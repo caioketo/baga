@@ -59,7 +59,7 @@ module.exports = {
 		});		
 	},
 	create: function (req, res) {
-		return res.view('formaPagamento/create.ejs', );
+		return res.view('formaPagamento/create.ejs');
 	},
 	editPost: function (req, res) {
 		FormaPagamento.update({id: req.body.id}, req.body.formaPagamento).exec(function (err, formaPagamentoDB) {
