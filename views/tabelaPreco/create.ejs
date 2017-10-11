@@ -1,0 +1,31 @@
+<label>Descrição</label>
+<br>
+<input id='descricao' type="text" value='' name='descricao' />
+<br>
+<input type="submit" value="Salvar" onclick="create();" />
+
+<script>
+	function validateTabela(tabela) {
+		return true;
+	}
+
+
+	function getTabela() {
+		return {
+			descricao: $('#descricao').val()
+		};
+	}
+
+
+	function create() {
+		var tabela = getTabela();
+
+		if (validateTabela(tabela)) {
+			io.socket.post('/tabelaPreco/createPost', { tabelaPreco: tabela }, function (resData) {
+				if (resData.statusCode == 200) {
+					document.location = '/tabelaPreco';
+				}
+			});
+		}
+	}
+</script>

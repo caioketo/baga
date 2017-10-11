@@ -1,0 +1,6 @@
+<input type="submit" value="Nova Tabela de Preço" onclick="window.location='/tabelaPreco/create';" />
+<ul>
+<% tabelasPreco.forEach(function(tp) { %>
+  <li onclick="window.location='/tabelaPreco/edit/<%= tp.id %>'"> <%= tp.descricao %> </li>
+<% }); %>
+</ul>

@@ -1,0 +1,44 @@
+<label>Descrição</label>
+<br>
+<input id='descricao' type="text" value='<%= formaPagamento.descricao %>' name='descricao' />
+<br>
+<div class="checkbox">
+  <label><input id='aVista' type="checkbox" checked=<%= formaPagamento.aVista %>>À Vista</label>
+</div>
+<br>
+<label>Conta</label>
+<br>
+<input id='conta' type="text" value='' name='conta' onfocus="findConta();" />
+<br>
+<label>Moeda</label>
+<br>
+<input id='moeda' type="text" value='' name='moeda' onfocus="findMoeda();" />
+<br>
+<br>
+<input type="submit" value="Salvar" onclick="editFormaPagamento();" />
+
+<%- include ../modelContas.ejs %>
+<%- include ../modelMoedas.ejs %>
+
+<script>
+	var formaPagamentoID = <%= formaPagamento.id %>;
+	var contas = <%- JSON.stringify(contas) %>;
+	var selectedConta =  <%= formaPagamento.conta.id %>;
+	var contObj = <%- JSON.stringify(formaPagamento.conta) %>;
+	var searchRows = $('#tableContas tr');
+	selecionarConta();
+
+	$('#contaMdl').on('shown.bs.modal', function () {
+	  $('#contaInput').focus()
+	});
+
+	var moedas = <%- JSON.stringify(moedas) %>;
+	var selectedMoeda =  <%= formaPagamento.moeda.id %>;
+	var moedaObj = <%- JSON.stringify(formaPagamento.moeda) %>;
+	var searchRowsMoeda = $('#tableMoedas tr');
+	selecionarMoeda();
+
+	$('#moedaMdl').on('shown.bs.modal', function () {
+	  $('#moedaInput').focus()
+	});
+</script>

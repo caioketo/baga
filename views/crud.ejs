@@ -1,0 +1,44 @@
+<input type="submit" value="<%= options.insert %>" onclick="window.location='<%= options.insertURL %>';" />
+<table id='tableCR' class="table table-striped">
+	<thead>
+		<tr>
+			<% fields.forEach(function (f) { %>
+				<th><%= f.titulo %></th>
+			<% }); %>
+			<th></th>
+		</tr>
+	</thead>
+	<tbody>
+		<% records.forEach(function(r) { %>
+			<tr id='<%= r.id %>'>
+				<% fields.forEach(function (f) { %>
+					<td><%= r[f.nome] %></td>
+				<% }); %>
+				<td>
+					<input type="submit" value="EDIT" onclick="window.location='<%= options.updateURL %>/<%= r.id %>';"/>
+					<input type="submit" value="DELETE" onclick="deleteRecord('<%= options.deleteURL %>', <%= r.id %>);"/>
+				</td>
+			</tr>
+		<% }); %>
+	</tbody>
+</table>
+<%- include modelDelete.ejs %>
+
+<script>
+	function deleteRecord(deleteURL, id) {
+		$('#confirmDelete').modal({
+		  backdrop: 'static',
+		  keyboard: false
+		})
+		.one('click', '#confirm', function(e) {
+			io.socket.post(deleteURL, { id: id }, function (resData) {
+				if (!resData) {
+
+				}
+				if (resData.statusCode == 200) {
+					window.location.reload();
+				}
+			});
+		});		
+	}
+</script>

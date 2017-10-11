@@ -1,0 +1,20 @@
+<label>Descrição</label>
+<br>
+<input id='descricao' type="text" value='<%= conta.descricao %>' name='descricao' />
+<br>
+<label>Tipo</label>
+<br>
+<select id="tipo">
+	<option value="0">Caixa</option>
+	<option value="1">Conta à Receber</option>
+	<option value="2">Conta à Pagar</option>
+	<option value="3">Conta Corrente</option>
+</select>
+<br>
+<input type="submit" value="Salvar" onclick="editConta();" />
+
+<script>
+	var contaID = <%= conta.id %>;
+	var contaTipo = <%= conta.tipo %>;
+	$('#conta').val(contaTipo);
+</script>

@@ -1,0 +1,38 @@
+<label>Descrição</label>
+<br>
+<input id='descricao' type="text" value='' name='descricao' />
+<br>
+<div class="checkbox">
+  <label><input id='aVista' type="checkbox" value="">À Vista</label>
+</div>
+<label>Conta</label>
+<br>
+<input id='conta' type="text" value='' name='conta' onfocus="findConta();" />
+<br>
+<label>Moeda</label>
+<br>
+<input id='moeda' type="text" value='' name='moeda' onfocus="findMoeda();" />
+<br>
+<br>
+<input type="submit" value="Salvar" onclick="createFormaPagamento();" />
+
+<%- include ../modelContas.ejs %>
+<%- include ../modelMoedas.ejs %>
+
+<script>
+	var contas = [];
+	var selectedConta = -1;
+	var contaObj = undefined;
+	var searchRows = $('#tableContas tr');
+	$('#contaMdl').on('shown.bs.modal', function () {
+	  $('#contaInput').focus()
+	});
+
+	var contas = [];
+	var selectedMoeda = -1;
+	var moedaObj = undefined;
+	var searchRowsMoeda = $('#tableMoedas tr');
+	$('#moedaMdl').on('shown.bs.modal', function () {
+	  $('#moedaInput').focus()
+	});
+</script>

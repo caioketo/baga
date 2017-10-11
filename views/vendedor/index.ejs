@@ -1,0 +1,6 @@
+<input type="submit" value="Novo Vendedor" onclick="window.location='/vendedor/create';" />
+<ul>
+<% vendedores.forEach(function(n) { %>
+  <li onclick="window.location='/vendedor/edit/<%= n.id %>'"> <%= n.nome %> </li>
+<% }); %>
+</ul>

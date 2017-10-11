@@ -1,0 +1,244 @@
+<label>Vendedor: </label>
+<label><%= vendedor.nome %></label>
+<br>
+<label>Cliente: </label>
+<label><%= cliente.nome %></label>
+<br>
+<br>
+<label>Produto</label>
+<br>
+<input id='produto' type="text" value='' placeholder="Produto..." name='produto' onkeyup="search()" onfocus="showProdutos();"/>
+<input id='qtde' type="number" value='1' name='qtde'>
+<input id='addProduto' type="submit" value="+" onclick="addProduto();"/>
+
+<!-- MODAL -->
+<div class="modal fade" id="produtosMdl" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Procurar Produtos</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <label>Nome</label>
+		<br>
+		<input id='produtoNome' type="text" value='' name='produtoNome' />
+		<br>
+		<table id='tableProdutos' class="table table-striped">
+			<thead>
+				<tr>
+					<th>Descrição</th>
+					<% tabelas.forEach(function (t) { %>
+						<th><%= t.descricao %></th>
+					<% }); %>
+				</tr>
+			</thead>
+			<tbody>
+				<% produtos.forEach(function(p) { %>
+					<tr id='<%= p.id %>'>
+						<td><%= p.descricao %></td>
+						<% tabelas.forEach(function (t) { %>
+							<td><%= p[t.descricao] %></td>
+						<% }); %>
+					</tr>
+				<% }); %>
+			</tbody>
+		</table>
+		</div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+        <button type="button" class="btn btn-primary" onclick="selecionarProduto();">Selecionar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<label>Itens</label>
+<table id='tableItens'  class="table table-striped">
+	<thead>
+		<th>Produto</th>
+		<th>Preço</th>
+		<th>Quantidade</th>
+		<th>Total</th>
+	</thead>
+	<tbody>
+	</tbody>
+</table>
+
+<br>
+<label>Sub-Total: </label>
+<label id='subTotal'></label>
+<br>
+<label>Total: </label>
+<label id='total'></label>
+<br>
+<label>Forma de Pagamento: </label>
+<select id="formaPagamentoSelect">
+	<% formasPagamento.forEach(function(fp) { %>
+		<option value="<%= fp.id %>"><%= fp.descricao %></option>
+	<% }); %>
+</select>
+<input id='valorFP' type="number" value='0' name='valorFP'>
+<input id='addPagamento' type="submit" value="+" onclick="addPagamento();"/>
+<br>
+<table id='tablePagamentos' class='table table-striped'>
+	<thead>
+		<th>Forma de Pagamento</th>
+		<th>Valor</th>
+	</thead>
+	<tbody>
+	</tbody>
+</table>
+<br>
+<input type="submit" value="Finalizar Venda" onclick="finalizarVenda();" />
+
+<script>
+
+	var itensDaVenda = [];
+	var pagamentos = [];
+	var prodJSON = '<%= JSON.stringify(produtos) %>';
+	prodJSON = prodJSON.replace(/&quot;/g, '"');
+	var produtos = JSON.parse(prodJSON);
+
+	var fpsJSON = '<%= JSON.stringify(formasPagamento) %>';
+	fpsJSON = fpsJSON.replace(/&quot;/g, '"');
+	var formasPagamento = JSON.parse(fpsJSON);
+	var searchRows = $('#tableProdutos tr');
+	searchRows.splice(0, 1);
+	$('#produto').keypress(function (e) {
+		if (e.keyCode == 13) {
+			$('#addProduto').click();
+		}
+	});
+	$('#qtde').keypress(function (e) {
+		if (e.keyCode == 13) {
+			$('#addProduto').click();
+		}
+	});
+
+	var selectedProd = -1;
+
+
+function showProdutos() {
+	searchRows.on('click', function (e) {
+		var row = $(this);
+		if (selectedProd > -1) {
+			$('#' + selectedProd).removeClass('highlight');
+		}
+		row.addClass('highlight');
+		selectedProd = row.attr('id');
+	});
+	$("#produtoNome").bind('keydown', search);
+	$("#produtosMdl").modal();
+}
+
+function selecionarProduto() {
+	$('#' + selectedProd).removeClass('highlight');
+	getProduto(selectedProd, function (produto) {
+		$("#produto").val(produto.descricao);
+		$("#produtosMdl").modal('hide');
+	});
+}
+
+function search() {
+	var text = $('#produtoNome').val();
+	var val = $.trim(text).replace(/ +/g, ' ').toLowerCase();
+
+	searchRows.show().filter(function() {
+		var text = $(this).text().replace(/\s+/g, ' ').	toLowerCase();
+		return !~text.indexOf(val);
+	}).hide();
+}
+
+function getProduto(id, cb) {
+	produtos.forEach(function (produto) {
+		if (produto.id == id) {
+			cb(produto);
+		}
+	});
+}
+
+function getFP(id, cb) {
+	formasPagamento.forEach(function (fp) {
+		if (fp.id == id) {
+			cb(fp);
+		}
+	});
+}
+
+function getTotal() {
+	var subTotal = 0;
+	itensDaVenda.forEach(function (item) {
+		subTotal += item.total;
+	});
+	return subTotal;
+}
+
+function getTotalPagto() {
+	var totalPag = 0;
+	pagamentos.forEach(function (pagamento) {
+		totalPag += pagamento.valor;
+	});
+	return totalPag;
+}
+
+function sumTotal() {
+	var sumTotal = getTotal();
+	$('#subTotal').text(sumTotal);
+	$('#total').text(sumTotal);
+}
+
+function addPagamento() {
+	var fpID = $('#formaPagamentoSelect').find(":selected").val();
+	var valor = $('#valorFP').val();
+
+	getFP(fpID, function (fp) {
+		var newPagamento = {
+			formaPagamento: fp,
+			valor: valor
+		};
+		pagamentos.push(newPagamento);
+		$('#tablePagamentos tr:last').after('<tr><td>' + fp.descricao + '</td><td>' + valor + '</td></tr>');
+	});
+}
+
+function addProduto() {
+	getProduto(selectedProd, function (produto) {
+		var newItem = {
+			produto: produto,
+			qtde: $('#qtde').val(),
+			venda: produto.venda,
+			custo: produto.custo,
+			total: (produto.venda * $('#qtde').val())
+		};
+		itensDaVenda.push(newItem);
+		$('#tableItens tr:last').after('<tr><td>' + produto.descricao + '</td><td>' + produto.venda + '</td><td>' +
+			newItem.qtde + '</td><td>' + newItem.total + '</td></tr>');
+		sumTotal();
+		$('#tableItens').editableTableWidget();
+		$('#textAreaEditor').editableTableWidget({editor: $('<textarea>')});
+		window.prettyPrint && prettyPrint();
+	});
+}
+
+function finalizarVenda() {
+	var totalItens = getTotal();
+	var totalPagto = getTotalPagto();
+	if (totalPagto < totalItens) {
+		alert('Pagamento insuficiente!');
+	}
+
+	io.socket.post('/venda/createPost', { venda: {
+		itens: itensDaVenda,
+		pagamentos: pagamentos/*,
+		cliente: cliente,
+		vendedor: vendedor*/
+	}}, function (resData) {
+		if (resData.statusCode == 200) {
+			document.location = '/venda';
+		}
+	});
+}
+</script>

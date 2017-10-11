@@ -1,0 +1,90 @@
+<label>Código</label>
+<br>
+<input id='codigo' type="number" value='' name='codigo' />
+<br>
+<label>Descrição</label>
+<br>
+<input id='descricao' type="text" value='' name='descricao' />
+<br>
+<label>Categoria</label>
+<br>
+<input id='categoria' type="text" value='' name='categoria' onfocus="findCategoria();" />
+<br>
+<label>Quantidade</label>
+<br>
+<input id='quantidade' type="number" value='' name='quantidade' />
+<br>
+<label>Preço de Custo</label>
+<br>
+<input id='custo' type="number" value='' name='custo' />
+<br>
+<label>Preços de Venda</label>
+<br>
+<div>
+	<div id="newPreco">
+		<select id="tabelasPreco"></select>
+		<input id='venda' type="number" value='' name='venda' />
+		<input type="submit" value="Adicionar Preço" onclick="addPreco();" />	
+	</div>
+	<table id='tablePrecos'>
+		<thead>
+			<tr>
+				<th>Tabela</th>
+				<th>Preço</th>
+			</tr>
+		</thead>
+		<tbody>
+		</tbody>
+	</table>
+</div>
+<br>
+<input type="submit" value="Salvar" onclick="createProduto();" />
+
+
+
+<!-- MODAL -->
+<div class="modal fade" id="categoriaMdl" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Procurar Categorias</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <label>Categoria</label>
+		<br>
+		<input id='cateogriaInput' type="text" value='' name='cateogriaInput' />
+		<br>
+
+		<table id='tableCategorias' class="table table-striped">
+			<thead>
+				<th>Categoria</th>
+			</thead>
+			<tbody id="tbodyCategorias">
+			</tbody>
+		</table>
+
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+        <button type="button" class="btn btn-primary" onclick="selecionarCategoria();">Selecionar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<script>
+	var tabelasDePreco = <%- JSON.stringify(tabelasPreco) %>;
+	var categorias = [];
+	var selectedCategoria = -1;
+	var categoriaObj = undefined;
+	var searchRows = $('#tableCategorias tr');
+	$('#categoriaMdl').on('shown.bs.modal', function () {
+	  $('#cateogriaInput').focus()
+	});
+</script>
+
+<script src="/js/produtoHelper.js"></script>

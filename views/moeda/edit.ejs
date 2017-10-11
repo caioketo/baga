@@ -1,0 +1,22 @@
+<label>Descrição</label>
+<br>
+<input id='descricao' type="text" value='<%= moeda.descricao %>' name='descricao' />
+<br>
+<label>Símbolo</label>
+<br>
+<input id='simbolo' type="text" value='<%= moeda.simbolo %>' name='simbolo' />
+<br>
+<label>Moeda Site</label>
+<br>
+<select id="moedaSite">
+	<% moedasSite.forEach(function(moedaSite) { %>
+		<option> <%= moedaSite %> </option>
+	<% }); %>
+</select>
+<br>
+<input type="submit" value="Salvar" onclick="editMoeda();" />
+
+<script>
+	var moedaID = <%= moeda.id %>;
+	$('#moedaSite').val('<%=moeda.moedaSite%>'.trim());
+</script>

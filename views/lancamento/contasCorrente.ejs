@@ -1,0 +1,22 @@
+<table id='tableCR' class="table table-striped">
+	<thead>
+		<tr>
+			<th>Cliente</th>
+			<th>Descrição</th>
+			<th>Valor</th>
+			<th>Moeda</th>
+			<th>Vencimento</th>
+		</tr>
+	</thead>
+	<tbody>
+		<% lancamentos.forEach(function(l) { %>
+			<tr id='<%= l.id %>'>
+				<td><%= l.cliente.nome %></td>
+				<td><%= l.descricao %></td>
+				<td><%= l.valor %></td>
+				<td><%= l.moeda.simbolo %></td>
+				<td><%= l.vencimento %></td>
+			</tr>
+		<% }); %>
+	</tbody>
+</table>

@@ -1,0 +1,74 @@
+<input type="submit" value="Suprimento" onclick="suprimentoSangria(true);" />
+<input type="submit" value="Sangria" onclick="suprimentoSangria(false);" />
+<table id='tableCR' class="table table-striped">
+	<thead>
+		<tr>
+			<th>Data</th>
+			<th>Descrição</th>
+			<th>Moeda</th>
+			<th>Valor</th>
+		</tr>
+	</thead>
+	<tbody>
+		<% lancamentos.forEach(function(l) { %>
+			<tr id='<%= l.id %>'>
+				<td><%= moment(l.data).format('DD/MM/YYYY') %></td>
+				<td><%= l.descricao %></td>
+				<td>$U</td>
+				<td><%= l.valor %></td>
+			</tr>
+		<% }); %>
+	</tbody>
+</table>
+<%- include modelSuprimentoSangria.ejs %>
+
+<script>
+	var suprimento = false;
+	var fpsJSON = '<%= JSON.stringify(formasPagamento) %>';
+	fpsJSON = fpsJSON.replace(/&quot;/g, '"');
+	var formasPagamento = JSON.parse(fpsJSON);
+	function getFP(id, cb) {
+		formasPagamento.forEach(function (fp) {
+			if (fp.id == id) {
+				cb(fp);
+			}
+		});
+	}
+
+
+	function suprimentoSangria(suprimentoL) {
+		suprimento = suprimentoL;
+		if (suprimento) {
+			$('#titulo').text('Suprimento');
+		}
+		else {
+			$('#titulo').text('Sangria');
+		}
+		$('#supriSangriMdl').modal({
+		  backdrop: 'static',
+		  keyboard: false
+		});
+	}
+	$('#confirm').click(function (e) {
+		var fpID = $('#formaPagamentoSelect').find(":selected").val();
+		getFP(fpID, function (fp) {
+			var pagamento = {
+				valor: $('#valorFP').val(),
+				formaPagamento: fp,
+				descricao: $('#descricao').val()
+			};
+			if (!suprimento) {
+				pagamento.valor = pagamento.valor * -1;
+			}
+			io.socket.post('/lancamento/suprimentoSangria', { pagamento: pagamento }, function (resData) {
+				if (!resData) {
+
+				}
+				if (resData.statusCode == 200) {
+					window.location.reload(); 
+				}
+			});
+		});
+	});
+	
+</script>

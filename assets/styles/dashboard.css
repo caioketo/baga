@@ -1,0 +1,21 @@
+
+
+#frameGeral {
+  width: 100%;
+  height: 800px;
+  padding-top: 50px;
+}
+
+.navbar-inverse {
+  background-color: #1ba013 !important;
+  border-color: #1ba013 !important;
+  background-image: linear-gradient(to bottom, #056f03 0%, #4a7506 100%) !important;
+}
+
+.navbar-inverse .navbar-nav > li > a {
+  color: #000000;
+}
+
+.navbar-inverse .navbar-brand {
+ color: #000000; 
+}

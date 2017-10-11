@@ -1,0 +1,29 @@
+<!-- Modal Dialog -->
+<div class="modal fade" id="supriSangriMdl" role="dialog" aria-labelledby="confirmDeleteLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 id="titulo" class="modal-title"></h4>
+      </div>
+      <div class="modal-body">
+      	<label>Descrição: </label>
+      	<br>
+      	<input id="descricao" type="text" value='' name="descricao" />
+      	<br>
+        <label>Forma de Pagamento: </label>
+        <br>
+		<select id="formaPagamentoSelect">
+			<% formasPagamento.forEach(function(fp) { %>
+				<option value="<%= fp.id %>"><%= fp.descricao %></option>
+			<% }); %>
+		</select>
+		<input id='valorFP' type="number" value='0' name='valorFP'>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+        <button type="button" class="btn btn-success" id="confirm">Baixar</button>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,85 @@
+/**
+ * FormaPagamentoController
+ *
+ * @description :: Server-side logic for managing Formapagamentoes
+ * @help        :: See http://sailsjs.org/#!/documentation/concepts/Controllers
+ */
+
+module.exports = {
+	index: function (req, res) {
+		FormaPagamento.find().exec(function (err, formasPagamento) {
+			if (err) {
+				console.log(JSON.stringify(err));
+				return res.send(JSON.stringify(err));
+			}
+			return res.view('crud.ejs', {
+				fields: [
+					{
+						titulo: 'Descrição',
+						nome: 'descricao'
+					}
+				],
+				records: formasPagamento,
+				options: {
+					insert: 'Nova Forma de Pagamento',
+					insertURL: '/formaPagamento/create',
+					updateURL: '/formaPagamento/edit',
+					deleteURL: '/formaPagamento/delete'
+				}
+			});
+		});
+	},
+	delete: function (req, res) {
+		FormaPagamento.destroy({id: req.body.id}).exec(function (err) {
+			if (err) {
+				return res.send(JSON.stringify(err));
+			}
+			return res.send({statusCode: 200});
+		});
+	},
+	edit: function(req, res) {
+		Moeda.find().exec(function (err, moedas) {
+			if (err) {
+				console.log(JSON.stringify(err));
+				return res.send(JSON.stringify(err));
+			}
+			Conta.find().exec(function (err, contas) {
+				if (err) {
+					console.log(JSON.stringify(err));
+					return res.send(JSON.stringify(err));
+				}
+				FormaPagamento.find({id: req.param('id')}).populate(['conta', 'moeda']).exec(function (err, formasPagamento) {
+					if (err) {
+						console.log(JSON.stringify(err));
+						return res.send(JSON.stringify(err));
+					}
+					return res.view({formaPagamento: formasPagamento[0], contas: contas, moedas: moedas});
+				});
+			});
+		});		
+	},
+	create: function (req, res) {
+		return res.view();
+	},
+	editPost: function (req, res) {
+		FormaPagamento.update({id: req.body.id}, req.body.formaPagamento).exec(function (err, formaPagamentoDB) {
+			if (err) {
+				console.log(JSON.stringify(err));
+				return res.send(JSON.stringify(err));
+			}
+			return res.send({statusCode: 200, formaPagamento: formaPagamentoDB});
+		});
+	},
+	createPost: function (req, res) {
+		//validate(req.body, function (produto) {
+		FormaPagamento.create(req.body.formaPagamento).exec(function (err, formaPagamentoDB) {
+			if (err) {
+				console.log(JSON.stringify(err));
+				return res.send(JSON.stringify(err));
+			}
+
+			return res.send({statusCode: 200, formaPagamento: formaPagamentoDB});
+		});
+	}
+};
+

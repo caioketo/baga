@@ -1,0 +1,39 @@
+<input type="submit" value="Nova CP" onclick="window.location='/lancamento/createCP';" />
+<table id='tableCP' class="table table-striped">
+	<thead>
+		<tr>
+			<th>Fornecedor</th>
+			<th>Descrição</th>
+			<th>Valor</th>
+			<th>Moeda</th>
+			<th>Vencimento</th>
+		</tr>
+	</thead>
+	<tbody>
+		<% lancamentos.forEach(function(l) { %>
+			<tr id='<%= l.id %>'>
+				<td><%= l.fornecedor.nome %></td>
+				<td><%= l.descricao %></td>
+				<td><%= l.valor %></td>
+				<td>$U</td>
+				<td><%= moment(l.vencimento).format('DD/MM/YYYY') %></td>
+				<td><input type="submit" value="BAIXAR" onclick="baixarConta(<%= l.id %>, <%= l.valor %>, false, '/lancamento/contasPagar');"/></td>
+				<td><input type="submit" value="DELETE" onclick="deleteRecord('/lancamento/delete', <%= l.id %>);"/></td>
+			</tr>
+		<% }); %>
+	</tbody>
+</table>
+
+
+<%- include ../modelDelete.ejs %>
+<%- include modelBaixa.ejs %>
+
+<script src="/js/lancamentoHelper.js"></script>
+
+<script>
+	var fpsJSON = '<%= JSON.stringify(formasPagamento) %>';
+	fpsJSON = fpsJSON.replace(/&quot;/g, '"');
+	var formasPagamento = JSON.parse(fpsJSON);
+	var pagamentos = [];
+	var valorConta = 0;
+</script>
