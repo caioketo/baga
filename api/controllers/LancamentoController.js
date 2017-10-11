@@ -33,6 +33,20 @@ function getContas(tipo, cb) {
 	});
 }
 
+function getContasObj(tipo, cb) {
+	Conta.find({tipo: tipo}).exec(function (err, contas) {
+		if (err) {
+			console.log(JSON.stringify(err));
+			return [];
+		}
+		if (cb) {
+			cb(contas);
+		}
+
+		return contas;
+	});
+}
+
 function getFormasPagamento(cb) {
 	FormaPagamento.find({aVista: true}).exec(function (err, formasPagamento) {
 		if (err) {
@@ -47,11 +61,30 @@ function getFormasPagamento(cb) {
 
 module.exports = {
 	index: function (req, res) {
+		Lancamento.find({pago: false}).populate(['moeda']).exec(function (err, lancamentos) {
+			if (err) {
+				console.log(JSON.stringify(err));
+				return res.send(JSON.stringify(err));
+			}
+
+			return res.view({lancamentos: lancamentos, moment: moment});
+		});
+	},
+	contaCorrenteSel: function (req, res) {
+		Lancamento.find({conta: req.body.conta}).populate('moeda').exec(function (err, lancamentos) {
+			if (err) {
+				console.log(JSON.stringify(err));
+				return res.send(JSON.stringify(err));
+			}
+			return res.send(lancamentos);
+		});
+	},
+	/*index: function (req, res) {
 		Lancamento.find().exec(function (err, results) {
 			console.log(JSON.stringify(results))
 		});
 		return res.view();
-	},
+	},*/
 	contasReceber: function (req, res) {
 		getFormasPagamento(function (formasPagamento) {
 			getContas(1, function (contas) {
@@ -87,8 +120,9 @@ module.exports = {
 					console.log(JSON.stringify(err));
 					return res.send(JSON.stringify(err));
 				}
-
-				return res.view({lancamentos: lancamentos, moment: moment});
+				getContasObj(3, function (contasObj) {
+					return res.view({contas: contasObj, lancamentos: lancamentos, moment: moment});
+				});
 			});
 		});
 	},

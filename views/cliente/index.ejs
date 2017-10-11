@@ -1,6 +1,0 @@
-<input type="submit" value="Novo Clientes" onclick="window.location='/cliente/create';" />
-<ul>
-<% clientes.forEach(function(n) { %>
-  <li onclick="window.location='/cliente/edit/<%= n.id %>'"> <%= n.nome %> </li>
-<% }); %>
-</ul>

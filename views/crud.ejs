@@ -2,6 +2,7 @@
 <table id='tableCR' class="table table-striped">
 	<thead>
 		<tr>
+			<th>ID</th>
 			<% fields.forEach(function (f) { %>
 				<th><%= f.titulo %></th>
 			<% }); %>
@@ -11,6 +12,7 @@
 	<tbody>
 		<% records.forEach(function(r) { %>
 			<tr id='<%= r.id %>'>
+				<td><%= r.id %></td>
 				<% fields.forEach(function (f) { %>
 					<td><%= r[f.nome] %></td>
 				<% }); %>

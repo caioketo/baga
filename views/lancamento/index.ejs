@@ -1,0 +1,30 @@
+<input type="submit" value="Nova CP" onclick="window.location='/lancamento/createCP';" />
+<table id='tableCP' class="table table-striped">
+	<thead>
+		<tr>
+			<th>Descrição</th>
+			<th>Valor</th>
+			<th>Vencimento</th>
+		</tr>
+	</thead>
+	<tbody>
+		<% lancamentos.forEach(function(l) { %>
+			<tr id='<%= l.id %>'>
+				<td><%= l.descricao %></td>
+				<td><%= l.valor %></td>
+				<td><%= l.conta %></td>
+				<td>$U</td>
+				<td><%= moment(l.vencimento).format('DD/MM/YYYY') %></td>
+				<td><input type="submit" value="DELETE" onclick="deleteRecord('/lancamento/delete', <%= l.id %>);"/></td>
+			</tr>
+		<% }); %>
+	</tbody>
+</table>
+
+
+<%- include ../modelDelete.ejs %>
+
+<script src="/js/lancamentoHelper.js"></script>
+
+<script>
+</script>

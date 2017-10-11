@@ -9,7 +9,8 @@ function validateCliente(cliente) {
 
 function getCliente() {
 	return {
-		nome: $('#nome').val()
+		nome: $('#nome').val(),
+		rut: $('#rut').val()
 	};
 }
 
@@ -219,7 +220,8 @@ function validateFornecedor(fornecedor) {
 
 function getFornecedor() {
 	return {
-		nome: $('#nome').val()
+		nome: $('#nome').val(),
+		rut: $('#rut').val()
 	};
 }
 
@@ -272,24 +274,33 @@ function selecionarConta() {
 function findConta() {
 	io.socket.get('/conta/getAll', function (resData, jwres) {
 		contas = resData;
-		$("#tbodyContas").empty();
-
-		for (var i = contas.length - 1; i >= 0; i--) {
-			$('#tableContas > tbody:last-child').append('<tr id="' + contas[i].id + '"><td>' + contas[i].descricao + '</td></tr>');
-		}
-		searchRows = $('#tableContas tr');
-		searchRows.splice(0, 1);
-		searchRows.on('click', function (e) {
-			var row = $(this);
-			if (selectedConta > -1) {
-				$('#' + selectedConta).removeClass('highlight');
-			}
-			row.addClass('highlight');
-			selectedConta = row.attr('id');
-		});
-		$("#contaInput").bind('keydown', filtrarContas);
-		$("#contaMdl").modal();
+		showContasModal();
 	});
+};
+
+function showContasModal(cb) {
+	$("#tbodyContas").empty();
+
+	for (var i = contas.length - 1; i >= 0; i--) {
+		$('#tableContas > tbody:last-child').append('<tr id="' + contas[i].id + '"><td>' + contas[i].descricao + '</td></tr>');
+	}
+	searchRows = $('#tableContas tr');
+	searchRows.splice(0, 1);
+	searchRows.on('click', function (e) {
+		var row = $(this);
+		if (selectedConta > -1) {
+			$('#' + selectedConta).removeClass('highlight');
+		}
+		row.addClass('highlight');
+		selectedConta = row.attr('id');
+	});
+	$("#contaInput").bind('keydown', filtrarContas);
+	if (cb) {
+		$('#confirm').on("click", function() {
+			cb(selectedConta);
+		});
+	}
+	$("#contaMdl").modal();
 };
 
 function filtrarContas(e) {

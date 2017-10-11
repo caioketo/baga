@@ -1,22 +1,35 @@
-<table id='tableCR' class="table table-striped">
+<%- include ../modelContas.ejs %>
+
+<table id='tableCC' class="table table-striped">
 	<thead>
 		<tr>
-			<th>Cliente</th>
+			<th>Data</th>
 			<th>Descrição</th>
-			<th>Valor</th>
 			<th>Moeda</th>
-			<th>Vencimento</th>
+			<th>Valor</th>
 		</tr>
 	</thead>
-	<tbody>
-		<% lancamentos.forEach(function(l) { %>
-			<tr id='<%= l.id %>'>
-				<td><%= l.cliente.nome %></td>
-				<td><%= l.descricao %></td>
-				<td><%= l.valor %></td>
-				<td><%= l.moeda.simbolo %></td>
-				<td><%= l.vencimento %></td>
-			</tr>
-		<% }); %>
+	<tbody id="tbodyCC">
 	</tbody>
 </table>
+
+<script>
+	var contas = <%- JSON.stringify(contas) %>;
+	var selectedConta = -1;
+	var contaObj = undefined;
+	var searchRows = $('#tableContas tr');
+	$('#contaMdl').on('shown.bs.modal', function () {
+	  $('#contaInput').focus()
+	});
+	showContasModal(function (conta) {
+		io.socket.get('/lancamento/contaCorrenteSel', { conta: selectedConta }, function (resData, jwres) {
+			var lancamentos = resData;
+			$("#tbodyCC").empty();
+			var total = 0;
+			for (var i = lancamentos.length - 1; i >= 0; i--) {
+				$('#tableCC > tbody:last-child').append('<tr id="' + lancamentos[i].id + '"><td>' + lancamentos[i].vencimento + '</td><td>' + lancamentos[i].descricao + '</td><td>$U</td><td>' + lancamentos[i].valor +'</td></tr>');
+				total += lancamentos[i].valor;
+			}
+		});
+	});
+</script>

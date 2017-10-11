@@ -1,6 +1,0 @@
-<input type="submit" value="Nova Forma de Pagamento" onclick="window.location='/formaPagamento/create';" />
-<ul>
-<% formasPagamento.forEach(function(fp) { %>
-  <li onclick="window.location='/formaPagamento/edit/<%= fp.id %>'"> <%= fp.descricao %> </li>
-<% }); %>
-</ul>
