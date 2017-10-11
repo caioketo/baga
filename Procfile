@@ -1,0 +1,1 @@
+web: sails lift --models.migrate='alter'
