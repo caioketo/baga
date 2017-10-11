@@ -53,13 +53,13 @@ module.exports = {
 						console.log(JSON.stringify(err));
 						return res.send(JSON.stringify(err));
 					}
-					return res.view({formaPagamento: formasPagamento[0], contas: contas, moedas: moedas});
+					return res.view('formaPagamento/edit.ejs', {formaPagamento: formasPagamento[0], contas: contas, moedas: moedas});
 				});
 			});
 		});		
 	},
 	create: function (req, res) {
-		return res.view();
+		return res.view('formaPagamento/create.ejs', );
 	},
 	editPost: function (req, res) {
 		FormaPagamento.update({id: req.body.id}, req.body.formaPagamento).exec(function (err, formaPagamentoDB) {
