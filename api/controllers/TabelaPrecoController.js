@@ -43,11 +43,11 @@ module.exports = {
 				console.log(JSON.stringify(err));
 				return res.send(JSON.stringify(err));
 			}
-			return res.view('tabelapreco/edit.ejs', {tabelaPreco: tabelasPreco[0]});
+			return res.view('tabelaPreco/edit.ejs', {tabelaPreco: tabelasPreco[0]});
 		});
 	},
 	create: function (req, res) {
-		return res.view('tabelapreco/create.ejs');
+		return res.view('tabelaPreco/create.ejs');
 	},
 	editPost: function (req, res) {
 		TabelaPreco.update({id: req.body.id}, req.body.tabelaPreco).exec(function (err, tabelaPrecoDB) {
