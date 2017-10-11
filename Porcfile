@@ -1,1 +1,1 @@
-web: sails lift --models.migrate='alter'
+web: node app.js
