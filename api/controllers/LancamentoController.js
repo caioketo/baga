@@ -135,7 +135,7 @@ module.exports = {
 						return res.send(JSON.stringify(err));
 					}
 
-					return res.view({lancamentos: lancamentos, moment: moment, formasPagamento: formasPagamento});
+					return res.view({lancamentos: lancamentos, moment: moment, formasPagamento: formasPagamento, total: 0});
 				});
 			});
 		});
@@ -176,7 +176,9 @@ module.exports = {
 	},
 	delete: function (req, res) {
 		Lancamento.destroy({id: req.body.id}).exec(function (err) {
-			console.log(JSON.stringify(err));
+			if (err) {
+				console.log(JSON.stringify(err));
+			}
 			return res.send({statusCode: 200});
 		});
 	},

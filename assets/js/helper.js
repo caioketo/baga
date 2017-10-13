@@ -408,3 +408,43 @@ function filtrarMoedas(e) {
 		}).hide();
 	}, 200);
 };
+
+/**
+	###LOJAS###
+*/
+
+function validateLoja(loja) {
+	return true;
+}
+
+
+function getLoja() {
+	return {
+		nome: $('#nome').val(),
+		rut: $('#rut').val()
+	};
+}
+
+function editLoja() {
+	var loja = getLoja();
+	if (validateLoja(loja)) {
+		io.socket.post('/loja/editPost', { loja: loja, id: lojaID }, function (resData) {
+			if (resData.statusCode == 200) {
+				document.location = '/loja';
+			}
+		});
+	}
+}
+
+
+function createLoja() {
+	var loja = getLoja();
+
+	if (validateLoja(loja)) {
+		io.socket.post('/loja/createPost', { loja: loja }, function (resData) {
+			if (resData.statusCode == 200) {
+				document.location = '/loja';
+			}
+		});
+	}
+}

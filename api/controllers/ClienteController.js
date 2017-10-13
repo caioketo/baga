@@ -32,6 +32,10 @@ module.exports = {
 			return res.view('crud.ejs', {
 				fields: [
 					{
+						titulo: 'RUT',
+						nome: 'rut'
+					},
+					{
 						titulo: 'Nome',
 						nome: 'nome'
 					}

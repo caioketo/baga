@@ -9,16 +9,24 @@
 			<th>Valor</th>
 		</tr>
 	</thead>
-	<tbody>
+	<tbody>		
 		<% lancamentos.forEach(function(l) { %>
 			<tr id='<%= l.id %>'>
 				<td><%= moment(l.data).format('DD/MM/YYYY') %></td>
 				<td><%= l.descricao %></td>
 				<td>$U</td>
 				<td><%= l.valor %></td>
+				<% total += parseInt(l.valor, 0); %>
 			</tr>
 		<% }); %>
 	</tbody>
+	<tfoot>
+		<tr>
+			<th><th>
+			<th>Total:</th>
+			<th><%= total %></th>
+		</tr>
+	</tfoot>
 </table>
 <%- include modelSuprimentoSangria.ejs %>
 

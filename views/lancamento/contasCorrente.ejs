@@ -12,7 +12,7 @@
 	<tbody id="tbodyCC">
 	</tbody>
 </table>
-
+<script src="/js/moment.min.js"></script>
 <script>
 	var contas = <%- JSON.stringify(contas) %>;
 	var selectedConta = -1;
@@ -22,14 +22,16 @@
 	  $('#contaInput').focus()
 	});
 	showContasModal(function (conta) {
+														//5
 		io.socket.get('/lancamento/contaCorrenteSel', { conta: selectedConta }, function (resData, jwres) {
 			var lancamentos = resData;
 			$("#tbodyCC").empty();
 			var total = 0;
 			for (var i = lancamentos.length - 1; i >= 0; i--) {
-				$('#tableCC > tbody:last-child').append('<tr id="' + lancamentos[i].id + '"><td>' + lancamentos[i].vencimento + '</td><td>' + lancamentos[i].descricao + '</td><td>$U</td><td>' + lancamentos[i].valor +'</td></tr>');
-				total += lancamentos[i].valor;
+				$('#tableCC > tbody:last-child').append('<tr id="' + lancamentos[i].id + '"><td>' + moment(lancamentos[i].vencimento).format('DD/MM/YYYY') + '</td><td>' + lancamentos[i].descricao + '</td><td>$U</td><td>' + lancamentos[i].valor +'</td></tr>');
+				total += parseInt(lancamentos[i].valor, 0);
 			}
+			$('#tableCC > tbody').after('<tfoot><tr><th></th><th></th><th>Total:</th><th>' + total.toString() + '</th></tr></tfoot>');
 		});
 	});
 </script>

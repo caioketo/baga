@@ -22,7 +22,10 @@ module.exports = {
   		},
   		preco: {
   			type: 'integer'
-  		}
+  		},
+      loja: {
+        model: 'Loja'
+      }
   }
 };
 

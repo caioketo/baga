@@ -10,7 +10,10 @@ module.exports = {
   attributes: {
   	nome: {
   		type: 'string'
-  	}
+  	},
+	rut: {
+		type: 'string'
+	}
   }
 };
 

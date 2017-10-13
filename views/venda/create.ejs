@@ -7,6 +7,7 @@
 <br>
 <label>Produto</label>
 <br>
+<input id='lojaNome' type="text" value='' name='lojaNome' disabled="true" style="width: 100px;" />
 <input id='produto' type="text" value='' placeholder="Produto..." name='produto' onkeyup="search()" onfocus="showProdutos();"/>
 <input id='qtde' type="number" value='1' name='qtde'>
 <input id='addProduto' type="submit" value="+" onclick="addProduto();"/>
@@ -22,8 +23,14 @@
         </button>
       </div>
       <div class="modal-body">
-        <label>Nome</label>
+      	<label>Loja: </label>
+		<select id="loja">
+			<% lojas.forEach(function(loja) { %>
+				<option id=<%=loja.id%>> <%= loja.nome %> </option>
+			<% }); %>
+		</select>
 		<br>
+        <label>Produto: </label>
 		<input id='produtoNome' type="text" value='' name='produtoNome' />
 		<br>
 		<table id='tableProdutos' class="table table-striped">
@@ -58,6 +65,7 @@
 <label>Itens</label>
 <table id='tableItens'  class="table table-striped">
 	<thead>
+		<th>Loja</th>
 		<th>Produto</th>
 		<th>Preço</th>
 		<th>Quantidade</th>
@@ -102,6 +110,10 @@
 	prodJSON = prodJSON.replace(/&quot;/g, '"');
 	var produtos = JSON.parse(prodJSON);
 
+	var lojasJSON = '<%= JSON.stringify(lojas) %>';
+	lojasJSON = lojasJSON.replace(/&quot;/g, '"');
+	var lojas = JSON.parse(lojasJSON);
+
 	var fpsJSON = '<%= JSON.stringify(formasPagamento) %>';
 	fpsJSON = fpsJSON.replace(/&quot;/g, '"');
 	var formasPagamento = JSON.parse(fpsJSON);
@@ -119,6 +131,7 @@
 	});
 
 	var selectedProd = -1;
+	var selectedLoja = -1;
 
 
 function showProdutos() {
@@ -130,12 +143,16 @@ function showProdutos() {
 		row.addClass('highlight');
 		selectedProd = row.attr('id');
 	});
+	$('#produtoNome').val('');
+	search();
 	$("#produtoNome").bind('keydown', search);
 	$("#produtosMdl").modal();
 }
 
 function selecionarProduto() {
 	$('#' + selectedProd).removeClass('highlight');
+	selectedLoja = $('#loja option:selected').attr("id");
+	$('#lojaNome').val(getLojaNome(selectedLoja));
 	getProduto(selectedProd, function (produto) {
 		$("#produto").val(produto.descricao);
 		$("#produtosMdl").modal('hide');
@@ -204,6 +221,14 @@ function addPagamento() {
 	});
 }
 
+function getLojaNome(id) {
+	for (var i = lojas.length - 1; i >= 0; i--) {
+		if (lojas[i].id == id) {
+			return lojas[i].nome;
+		}
+	}
+}
+
 function addProduto() {
 	getProduto(selectedProd, function (produto) {
 		var newItem = {
@@ -211,15 +236,15 @@ function addProduto() {
 			qtde: $('#qtde').val(),
 			venda: produto.venda,
 			custo: produto.custo,
-			total: (produto.venda * $('#qtde').val())
+			total: (produto.venda * $('#qtde').val()),
+			loja: selectedLoja
 		};
 		itensDaVenda.push(newItem);
-		$('#tableItens tr:last').after('<tr><td>' + produto.descricao + '</td><td>' + produto.venda + '</td><td>' +
-			newItem.qtde + '</td><td>' + newItem.total + '</td></tr>');
+		$('#tableItens tr:last').after('<tr><td>' + getLojaNome(newItem.loja) + '</td><td>' + produto.descricao + '</td><td>' + produto.venda + '</td><td>' + newItem.qtde + '</td><td>' + newItem.total + '</td></tr>');
 		sumTotal();
-		$('#tableItens').editableTableWidget();
-		$('#textAreaEditor').editableTableWidget({editor: $('<textarea>')});
-		window.prettyPrint && prettyPrint();
+		$('#produto').val('');
+		$('#lojaNome').val('');
+		$('#qtde').val('1');
 	});
 }
 
