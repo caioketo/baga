@@ -199,7 +199,7 @@ module.exports = {
 
 						_formaPagamento.condicoesPagamento.forEach(function (condicao, index) {
 							if (condicao.id == pagamento.condicaoPagamento) {
-								lancarPagamento(vendaDB.id, vendaDB.cliente, pagamento, _formaPagamento, condicao);
+								lancarPagamento(vendaDB.numero, vendaDB.cliente, pagamento, _formaPagamento, condicao);
 							}
 						});
 					});

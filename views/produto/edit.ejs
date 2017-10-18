@@ -76,7 +76,7 @@
 <script src="/js/produtoHelper.js"></script>
 
 <script>
-	var produtoID = <%= produto.id %>;
+	var produtoID = '<%= produto.id %>';
 	$(document).ready(function() {
 		$.fn.editable.defaults.mode = 'inline';
 		$('#codigoA').editable();

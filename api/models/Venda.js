@@ -28,6 +28,10 @@ module.exports = {
       cancelada: {
         type: 'boolean',
         defaultsTo: false
+      },
+      numero: {
+        type: 'integer',
+        autoIncrement: true
       }
   }
 };

@@ -27,9 +27,9 @@
 <%- include ../modalFormaPagamento.ejs %>
 
 <script>
-	var condicaoPagamentoID = <%= condicaoPagamento.id %>;
+	var condicaoPagamentoID = '<%= condicaoPagamento.id %>';
 	var formasPagamento = <%- JSON.stringify(formasPagamento) %>;
-	var selectedFormaPagamento = <%= condicaoPagamento.formaPagamento.id %>;
+	var selectedFormaPagamento = '<%= condicaoPagamento.formaPagamento.id %>';
 	var formaPagamentoObj = <%- JSON.stringify(condicaoPagamento.formaPagamento) %>;
 	var searchRowsFP = $('#tableFP tr');
 	selecionarFormaPagamento();

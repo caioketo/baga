@@ -21,9 +21,9 @@
 <%- include ../modelMoedas.ejs %>
 
 <script>
-	var formaPagamentoID = <%= formaPagamento.id %>;
+	var formaPagamentoID = '<%= formaPagamento.id %>';
 	var contas = <%- JSON.stringify(contas) %>;
-	var selectedConta =  <%= formaPagamento.conta.id %>;
+	var selectedConta =  '<%= formaPagamento.conta.id %>';
 	var contObj = <%- JSON.stringify(formaPagamento.conta) %>;
 	var searchRows = $('#tableContas tr');
 	selecionarConta();
@@ -33,7 +33,7 @@
 	});
 
 	var moedas = <%- JSON.stringify(moedas) %>;
-	var selectedMoeda =  <%= formaPagamento.moeda.id %>;
+	var selectedMoeda =  '<%= formaPagamento.moeda.id %>';
 	var moedaObj = <%- JSON.stringify(formaPagamento.moeda) %>;
 	var searchRowsMoeda = $('#tableMoedas tr');
 	selecionarMoeda();

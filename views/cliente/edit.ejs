@@ -11,7 +11,7 @@
 <input type="submit" value="Salvar" onclick="editCliente();" />
 
 <script>
-	var clienteID = <%= cliente.id %>;
+	var clienteID = '<%= cliente.id %>';
 	$("#rut").rut().on('rutInvalido', function(e) {
 		//alert("El rut " + $(this).val() + " es inválido");
 		$("#rut").addClass("invalid");
