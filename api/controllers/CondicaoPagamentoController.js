@@ -21,7 +21,7 @@ module.exports = {
 				],
 				records: condicoesPagamento,
 				options: {
-					insert: 'Nova Forma de Pagamento',
+					insert: 'Nova Condição de Pagamento',
 					insertURL: '/condicaoPagamento/create',
 					updateURL: '/condicaoPagamento/edit',
 					deleteURL: '/condicaoPagamento/delete'
