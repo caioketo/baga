@@ -31,7 +31,10 @@ module.exports.connections = {
   localDiskDb: {
     adapter: 'sails-disk'
   },
-
+  mongodb: {
+    adapter: 'sails-mongo',
+    url: 'mongodb://keto:vd001989@ds125255.mlab.com:25255/heroku_9d1d6dp2'
+  }
   /***************************************************************************
   *                                                                          *
   * MySQL is the world's most popular relational database.                   *
