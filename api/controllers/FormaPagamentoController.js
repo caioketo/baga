@@ -12,6 +12,7 @@ module.exports = {
 				console.log(JSON.stringify(err));
 				return res.send(JSON.stringify(err));
 			}
+			console.log(JSON.stringify(formasPagamento));
 			return res.send(formasPagamento);
 		});
 	},
