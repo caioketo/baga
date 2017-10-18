@@ -18,7 +18,7 @@
 				<% }); %>
 				<td>
 					<input type="submit" value="EDIT" onclick="window.location='<%= options.updateURL %>/<%= r.id %>';"/>
-					<input type="submit" value="DELETE" onclick="deleteRecord('<%= options.deleteURL %>', <%= r.id %>);"/>
+					<input type="submit" value="DELETE" onclick="deleteRecord('<%= options.deleteURL %>', '<%= r.id %>');"/>
 				</td>
 			</tr>
 		<% }); %>
