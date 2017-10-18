@@ -1,0 +1,39 @@
+<label>Descrição</label>
+<br>
+<input id='descricao' type="text" value='<%= condicaoPagamento.descricao %>' name='descricao' />
+<br>
+<label>Forma de Pagamento</label>
+<br>
+<input id='formaPagamento' type="text" value='' name='formaPagamento' onfocus="findFormaPagamento();" />
+<br>
+<div class="checkbox">
+  <label><input id='aVista' type="checkbox" checked='<%= condicaoPagamento.aVista %>'>À Vista</label>
+</div>
+<br>
+<label>Primeira Parcela</label>
+<br>
+<input id='primeiraParcela' type="number" value='<%= condicaoPagamento.primeiraParcela %>' name='primeiraParcela' />
+<br>
+<label>Número de Parcela</label>
+<br>
+<input id='parcelas' type="number" value='<%= condicaoPagamento.parcelas %>' name='parcelas' />
+<br>
+<label>Intervalo entre Parcela</label>
+<br>
+<input id='intervalo' type="number" value='<%= condicaoPagamento.intervalo %>' name='intervalo' />
+<br>
+<input type="submit" value="Salvar" onclick="editCondicaoPagamento();" />
+
+<%- include ../modalFormaPagamento.ejs %>
+
+<script>
+	var condicaoPagamentoID = <%= condicaoPagamento.id %>;
+	var formasPagamento = <%- JSON.stringify(formasPagamento) %>;
+	var selectedFormaPagamento = <%= condicaoPagamento.formaPagamento.id %>;
+	var formaPagamentoObj = <%- JSON.stringify(condicaoPagamento.formaPagamento) %>;
+	var searchRowsFP = $('#tableFP tr');
+	selecionarFormaPagamento();
+	$('#formaPagamentoMdl').on('shown.bs.modal', function () {
+	  $('#formaPagamentoInput').focus()
+	});
+</script>

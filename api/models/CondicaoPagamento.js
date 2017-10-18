@@ -11,6 +11,12 @@ module.exports = {
   		formaPagamento: {
   			model: 'FormaPagamento'
   		},
+      aVista: {
+        type: 'boolean'
+      },
+      intervalo: {
+        type: 'integer'
+      },
   		parcelas: {
   			type: 'integer'
   		},

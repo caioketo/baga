@@ -1,0 +1,118 @@
+<input type="submit" value="Nova Venda" onclick="window.location = '/venda/create';"/>
+<table id="tableVendas" class='table table-striped'>
+	<thead>
+		<tr>
+			<th>Data</th>
+			<th>Cliente</th>
+			<th>Vendedor</th>
+			<th>Total</th>
+			<th></th>
+		</tr>
+	</thead>
+	<tbody>
+		<% vendas.forEach(function (v) { %>
+			<tr id='<%= v.id %>'>
+				<td onclick='getDetailVenda(<%= v.id %>);'><%= moment(v.createdAt).format('DD/MM/YYYY') %></td>
+				<td onclick='getDetailVenda(<%= v.id %>);'><%= v.cliente.nome %></td>
+				<td onclick='getDetailVenda(<%= v.id %>);'><%= v.vendedor.nome %></td>
+				<td onclick='getDetailVenda(<%= v.id %>);'><%= v.total %></td>
+				<td><input type="submit" value="CANCELAR" onclick="cancelarVenda(<%= v.id %>);"/></td>
+			</tr>
+		<% }); %>
+	</tbody>
+</table>
+
+
+<div class="modal fade" id="detailModal" role="dialog" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 id="titleVenda" class="modal-title">Venda </h4>
+      </div>
+      <div class="modal-body">
+		<table id='tableItens' class='table table-striped'>
+			<thead>
+				<th>Loja</th>
+				<th>Produto</th>
+				<th>Preço</th>
+				<th>Quantidade</th>
+				<th>Total</th>
+			</thead>
+			<tbody>
+			</tbody>
+		</table>
+		<br>
+		<table id='tablePagamentos' class='table table-striped'>
+			<thead>
+				<th>Forma de Pagamento</th>
+				<th>Valor</th>
+			</thead>
+			<tbody>
+			</tbody>
+		</table>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Fechar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- Modal Dialog -->
+<div class="modal fade" id="confirmDelete" role="dialog" aria-labelledby="confirmDeleteLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title">Cancelar Venda</h4>
+      </div>
+      <div class="modal-body">
+        <p>Tem certeza disso ?</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+        <button type="button" class="btn btn-danger" id="confirm">Confirmar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+	function cancelarVenda(id) {
+		//cancelar venda
+		$('#confirmDelete').modal({
+		  backdrop: 'static',
+		  keyboard: false
+		})
+		.one('click', '#confirm', function(e) {
+			io.socket.post('/venda/cancelarVenda', { id: id }, function (resData) {
+				if (!resData) {
+
+				}
+				if (resData.statusCode == 200) {
+					window.location.reload();
+				}
+			});
+		});
+	}
+
+	function getDetailVenda(id) {
+		io.socket.get('/venda/getDetail', {vendaID: id}, function (resData) {
+			let venda = resData.venda;
+			$('#titleVenda').text('Venda ' + venda.id);
+			$('#tableItens > tbody').empty();
+			$('#tablePagamentos > tbody').empty();
+			for (var i = venda.itens.length - 1; i >= 0; i--) {
+				let item = venda.itens[i];
+				$('#tableItens > tbody:last-child').append('<tr id="' + item.id + '"><td>' + item.loja.nome + '</td><td>' + item.produto.descricao + '</td><td>' + item.preco + '</td><td>' + item.quantidade +'</td><td>' + (item.quantidade * item.preco).toString() +'</td></tr>');
+			}
+			for (var i = venda.pagamentos.length - 1; i >= 0; i--) {
+				let pagamento = venda.pagamentos[i];
+				$('#tablePagamentos > tbody:last-child').append('<tr id="' + pagamento.id + '"><td>' + pagamento.formaPagamento.descricao + '</td><td>' + pagamento.valor + '</td></tr>');
+			}
+			$('#detailModal').modal();
+		});
+	}
+</script>

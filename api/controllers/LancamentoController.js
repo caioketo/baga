@@ -155,7 +155,7 @@ module.exports = {
 
 				return res.send({statusCode: 200, lancamento: lancamentoDB});
 			});
-		});	
+		});
 	},
 	createCP: function (req, res) {
 		return res.view();

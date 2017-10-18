@@ -1,3 +1,4 @@
+<script src="/js/jquery.rut.min.js"></script>
 <script src="/js/createCliente.js"></script>
 <label>Nome</label>
 <br>
@@ -11,4 +12,10 @@
 
 <script>
 	var fornecedorID = <%= fornecedor.id %>;
+	$("#rut").rut().on('rutInvalido', function(e) {
+		//alert("El rut " + $(this).val() + " es inválido");
+		$("#rut").addClass("invalid");
+	}).on('rutValido', function (e) {
+		$("#rut").removeClass("invalid");
+	});
 </script>

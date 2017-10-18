@@ -6,6 +6,15 @@
  */
 
 module.exports = {
+	getAll: function (req, res) {
+		FormaPagamento.find().exec(function (err, formasPagamento) {
+			if (err) {
+				console.log(JSON.stringify(err));
+				return res.send(JSON.stringify(err));
+			}
+			return res.send(formasPagamento);
+		});
+	},
 	index: function (req, res) {
 		FormaPagamento.find().exec(function (err, formasPagamento) {
 			if (err) {

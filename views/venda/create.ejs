@@ -29,7 +29,15 @@
 				<option id=<%=loja.id%>> <%= loja.nome %> </option>
 			<% }); %>
 		</select>
+		<label> Tabela: </label>
+		<select id="tabelaPreco">
+			<% tabelas.forEach(function(t) { %>
+				<option id=<%=t.id%>> <%= t.descricao %> </option>
+			<% }); %>
+		</select>
 		<br>
+		<br>
+
         <label>Produto: </label>
 		<input id='produtoNome' type="text" value='' name='produtoNome' />
 		<br>
@@ -114,6 +122,10 @@
 	lojasJSON = lojasJSON.replace(/&quot;/g, '"');
 	var lojas = JSON.parse(lojasJSON);
 
+	var tabelasJSON = '<%= JSON.stringify(tabelas) %>';
+	tabelasJSON = tabelasJSON.replace(/&quot;/g, '"');
+	var tabelas = JSON.parse(tabelasJSON);
+
 	var fpsJSON = '<%= JSON.stringify(formasPagamento) %>';
 	fpsJSON = fpsJSON.replace(/&quot;/g, '"');
 	var formasPagamento = JSON.parse(fpsJSON);
@@ -132,6 +144,7 @@
 
 	var selectedProd = -1;
 	var selectedLoja = -1;
+	var selectedTabela = -1;
 
 
 function showProdutos() {
@@ -152,6 +165,7 @@ function showProdutos() {
 function selecionarProduto() {
 	$('#' + selectedProd).removeClass('highlight');
 	selectedLoja = $('#loja option:selected').attr("id");
+	selectedTabela = $('#tabelaPreco option:selected').attr("id");
 	$('#lojaNome').val(getLojaNome(selectedLoja));
 	getProduto(selectedProd, function (produto) {
 		$("#produto").val(produto.descricao);
@@ -213,7 +227,8 @@ function addPagamento() {
 
 	getFP(fpID, function (fp) {
 		var newPagamento = {
-			formaPagamento: fp,
+			condicaoPagamento: fp.condicaoPagamento,
+			formaPagamento: fp.formaPagamento,
 			valor: valor
 		};
 		pagamentos.push(newPagamento);
@@ -229,18 +244,28 @@ function getLojaNome(id) {
 	}
 }
 
+function getPrecoVenda(_produto) {
+	for (var i = 0; i < _produto.precos.length; i++) {
+		if (_produto.precos[i].tabelaPreco == selectedTabela) {
+			return _produto.precos[i].valor;
+		}
+	}
+	return 0;
+}
+
 function addProduto() {
 	getProduto(selectedProd, function (produto) {
+		var valorProd = getPrecoVenda(produto);
 		var newItem = {
 			produto: produto,
 			qtde: $('#qtde').val(),
-			venda: produto.venda,
+			venda: valorProd,
 			custo: produto.custo,
-			total: (produto.venda * $('#qtde').val()),
+			total: (valorProd * $('#qtde').val()),
 			loja: selectedLoja
 		};
 		itensDaVenda.push(newItem);
-		$('#tableItens tr:last').after('<tr><td>' + getLojaNome(newItem.loja) + '</td><td>' + produto.descricao + '</td><td>' + produto.venda + '</td><td>' + newItem.qtde + '</td><td>' + newItem.total + '</td></tr>');
+		$('#tableItens tr:last').after('<tr><td>' + getLojaNome(newItem.loja) + '</td><td>' + produto.descricao + '</td><td>' + newItem.venda + '</td><td>' + newItem.qtde + '</td><td>' + newItem.total + '</td></tr>');
 		sumTotal();
 		$('#produto').val('');
 		$('#lojaNome').val('');
@@ -248,18 +273,46 @@ function addProduto() {
 	});
 }
 
+function getItensForPost(_itens) {
+	let itensFP = [];
+	for (var i = _itens.length - 1; i >= 0; i--) {
+		itensFP.push({
+			produto: _itens[i].produto.id,
+			quantidade: _itens[i].qtde,
+			custo: _itens[i].custo,
+			preco: _itens[i].venda,
+			loja: _itens[i].loja
+		});
+	}
+	return itensFP;
+}
+
+function getPagamentosForPost(_pagamentos) {
+	let pagamentosFP = [];
+
+	for (var i = _pagamentos.length - 1; i >= 0; i--) {
+		pagamentosFP.push({
+			formaPagamento: _pagamentos[i].formaPagamento.id,
+			valor: _pagamentos[i].valor
+		});
+	}
+
+	return pagamentosFP;
+}
 function finalizarVenda() {
 	var totalItens = getTotal();
 	var totalPagto = getTotalPagto();
 	if (totalPagto < totalItens) {
 		alert('Pagamento insuficiente!');
+		return;
 	}
 
 	io.socket.post('/venda/createPost', { venda: {
-		itens: itensDaVenda,
-		pagamentos: pagamentos/*,
-		cliente: cliente,
-		vendedor: vendedor*/
+		itens: getItensForPost(itensDaVenda),
+		pagamentos: pagamentos,
+		total: totalItens,
+		cliente: 1,
+		vendedor: 1
 	}}, function (resData) {
 		if (resData.statusCode == 200) {
 			document.location = '/venda';

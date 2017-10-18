@@ -15,16 +15,19 @@ module.exports = {
   			model: 'Produto'
   		},
   		quantidade: {
-  			type: 'integer'
+  			type: 'float'
   		},
   		custo: {
-  			type: 'integer'
+  			type: 'float'
   		},
   		preco: {
-  			type: 'integer'
+  			type: 'float'
   		},
       loja: {
         model: 'Loja'
+      },
+      tabelaPreco: {
+        model: 'TabelaPreco'
       }
   }
 };

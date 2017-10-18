@@ -32,7 +32,13 @@ module.exports = {
   	},
   	fornecedor: {
   		model: 'Fornecedor'
-  	}
+  	},
+    valor: {
+      type: 'float'
+    },
+    venda: {
+      model: 'Venda'
+    }
   }
 };
 

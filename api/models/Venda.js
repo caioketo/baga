@@ -21,7 +21,14 @@ module.exports = {
   		},
   		vendedor: {
   			model: 'Vendedor'
-  		}
+  		},
+      total: {
+        type: 'float'
+      },
+      cancelada: {
+        type: 'boolean',
+        defaultsTo: false
+      }
   }
 };
 

@@ -11,14 +11,15 @@ module.exports = {
 	descricao: {
 		type: 'string'
 	},
-	aVista: {
-		type: 'boolean'
-	},
 	moeda: {
 		model: 'Moeda'
 	},
 	conta: {
 		model: 'Conta'
+	},
+	condicoesPagamento: {
+		collection: 'CondicaoPagamento',
+		via: 'formaPagamento'
 	}
   }
 };

@@ -98,7 +98,6 @@ function validateFP(fp) {
 function getFP() {
 	return {
 		descricao: $('#descricao').val(),
-		aVista: $("#aVista").is(':checked'),
 		conta: selectedConta,
 		moeda: selectedMoeda
 	};
@@ -347,7 +346,7 @@ function editMoeda() {
 function createMoeda() {
 	var moeda = getMoedaObj();
 
-	if (validateConta(moeda)) {
+	if (validateMoeda(moeda)) {
 		io.socket.post('/moeda/createPost', { moeda: moeda }, function (resData) {
 			if (resData.statusCode == 200) {
 				document.location = '/moeda';
@@ -448,3 +447,102 @@ function createLoja() {
 		});
 	}
 }
+
+
+
+/**
+	###CONDICOES DE PAGAMENTO###
+*/
+
+
+function validateCondicaoPagamento(condicaoPagamento) {
+	return true;
+}
+
+
+function getCondicaoPagamentoObj() {
+	return {
+		descricao: $('#descricao').val(),
+		aVista: $("#aVista").is(':checked'),
+		primeiraParcela: $('#primeiraParcela').val(),
+		intervalo: $('#intervalo').val(),
+		parcelas: $('#parcelas').val(),
+		formaPagamento: selectedFormaPagamento
+	};
+}
+
+function editCondicaoPagamento() {
+	var condicaoPagamento = getCondicaoPagamentoObj();
+	if (validateCondicaoPagamento(condicaoPagamento)) {
+		io.socket.post('/condicaoPagamento/editPost', { condicaoPagamento: condicaoPagamento, id: condicaoPagamentoID }, function (resData) {
+			if (resData.statusCode == 200) {
+				document.location = '/condicaoPagamento';
+			}
+		});
+	}
+}
+
+
+function createCondicaoPagamento() {
+	var condicaoPagamento = getCondicaoPagamentoObj();
+
+	if (validateCondicaoPagamento(condicaoPagamento)) {
+		io.socket.post('/condicaoPagamento/createPost', { condicaoPagamento: condicaoPagamento }, function (resData) {
+			if (resData.statusCode == 200) {
+				document.location = '/condicaoPagamento';
+			}
+		});
+	}
+}
+
+function getFormaPagamento(id) {
+	for (var i = formasPagamento.length - 1; i >= 0; i--) {
+		if (formasPagamento[i].id == id) {
+			return formasPagamento[i];
+		}
+	}
+	return undefined;
+}
+
+function selecionarFormaPagamento() {
+	if (selectedFormaPagamento !== -1) {
+		formaPagamentoObj = getFormaPagamento(selectedFormaPagamento);
+		$('#formaPagamento').val(formaPagamentoObj.descricao);
+		$('#formaPagamentoMdl').modal('hide');
+	}
+}
+
+
+function findFormaPagamento() {
+	io.socket.get('/formaPagamento/getAll', function (resData, jwres) {
+		formasPagamento = resData;
+		$("#tbodyFP").empty();
+
+		for (var i = formasPagamento.length - 1; i >= 0; i--) {
+			$('#tableFP > tbody:last-child').append('<tr id="' + formasPagamento[i].id + '"><td>' + formasPagamento[i].descricao + '</td></tr>');
+		}
+		searchRowsFP = $('#tableFP tr');
+		searchRowsFP.splice(0, 1);
+		searchRowsFP.on('click', function (e) {
+			var row = $(this);
+			if (selectedFormaPagamento > -1) {
+				$('#' + selectedFormaPagamento).removeClass('highlight');
+			}
+			row.addClass('highlight');
+			selectedFormaPagamento = row.attr('id');
+		});
+		$("#formaPagamentoInput").bind('keydown', filtrarFormaPagamento);
+		$("#formaPagamentoMdl").modal();
+	});
+};
+
+function filtrarFormaPagamento(e) {
+	setTimeout(function () {
+		var text = $("#formaPagamentoInput").val();
+		var val = $.trim(text).replace(/ +/g, ' ').toLowerCase();
+		searchRowsFP.show().filter(function() {
+			var text = $(this).text().replace(/\s+/g, ' ').	toLowerCase();
+			return !~text.indexOf(val);
+		}).hide();
+	}, 200);
+};
