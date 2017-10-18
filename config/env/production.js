@@ -21,13 +21,13 @@ module.exports = {
      connection: 'mongodb'
    },
 
-   session: {
-     adapter: 'redis'
-   },
+   //session: {
+//     adapter: 'redis'
+   //},
 
-   sockets: {
-     adapter: 'socket.io-redis'
-   },
+   //sockets: {
+     //adapter: 'socket.io-redis'
+   //},
 
   /***************************************************************************
    * Set the port in the production environment to 80                        *
