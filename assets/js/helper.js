@@ -514,6 +514,8 @@ function selecionarFormaPagamento() {
 
 
 function findFormaPagamento() {
+
+	
 	io.socket.get('/formaPagamento/getAll', function (resData, jwres) {
 		formasPagamento = resData;
 		$("#tbodyFP").empty();
