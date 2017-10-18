@@ -22,9 +22,9 @@ module.exports = {
 				records: condicoesPagamento,
 				options: {
 					insert: 'Nova Condição de Pagamento',
-					insertURL: '/condicaoPagamento/create',
-					updateURL: '/condicaoPagamento/edit',
-					deleteURL: '/condicaoPagamento/delete'
+					insertURL: '/condicaopagamento/create',
+					updateURL: '/condicaopagamento/edit',
+					deleteURL: '/condicaopagamento/delete'
 				}
 			});
 		});

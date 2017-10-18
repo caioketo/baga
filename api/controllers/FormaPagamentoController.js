@@ -31,9 +31,9 @@ module.exports = {
 				records: formasPagamento,
 				options: {
 					insert: 'Nova Forma de Pagamento',
-					insertURL: '/formaPagamento/create',
-					updateURL: '/formaPagamento/edit',
-					deleteURL: '/formaPagamento/delete'
+					insertURL: '/formapagamento/create',
+					updateURL: '/formapagamento/edit',
+					deleteURL: '/formapagamento/delete'
 				}
 			});
 		});
