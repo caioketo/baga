@@ -48,13 +48,13 @@ module.exports = {
 					console.log(JSON.stringify(err));
 					return res.send(JSON.stringify(err));
 				}
-				return res.view('condicaoPagamento/edit.ejs', {condicaoPagamento: condicoesPagamento[0], 
+				return res.view('condicaopagamento/edit.ejs', {condicaoPagamento: condicoesPagamento[0], 
 					formasPagamento: formasPagamento});
 			});
 		});				
 	},
 	create: function (req, res) {
-		return res.view('condicaoPagamento/create.ejs');
+		return res.view('condicaopagamento/create.ejs');
 	},
 	editPost: function (req, res) {
 		CondicaoPagamento.update({id: req.body.id}, req.body.condicaoPagamento).exec(function (err, condicaoPagamentoDB) {
