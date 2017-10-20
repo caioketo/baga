@@ -1,5 +1,7 @@
+<%- include modalSearch.ejs %>
+<br>
 <input type="submit" value="<%= options.insert %>" onclick="window.location='<%= options.insertURL %>';" />
-<table id='tableCR' class="table table-striped">
+<table id='tableCRUD' class="table table-striped">
 	<thead>
 		<tr>
 			<th>ID</th>
@@ -9,7 +11,7 @@
 			<th></th>
 		</tr>
 	</thead>
-	<tbody>
+	<tbody id='bodyCRUD'>
 		<% records.forEach(function(r) { %>
 			<tr id='<%= r.id %>'>
 				<td><%= r.id %></td>

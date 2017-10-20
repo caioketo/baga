@@ -24,7 +24,12 @@ module.exports = {
 					insert: 'Nova Tabela de Preço',
 					insertURL: '/tabelaPreco/create',
 					updateURL: '/tabelaPreco/edit',
-					deleteURL: '/tabelaPreco/delete'
+					deleteURL: '/tabelaPreco/delete',
+					searchField: {
+						descricao: 'Descrição',
+						type: 'text',
+						nome: 'descricao'
+					}
 				}
 			});
 		});

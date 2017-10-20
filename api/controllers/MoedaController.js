@@ -50,7 +50,12 @@ module.exports = {
 					insert: 'Nova Moeda',
 					insertURL: '/moeda/create',
 					updateURL: '/moeda/edit',
-					deleteURL: '/moeda/delete'
+					deleteURL: '/moeda/delete',
+					searchField: {
+						descricao: 'Descrição',
+						type: 'text',
+						nome: 'descricao'
+					}
 				}
 			});
 		});

@@ -33,7 +33,12 @@ module.exports = {
 					insert: 'Novo Produto',
 					insertURL: '/produto/create',
 					updateURL: '/produto/edit',
-					deleteURL: '/produto/delete'
+					deleteURL: '/produto/delete',
+					searchField: {
+						descricao: 'Descrição',
+						type: 'text',
+						nome: 'descricao'
+					}
 				}
 			});
 		});

@@ -1,0 +1,35 @@
+<label><%= options.searchField.descricao %></label>
+<input id='searchField' type="<%= options.searchField.type %>" value='' name='searchField' oninput='filter();' />
+
+<script>
+	var records = <%- JSON.stringify(records) %>;
+	var showingIds = [];
+	records.forEach(function (record, id) {
+		showingIds.push(record.id);
+	});
+
+	$('#searchField').focus();
+
+	function filter() {
+		var searchText = $('#searchField').val();
+		//loop and add showingids
+		var searchedRecords = $.grep(records, function (e) {
+			return e['<%= options.searchField.nome %>'].includes(searchText);
+		});
+		showingIds = [];
+		searchedRecords.forEach(function (element, id) {
+			showingIds.push(element.id);
+		});
+
+
+		var rows = $('#bodyCRUD > tr');
+		for (var i = 0; i < rows.length; i++) {
+			if (showingIds.includes(rows[i].id)) {
+				rows[i].style.display = '';
+			}
+			else {
+				rows[i].style.display = 'none';
+			}
+		}
+	}
+</script>

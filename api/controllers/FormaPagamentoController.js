@@ -34,7 +34,12 @@ module.exports = {
 					insert: 'Nova Forma de Pagamento',
 					insertURL: '/formapagamento/create',
 					updateURL: '/formapagamento/edit',
-					deleteURL: '/formapagamento/delete'
+					deleteURL: '/formapagamento/delete',
+					searchField: {
+						descricao: 'Descrição',
+						type: 'text',
+						nome: 'descricao'
+					}
 				}
 			});
 		});

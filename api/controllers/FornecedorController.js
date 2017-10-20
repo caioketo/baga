@@ -45,7 +45,12 @@ module.exports = {
 					insert: 'Novo Fornecedor',
 					insertURL: '/fornecedor/create',
 					updateURL: '/fornecedor/edit',
-					deleteURL: '/fornecedor/delete'
+					deleteURL: '/fornecedor/delete',
+					searchField: {
+						descricao: 'Nome',
+						type: 'text',
+						nome: 'nome'
+					}
 				}
 			});
 		});

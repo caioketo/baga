@@ -45,7 +45,12 @@ module.exports = {
 					insert: 'Novo Loja',
 					insertURL: '/loja/create',
 					updateURL: '/loja/edit',
-					deleteURL: '/loja/delete'
+					deleteURL: '/loja/delete',
+					searchField: {
+						descricao: 'Nome',
+						type: 'text',
+						nome: 'nome'
+					}
 				}
 			});
 		});

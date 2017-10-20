@@ -42,7 +42,12 @@ module.exports = {
 					insert: 'Nova Conta',
 					insertURL: '/conta/create',
 					updateURL: '/conta/edit',
-					deleteURL: '/conta/delete'
+					deleteURL: '/conta/delete',
+					searchField: {
+						descricao: 'Descrição',
+						type: 'text',
+						nome: 'descricao'
+					}
 				}
 			});
 		});

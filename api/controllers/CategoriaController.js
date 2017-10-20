@@ -41,7 +41,12 @@ module.exports = {
 					insert: 'Nova Categoria',
 					insertURL: '/categoria/create',
 					updateURL: '/categoria/edit',
-					deleteURL: '/categoria/delete'
+					deleteURL: '/categoria/delete',
+					searchField: {
+						descricao: 'Descrição',
+						type: 'text',
+						nome: 'descricao'
+					}
 				}
 			});
 		});

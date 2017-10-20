@@ -45,7 +45,12 @@ module.exports = {
 					insert: 'Novo Cliente',
 					insertURL: '/cliente/create',
 					updateURL: '/cliente/edit',
-					deleteURL: '/cliente/delete'
+					deleteURL: '/cliente/delete',
+					searchField: {
+						descricao: 'Descrição',
+						type: 'text',
+						nome: 'descricao'
+					}
 				}
 			});
 		});

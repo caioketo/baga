@@ -24,7 +24,12 @@ module.exports = {
 					insert: 'Nova Condição de Pagamento',
 					insertURL: '/condicaopagamento/create',
 					updateURL: '/condicaopagamento/edit',
-					deleteURL: '/condicaopagamento/delete'
+					deleteURL: '/condicaopagamento/delete',
+					searchField: {
+						descricao: 'Descrição',
+						type: 'text',
+						nome: 'descricao'
+					}
 				}
 			});
 		});

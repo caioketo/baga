@@ -24,7 +24,12 @@ module.exports = {
 					insert: 'Novo Vendedor',
 					insertURL: '/vendedor/create',
 					updateURL: '/vendedor/edit',
-					deleteURL: '/vendedor/delete'
+					deleteURL: '/vendedor/delete',
+					searchField: {
+						descricao: 'Nome',
+						type: 'text',
+						nome: 'nome'
+					}
 				}
 			});
 		});
