@@ -22,14 +22,6 @@
 		});
 
 
-		var rows = $('#bodyCRUD > tr');
-		for (var i = 0; i < rows.length; i++) {
-			if (showingIds.includes(rows[i].id)) {
-				rows[i].style.display = '';
-			}
-			else {
-				rows[i].style.display = 'none';
-			}
-		}
+		applyFilter($('#bodyCRUD > tr'), showingIds);
 	}
 </script>

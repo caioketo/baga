@@ -38,6 +38,10 @@ module.exports = {
 					{
 						titulo: 'Nome',
 						nome: 'nome'
+					},
+					{
+						titulo: 'E-mail',
+						nome: 'email'
 					}
 				],
 				records: clientes,
@@ -56,16 +60,28 @@ module.exports = {
 		});
 	},
 	edit: function(req, res) {
-		Cliente.find({id: req.param('id')}).exec(function (err, clientes) {
+		TabelaPreco.find().exec(function (err, tabelasPreco) {
 			if (err) {
 				console.log(JSON.stringify(err));
 				return res.send(JSON.stringify(err));
 			}
-			return res.view({cliente: clientes[0]});
+			Cliente.find({id: req.param('id')}).populate('tabelaPreco').exec(function (err, clientes) {
+				if (err) {
+					console.log(JSON.stringify(err));
+					return res.send(JSON.stringify(err));
+				}
+				return res.view({cliente: clientes[0], tabelasPreco: tabelasPreco});
+			});
 		});
 	},
 	create: function (req, res) {
-		return res.view();
+		TabelaPreco.find().exec(function (err, tabelasPreco) {
+			if (err) {
+				console.log(JSON.stringify(err));
+				return res.send(JSON.stringify(err));
+			}
+			return res.view({tabelasPreco: tabelasPreco});
+		});
 	},
 	editPost: function (req, res) {
 		Cliente.update({id: req.body.id}, req.body.cliente).exec(function (err, clienteDB) {

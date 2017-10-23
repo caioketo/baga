@@ -13,6 +13,12 @@ module.exports = {
 		},
 		rut: {
 			type: 'string'
+		},
+		email: {
+			type: 'string'
+		},
+		tabelaPreco: {
+			model: 'TabelaPreco'
 		}
   }
 };

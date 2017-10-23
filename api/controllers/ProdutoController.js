@@ -39,7 +39,8 @@ module.exports = {
 						type: 'text',
 						nome: 'descricao'
 					}
-				}
+				},
+				filtro: true
 			});
 		});
 	},

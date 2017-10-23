@@ -1,4 +1,5 @@
 <input type="submit" value="Nova CR" onclick="window.location='/lancamento/createCR';" />
+<input type="submit" value="Filtrar" onclick="mostrarFiltro();" />
 <table id='tableCR' class="table table-striped">
 	<thead>
 		<tr>
@@ -25,6 +26,7 @@
 </table>
 
 <%- include ../modelDelete.ejs %>
+<%- include ../filtros/modalFiltroCR.ejs %>
 <%- include modelBaixa.ejs %>
 
 <script src="/js/lancamentoHelper.js"></script>
@@ -35,4 +37,21 @@
 	var formasPagamento = JSON.parse(fpsJSON);
 	var pagamentos = [];
 	var valorConta = 0;
+
+	var records = <%- JSON.stringify(lancamentos) %>;
+	var showingIds = [];
+	var searchedRecords = $.grep(records, function (e) {
+		var d1 = new Date(e.vencimento);
+		var d2 = new Date();
+		return d1 <= d2;
+	});
+	searchedRecords.forEach(function (element, id) {
+		showingIds.push(element.id);
+	});
+	var rows = $('#tableCR > tbody > tr');
+	applyFilter(rows, showingIds);
+
+	function mostrarFiltro() {
+		$("#filtroMdl").modal();
+	}
 </script>

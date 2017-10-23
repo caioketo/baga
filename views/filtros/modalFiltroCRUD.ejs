@@ -1,0 +1,128 @@
+<input type="submit" value="Filtrar" onclick="mostrarFiltro();" />
+<div class="modal fade" id="filtroMdl" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Filtrar</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+      	<label><input id="descricaoCbx" type="checkbox" value="">Descrição</label>
+		<br>
+		<input id='descricao' type="text" value=''/>
+		<br>
+		<br>
+		<label><input id="categoriaCbx" type="checkbox" value="">Categoria</label>
+		<br>
+		<input id='categoria' type="text" value='' name='categoria' onfocus="findCategoria();" />
+		<br>
+		<br>
+		<label><input id="quantidadeCbx" type="checkbox" value="">Quantidade entre</label>
+		<br>
+		<input id='qtdeInicio' type="number" value=''/> e <input id='qtdeFim' type="number" value=''/>
+      </div>
+      <div class="modal-footer">
+      	<button type="button" class="btn btn-secondary" data-dismiss="modal" onclick="tirarFiltro();">Limpar</button>
+        <button type="button" class="btn btn-primary" data-dismiss="modal" onclick="aplicarFiltro();">Aplicar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<div class="modal fade" id="categoriaMdl" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Procurar Categorias</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <label>Categoria</label>
+		<br>
+		<input id='cateogriaInput' type="text" value='' name='cateogriaInput' />
+		<br>
+
+		<table id='tableCategorias' class="table table-striped">
+			<thead>
+				<th>Categoria</th>
+			</thead>
+			<tbody id="tbodyCategorias">
+			</tbody>
+		</table>
+
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+        <button type="button" class="btn btn-primary" onclick="selecionarCategoria();">Selecionar</button>
+      </div>
+    </div>
+  </div>
+</div>
+<script src="/js/produtoHelper.js"></script>
+<script>
+	$('#vencimentoInicio').datepicker({ dateFormat: 'dd/mm/yy' });
+	$('#vencimentoFim').datepicker({ dateFormat: 'dd/mm/yy' });
+	var showingObjs = [];
+	var categorias = [];
+	var selectedCategoria = -1;
+	var categoriaObj = undefined;
+	var searchRows = $('#tableCategorias tr');
+	$('#categoriaMdl').on('shown.bs.modal', function () {
+	  $('#cateogriaInput').focus()
+	});
+
+	function aplicarFiltro() {
+		showingIds = [];
+		showingObjs = records.slice();
+		
+		if ($("#descricaoCbx").is(':checked')) {
+			var text = $('#descricao').val();
+			showingObjs.forEach(function (record, id) {
+				if (!record.descricao.includes(text)) {
+					showingObjs.splice(id, 1);
+				}
+			});
+		}
+		if ($("#categoriaCbx").is(':checked')) {
+			showingObjs.forEach(function (record, id) {
+				if (record.categoria.id !== categoriaObj.id) {
+					showingObjs.splice(id, 1);
+				}
+			});
+		}
+
+		if ($("#quantidadeCbx").is(':checked')) {
+			var qtdeInicio = $('#qtdeInicio').val();
+			var qtdeFim = $('#qtdeFim').val();
+			showingObjs.forEach(function (record, id) {
+				if (record.quantidade < qtdeInicio || record.quantidade > qtdeFim) {
+					showingObjs.splice(id, 1);
+				}
+			});
+		}
+
+		showingObjs.forEach(function (obj, id) {
+			showingIds.push(obj.id);
+		});
+
+		var rows = $('#tableCRUD > tbody > tr');
+		applyFilter(rows, showingIds);
+	}
+
+	function tirarFiltro() {
+		records.forEach(function (element, id) {
+			showingIds.push(element.id);
+		});
+		var rows = $('#tableCRUD > tbody > tr');
+		applyFilter(rows, showingIds);
+	}
+
+	function mostrarFiltro() {
+		$("#filtroMdl").modal();
+	}
+</script>

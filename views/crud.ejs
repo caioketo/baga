@@ -1,4 +1,9 @@
-<%- include modalSearch.ejs %>
+<div>
+	<%- include modalSearch.ejs %>
+</div>
+<% if (typeof filtro !== 'undefined') { %>
+	<%- include ./filtros/modalFiltroCRUD.ejs %> 	
+<% } %>
 <br>
 <input type="submit" value="<%= options.insert %>" onclick="window.location='<%= options.insertURL %>';" />
 <table id='tableCRUD' class="table table-striped">
@@ -29,6 +34,9 @@
 <%- include modelDelete.ejs %>
 
 <script>
+	var records = <%- JSON.stringify(records) %>;
+	var showingIds = [];
+
 	function deleteRecord(deleteURL, id) {
 		$('#confirmDelete').modal({
 		  backdrop: 'static',

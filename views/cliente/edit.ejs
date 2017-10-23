@@ -4,9 +4,21 @@
 <br>
 <input id='nome' type="text" value='<%= cliente.nome %>' name='nome' />
 <br>
+<br>
 <label>RUT</label>
 <br>
 <input id='rut' type="text" value='<%= cliente.rut %>' name='rut' />
+<br>
+<br>
+<label>E-mail</label>
+<br>
+<input id='email' type="text" value='<%= cliente.email %>' />
+<br>
+<br>
+<label>Tabela de Preço</label>
+<br>
+<select id="tabelasPreco"></select>
+<br>
 <br>
 <input type="submit" value="Salvar" onclick="editCliente();" />
 
@@ -18,4 +30,17 @@
 	}).on('rutValido', function (e) {
 		$("#rut").removeClass("invalid");
 	});
+
+	var tabelasDePreco = <%- JSON.stringify(tabelasPreco) %>;
+
+	tabelasDePreco.forEach(function (item, index) {
+		$('#tabelasPreco')
+	    	.append($("<option></option>")
+	        .attr("value",item.id)
+	        .text(item.descricao)); 
+	});
+
+	<% if (typeof cliente.tabelaPreco !== 'undefined') { %>
+		$('#tabelasPreco').val('<%= cliente.tabelaPreco.id %>');
+	<% } %>
 </script>

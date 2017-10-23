@@ -13,7 +13,12 @@
 	</tbody>
 </table>
 <script src="/js/moment.min.js"></script>
+
+<%- include ../filtros/modalFiltroCC.ejs %>
+
 <script>
+	var records = [];
+	var showingIds = [];
 	var contas = <%- JSON.stringify(contas) %>;
 	var selectedConta = -1;
 	var contaObj = undefined;
@@ -24,6 +29,7 @@
 	showContasModal(function (conta) {
 														//5
 		io.socket.get('/lancamento/contaCorrenteSel', { conta: selectedConta }, function (resData, jwres) {
+			records = resData;
 			var lancamentos = resData;
 			$("#tbodyCC").empty();
 			var total = 0;
@@ -34,4 +40,8 @@
 			$('#tableCC > tbody').after('<tfoot><tr><th></th><th></th><th>Total:</th><th>' + total.toString() + '</th></tr></tfoot>');
 		});
 	});
+
+	function mostrarFiltro() {
+		$("#filtroMdl").modal();
+	}
 </script>

@@ -4,17 +4,39 @@
 <br>
 <input id='nome' type="text" value='' name='nome' />
 <br>
+<br>
 <label>RUT</label>
 <br>
 <input id='rut' type="text" value='' name='rut' />
 <br>
+<br>
+<label>E-mail</label>
+<br>
+<input id='email' type="text" value='' />
+<br>
+<br>
+<label>Tabela de Preço</label>
+<br>
+<select id="tabelasPreco"></select>
+<br>
+<br>
 <input type="submit" value="Salvar" onclick="createCliente();" />
 
 <script>
-	$("#rut").rut().on('rutInvalido', function(e) {
-		//alert("El rut " + $(this).val() + " es inválido");
-		$("#rut").addClass("invalid");
-	}).on('rutValido', function (e) {
-		$("#rut").removeClass("invalid");
+	$("#rut").rut()
+		.on('rutInvalido', function(e) {
+			//alert("El rut " + $(this).val() + " es inválido");
+			$("#rut").addClass("invalid");
+		}).on('rutValido', function (e) {
+			$("#rut").removeClass("invalid");
+	});
+
+	var tabelasDePreco = <%- JSON.stringify(tabelasPreco) %>;
+
+	tabelasDePreco.forEach(function (item, index) {
+		$('#tabelasPreco')
+	    	.append($("<option></option>")
+	        .attr("value",item.id)
+	        .text(item.descricao)); 
 	});
 </script>

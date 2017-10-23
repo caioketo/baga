@@ -10,7 +10,9 @@ function validateCliente(cliente) {
 function getCliente() {
 	return {
 		nome: $('#nome').val(),
-		rut: $('#rut').val()
+		rut: $('#rut').val(),
+		email: $('#email').val(),
+		tabelaPreco: $("#tabelasPreco").val()
 	};
 }
 
@@ -548,3 +550,15 @@ function filtrarFormaPagamento(e) {
 		}).hide();
 	}, 200);
 };
+
+
+function applyFilter(_rows, _showingIds) {
+	for (var i = 0; i < _rows.length; i++) {
+		if (_showingIds.includes(_rows[i].id)) {
+			_rows[i].style.display = '';
+		}
+		else {
+			_rows[i].style.display = 'none';
+		}
+	}
+}

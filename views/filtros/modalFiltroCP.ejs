@@ -1,0 +1,93 @@
+<div class="modal fade" id="filtroMdl" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Filtrar</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+      	<label><input id="fornecedorCbx" type="checkbox" value="">Fornecedor</label>
+		<br>
+		<input id='fornecedor' type="text" value='' onfocus="findFornecedor();" />
+		<br>
+		<br>
+		<label><input id="descricaoCbx" type="checkbox" value="">Descrição</label>
+		<br>
+		<input id='descricao' type="text" value=''/>
+		<br>
+		<br>
+		<label><input id="vencimentoCbx" type="checkbox" value="">Data de Vencimento</label>
+		<br>
+		<input id='vencimentoInicio' type="text" value=''/> À <input id='vencimentoFim' type="text" value=''/>
+      </div>
+      <div class="modal-footer">
+      	<button type="button" class="btn btn-secondary" data-dismiss="modal" onclick="tirarFiltro();">Limpar</button>
+        <button type="button" class="btn btn-primary" data-dismiss="modal" onclick="aplicarFiltro();">Aplicar</button>
+      </div>
+    </div>
+  </div>
+</div>
+<%- include ../modalFornecedores.ejs %>
+
+
+<script>
+	$('#vencimentoInicio').datepicker({ dateFormat: 'dd/mm/yy' });
+	$('#vencimentoFim').datepicker({ dateFormat: 'dd/mm/yy' });
+	var showingObjs = [];
+	var fornecedores = [];
+	var selectedFornecedor = -1;
+	var fornecedorObj = undefined;
+	var searchRows = $('#tableFornecedores tr');
+	$('#fornecedorMdl').on('shown.bs.modal', function () {
+	  $('#fornecedorNome').focus()
+	});
+
+	function aplicarFiltro() {
+		showingIds = [];
+		showingObjs = records.slice();
+		if ($("#fornecedorCbx").is(':checked')) {
+			if (fornecedorObj) {
+				showingObjs.forEach(function (record, id) {
+					if (record.fornecedor.id !== fornecedorObj.id) {
+						showingObjs.splice(id, 1);
+					}
+				});
+			}
+		}
+		if ($("#descricaoCbx").is(':checked')) {
+			var text = $('#descricao').val();
+			showingObjs.forEach(function (record, id) {
+				if (!record.descricao.includes(text)) {
+					showingObjs.splice(id, 1);
+				}
+			});
+		}
+		if ($("#vencimentoCbx").is(':checked')) {
+			var dI = new Date($('#vencimentoInicio').datepicker("getDate"));
+			var dF = new Date($('#vencimentoFim').datepicker("getDate"));
+			showingObjs.forEach(function (record, id) {
+				var ven = new Date(record.vencimento);
+				if (ven < dI || ven > dF) {
+					showingObjs.splice(id, 1);
+				}
+			});
+		}
+
+		showingObjs.forEach(function (obj, id) {
+			showingIds.push(obj.id);
+		});
+
+		var rows = $('#tableCP > tbody > tr');
+		applyFilter(rows, showingIds);
+	}
+
+	function tirarFiltro() {
+		records.forEach(function (element, id) {
+			showingIds.push(element.id);
+		});
+		var rows = $('#tableCP > tbody > tr');
+		applyFilter(rows, showingIds);
+	}
+</script>

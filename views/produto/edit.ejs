@@ -18,6 +18,7 @@
 <br>
 <input id='custo' type="number" value='<%= produto.custo %>' name='custo' />
 <br>
+<br>
 <label>Preços de Venda</label>
 <br>
 <div>
@@ -26,7 +27,7 @@
 		<input id='venda' type="number" value='' name='venda' />
 		<input type="submit" value="Adicionar Preço" onclick="addPreco();" />	
 	</div>
-	<table id='tablePrecos'>
+	<table id='tablePrecos' class="table table-striped" >
 		<thead>
 			<tr>
 				<th>Tabela</th>
@@ -73,8 +74,6 @@
 </div>
 
 
-<script src="/js/produtoHelper.js"></script>
-
 <script>
 	var produtoID = '<%= produto.id %>';
 	$(document).ready(function() {
@@ -85,8 +84,13 @@
 	var precos = <%- JSON.stringify(produto.precos) %>;
 
 	var categorias =  <%- JSON.stringify(categorias) %>;
-	var selectedCategoria =  <%= produto.categoria.id %>;
-	var categoriaObj = <%- JSON.stringify(produto.categoria) %>;
+	<% if (typeof produto.categoria !== 'undefined') { %>
+		var selectedCategoria =  '<%= produto.categoria.id %>';
+		var categoriaObj = <%- JSON.stringify(produto.categoria) %>;
+	<%} else { %>
+		var selectedCategoria = -1;
+		var categoriaObj;
+	<% } %>
 	var searchRows = $('#tableCategorias tr');
 	selecionarCategoria();
 
@@ -95,3 +99,5 @@
 	});
 </script>
 
+
+<script src="/js/produtoHelper.js"></script>
