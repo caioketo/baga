@@ -1,0 +1,24 @@
+/**
+ * Permissao.js
+ *
+ * @description :: TODO: You might write a short summary of how this model works and what it represents here.
+ * @docs        :: http://sailsjs.org/documentation/concepts/models-and-orm/models
+ */
+
+module.exports = {
+
+  attributes: {
+  	users: {
+  		collection: 'user',
+  		via: 'permissao',
+  		through: 'grupopermissao'
+  	},
+  	path: {
+  		type: 'string'
+  	},
+    nome: {
+      type: 'string'
+    }
+  }
+};
+

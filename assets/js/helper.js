@@ -562,3 +562,88 @@ function applyFilter(_rows, _showingIds) {
 		}
 	}
 }
+
+
+/**
+	###GRUPOS PERMISSÕES###
+*/
+
+function validateGrupoPermissao(grupo) {
+	return true;
+}
+
+
+function getGrupoPermissao() {
+	var permissoesDoGrupo = [];
+	$('.cbxPermissao:checkbox:checked').each(function () {
+		permissoesDoGrupo.push($(this).val());
+	});
+	return {
+		nome: $('#nome').val(),
+		permissoes: permissoesDoGrupo
+	};
+}
+
+function editGrupoPermissao() {
+	var grupo = getGrupoPermissao();
+	if (validateGrupoPermissao(grupo)) {
+		io.socket.post('/grupopermissao/editPost', { grupo: grupo, id: grupoID }, function (resData) {
+			if (resData.statusCode == 200) {
+				document.location = '/grupopermissao';
+			}
+		});
+	}
+}
+
+
+function createGrupoPermissao() {
+	var grupo = getGrupoPermissao();
+
+	if (validateGrupoPermissao(grupo)) {
+		io.socket.post('/grupopermissao/createPost', { grupo: grupo }, function (resData) {
+			if (resData.statusCode == 200) {
+				document.location = '/grupopermissao';
+			}
+		});
+	}
+}
+
+/**
+	###PERMISSÕES###
+*/
+
+function validatePermissao(permissao) {
+	return true;
+}
+
+
+function getPermissao() {
+	return {
+		nome: $('#nome').val(),
+		path: $('#path').val()
+	};
+}
+
+function editPermissao() {
+	var permissao = getPermissao();
+	if (validatePermissao(permissao)) {
+		io.socket.post('/permissao/editPost', { permissao: permissao, id: permissaoID }, function (resData) {
+			if (resData.statusCode == 200) {
+				document.location = '/permissao';
+			}
+		});
+	}
+}
+
+
+function createPermissao() {
+	var permissao = getPermissao();
+
+	if (validatePermissao(permissao)) {
+		io.socket.post('/permissao/createPost', { permissao: permissao }, function (resData) {
+			if (resData.statusCode == 200) {
+				document.location = '/permissao';
+			}
+		});
+	}
+}

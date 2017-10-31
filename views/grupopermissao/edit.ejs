@@ -1,0 +1,26 @@
+<label>Nome</label>
+<br>
+<input id='nome' type="text" value='<%= grupo.nome %>' />
+<br>
+<br>
+<div id='permissoes'>
+<% permissoes.forEach(function (el, index) { %>
+	<input class="cbxPermissao" type="checkbox" value="<%= el.id %>"> <%= el.nome %> </input>
+	<br>
+<% }); %>
+</div>
+<br>
+
+<input type="submit" value="Salvar" onclick="editGrupoPermissao();" />
+
+
+<script>
+	var grupoID = '<%= grupo.id %>';
+	var grupo = <%- JSON.stringify(grupo) %>;
+	var permissoes = <%- JSON.stringify(permissoes) %>;
+	$('.cbxPermissao:checkbox').each(function () {
+		if (grupo.permissoes.includes($(this).val())) {
+			$(this).prop('checked', true);
+		}
+	});
+</script>

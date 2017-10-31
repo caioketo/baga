@@ -1,0 +1,14 @@
+<label>Nome</label>
+<br>
+<input id='nome' type="text" value='<% permissao.nome %>' />
+<br>
+<label>Path</label>
+<br>
+<input id='path' type="text" value='<% permissao.path %>' />
+<br>
+<br>
+<input type="submit" value="Salvar" onclick="editPermissao();" />
+
+<script>
+	var permissaoID = '<%= permissao.id %>';
+</script>

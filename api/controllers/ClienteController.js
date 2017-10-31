@@ -51,9 +51,9 @@ module.exports = {
 					updateURL: '/cliente/edit',
 					deleteURL: '/cliente/delete',
 					searchField: {
-						descricao: 'Descrição',
+						descricao: 'Nome',
 						type: 'text',
-						nome: 'descricao'
+						nome: 'nome'
 					}
 				}
 			});

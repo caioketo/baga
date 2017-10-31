@@ -1,0 +1,17 @@
+<label>Nome</label>
+<br>
+<input id='nome' type="text" value='' />
+<br>
+<br>
+<div id='permissoes'>
+<% permissoes.forEach(function (el, index) { %>
+	<input class="cbxPermissao" type="checkbox" value="<%= el.id %>"> <%= el.nome %> </input>
+	<br>
+<% }); %>
+</div>
+<br>
+<input type="submit" value="Salvar" onclick="createGrupoPermissao();" />
+
+<script>
+	var permissoes = <%- JSON.stringify(permissoes) %>;
+</script>

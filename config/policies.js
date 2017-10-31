@@ -25,8 +25,20 @@ module.exports.policies = {
   * access)                                                                  *
   *                                                                          *
   ***************************************************************************/
-
-  // '*': true,
+  '/dashboard': true,
+  '/unauthorized': true,
+  '*': 'hasPermission',
+  GrupoPermissaoController: {
+    '*': true
+  },
+  PermissaoController: {
+    '*': true
+  },
+  UserController: {
+    '*': 'isAuthenticated',
+    login: true,
+    signup: true
+  }
 
   /***************************************************************************
   *                                                                          *
