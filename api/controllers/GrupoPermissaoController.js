@@ -15,8 +15,8 @@ module.exports = {
 			return res.view('crud.ejs', {
 				fields: [
 					{
-						titulo: 'Descrição',
-						nome: 'descricao'
+						titulo: 'Nome',
+						nome: 'nome'
 					}
 				],
 				records: grupos,
@@ -26,9 +26,9 @@ module.exports = {
 					updateURL: '/grupopermissao/edit',
 					deleteURL: '/grupopermissao/delete',
 					searchField: {
-						descricao: 'Descrição',
+						descricao: 'Nome',
 						type: 'text',
-						nome: 'descricao'
+						nome: 'nome'
 					}
 				}
 			});
