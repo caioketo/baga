@@ -28,16 +28,12 @@ module.exports.policies = {
   '/dashboard': true,
   '/unauthorized': true,
   '*': 'hasPermission',
-  GrupoPermissaoController: {
-    '*': true
-  },
   PermissaoController: {
-    '*': true
+    '*': 'isRoot'
   },
   UserController: {
     '*': 'isAuthenticated',
-    login: true,
-    signup: true
+    login: true
   }
 
   /***************************************************************************

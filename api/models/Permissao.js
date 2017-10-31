@@ -8,16 +8,15 @@
 module.exports = {
 
   attributes: {
-  	users: {
-  		collection: 'user',
-  		via: 'permissao',
-  		through: 'grupopermissao'
-  	},
   	path: {
   		type: 'string'
   	},
     nome: {
       type: 'string'
+    },
+    grupos: {
+      collection: 'grupopermissao',
+      via: 'permissoes'
     }
   }
 };

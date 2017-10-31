@@ -20,18 +20,17 @@ module.exports = {
 		cliente: {
 			model: 'Cliente'
 		},
-		permissoes: {
-	  		collection: 'permissao',
-	  		via: 'user',
-	  		through: 'grupopermissao'
-	  	}
+		grupopermissao: {
+			model: 'grupopermissao'
+		}
 	},
 	signup: function (inputs, cb) {
 		bcrypt.genSalt(10, function(err, salt) {
 			bcrypt.hash(inputs.password, salt, function (err, hash) {
 				User.create({
 			      username: inputs.username,
-			      password: hash
+			      password: hash,
+			      grupopermissao: inputs.grupopermissao
 			    })
 			    .exec(cb);
 			});

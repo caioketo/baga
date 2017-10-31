@@ -11,8 +11,10 @@ module.exports = {
   	user: {
   		model: 'user'
   	},
-  	permissao: {
-  		model: 'permissao'
+  	permissoes: {
+      collection: 'permissao',
+      via: 'grupos',
+      dominant: true
   	},
   	nome: {
   		type: 'string'

@@ -647,3 +647,98 @@ function createPermissao() {
 		});
 	}
 }
+
+
+function getGrupoPermissaoById(id) {
+	for (var i = grupos.length - 1; i >= 0; i--) {
+		if (grupos[i].id == id) {
+			return grupos[i];
+		}
+	}
+	return undefined;
+}
+
+function selecionarGrupoPermissao() {
+	if (selectedGrupo !== -1) {
+		grupoObj = getGrupoPermissaoById(selectedGrupo);
+		$('#grupopermissao').val(grupoObj.nome);
+		$('#grupoMdl').modal('hide');
+	}
+}
+
+
+function findGrupoPermissao() {
+	$("#tbodyGrupo").empty();
+
+	for (var i = grupos.length - 1; i >= 0; i--) {
+		$('#tableGrupo > tbody:last-child').append('<tr id="' + grupos[i].id + '"><td>' + grupos[i].nome + '</td></tr>');
+	}
+	searchRowsGrupo = $('#tableGrupo tr');
+	searchRowsGrupo.splice(0, 1);
+	searchRowsGrupo.on('click', function (e) {
+		var row = $(this);
+		if (selectedGrupo > -1) {
+			$('#' + selectedGrupo).removeClass('highlight');
+		}
+		row.addClass('highlight');
+		selectedGrupo = row.attr('id');
+	});
+	$("#grupoInput").bind('keydown', filtrarGrupoPermissao);
+	$("#grupoMdl").modal();
+};
+
+function filtrarGrupoPermissao(e) {
+	setTimeout(function () {
+		var text = $("#grupoInput").val();
+		var val = $.trim(text).replace(/ +/g, ' ').toLowerCase();
+		searchRowsGrupo.show().filter(function() {
+			var text = $(this).text().replace(/\s+/g, ' ').	toLowerCase();
+			return !~text.indexOf(val);
+		}).hide();
+	}, 200);
+};
+
+
+/**
+	###USERS###
+*/
+
+function validateUser(user) {
+	return true;
+}
+
+
+function getUser(password) {
+	var userGet = {
+		username: $('#username').val(),
+		grupopermissao: selectedGrupo
+	};
+	if (password) {		
+		userGet.password = $('#password').val();
+	}
+	return userGet;
+}
+
+function editUser() {
+	var user = getUser(false);
+	if (validateUser(user)) {
+		io.socket.post('/user/editPost', { user: user, id: userID }, function (resData) {
+			if (resData.statusCode == 200) {
+				document.location = '/user';
+			}
+		});
+	}
+}
+
+
+function createUser() {
+	var user = getUser(true);
+
+	if (validateUser(user)) {
+		io.socket.post('/user/createPost', { user: user }, function (resData) {
+			if (resData.statusCode == 200) {
+				document.location = '/user';
+			}
+		});
+	}
+}

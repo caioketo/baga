@@ -69,6 +69,14 @@ module.exports = {
 
 			return res.send({statusCode: 200, grupo: grupoDB});
 		});
-	}	
+	},
+	delete: function (req, res) {
+		GrupoPermissao.destroy({id: req.body.id}).exec(function (err) {
+			if (err) {
+				return res.send(JSON.stringify(err));
+			}
+			return res.send({statusCode: 200});
+		});
+	},
 };
 

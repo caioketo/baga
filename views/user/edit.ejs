@@ -1,0 +1,63 @@
+<label>Usuário</label>
+<br>
+<input id='username' type="text" value='<%= user.username %>' />
+<br>
+
+<label>Grupo de Permissões</label>
+<br>
+<input id='grupopermissao' type="text" value='' onfocus="findGrupoPermissao();" />
+<br>
+<br>
+<input type="submit" value="Salvar" onclick="editUser();" />
+
+
+<!-- MODAL -->
+<div class="modal fade" id="grupoMdl" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Procurar Grupo de Permissão</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <label>Grupo de Permissão</label>
+		<br>
+		<input id='grupoInput' type="text" value='' />
+		<br>
+
+		<table id='tableGrupo' class="table table-striped">
+			<thead>
+				<th>Nome</th>
+			</thead>
+			<tbody id="tbodyGrupo">
+			</tbody>
+		</table>
+
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+        <button type="button" class="btn btn-primary" onclick="selecionarGrupoPermissao();">Selecionar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+<script>
+	var userID = '<%= user.id %>';
+	var grupos = <%- JSON.stringify(grupos) %>;
+	var selectedGrupo = '<%= (typeof user.grupopermissao == 'undefined') ? -1 : user.grupopermissao.id %>';
+	<% if (typeof user.grupopermissao == 'undefined') { %>
+		var grupoObj = undefined;	
+	<% } else { %>
+		var grupoObj = <%- JSON.stringify(user.grupopermissao) %>;
+	<% } %>
+	var searchRowsGrupo = $('#tableGrupo tr');
+	selecionarGrupoPermissao();
+	$('#grupoMdl').on('shown.bs.modal', function () {
+	  $('#grupoInput').focus()
+	});
+</script>
