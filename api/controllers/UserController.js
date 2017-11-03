@@ -25,7 +25,7 @@ module.exports = {
 			if (req.wantsJSON) {
 				return res.ok();
 			}
-			return res.redirect('/');
+			return res.redirect('/dashboard');
 		})
 	},
 	logout: function (req, res) {

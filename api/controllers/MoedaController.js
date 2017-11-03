@@ -6,11 +6,6 @@
  */
 
 module.exports = {
-	teste: function (req, res) {
-		CotacaoService.getCotacao(function (result) {
-			return res.send(result);
-		});
-	},
 	getAll: function (req, res) {
 		Moeda.find().exec(function (err, moedas) {
 			if (err) {

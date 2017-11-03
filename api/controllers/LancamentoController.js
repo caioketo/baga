@@ -54,7 +54,9 @@ function getFormasPagamento(cb) {
 			cb([]);
 			return;
 		}
-		cb(formasPagamento);
+		FormaPagamento.getCotacaoMoedas(formasPagamento, function (_formasPagamento) {
+			cb(_formasPagamento);
+		});
 	});
 }
 

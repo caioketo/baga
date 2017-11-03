@@ -28,7 +28,7 @@ module.exports.policies = {
   '/unauthorized': true,
   '*': 'hasPermission',
   DashboardController: {
-    '*': true
+    '*': 'isAuthenticated'
   },
   PermissaoController: {
     '*': 'isRoot'
