@@ -26,29 +26,37 @@ module.exports = {
 				contas[i]['tipoDesc'] = contas[i].tipoDesc();
 			}
 
-			return res.view('crud.ejs', {
-				fields: [
-					{
-						titulo: 'Descrição',
-						nome: 'descricao'
-					},
-					{
-						titulo: 'Tipo',
-						nome: 'tipoDesc'
+			PermissaoService.hasEditDeletePermissao({
+				userId: req.session.me,
+				insertPath: '/conta/create',
+				deletePath: '/conta/delete',
+				editPath: '/conta/edit'
+			}, function (resultPermissao) {
+				return res.view('crud.ejs', {
+					fields: [
+						{
+							titulo: 'Descrição',
+							nome: 'descricao'
+						},
+						{
+							titulo: 'Tipo',
+							nome: 'tipoDesc'
+						}
+					],
+					records: contas,
+					options: {
+						insert: 'Nova Conta',
+						insertURL: '/conta/create',
+						updateURL: '/conta/edit',
+						deleteURL: '/conta/delete',
+						searchField: {
+							descricao: 'Descrição',
+							type: 'text',
+							nome: 'descricao'
+						},
+						permissoes: resultPermissao
 					}
-				],
-				records: contas,
-				options: {
-					insert: 'Nova Conta',
-					insertURL: '/conta/create',
-					updateURL: '/conta/edit',
-					deleteURL: '/conta/delete',
-					searchField: {
-						descricao: 'Descrição',
-						type: 'text',
-						nome: 'descricao'
-					}
-				}
+				});
 			});
 		});
 	},

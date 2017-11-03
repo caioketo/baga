@@ -12,25 +12,33 @@ module.exports = {
 				console.log(JSON.stringify(err));
 				return res.send(JSON.stringify(err));
 			}
-			return res.view('crud.ejs', {
-				fields: [
-					{
-						titulo: 'Descrição',
-						nome: 'descricao'
+			PermissaoService.hasEditDeletePermissao({
+				userId: req.session.me,
+				insertPath: '/condicaopagamento/create',
+				deletePath: '/condicaopagamento/delete',
+				editPath: '/condicaopagamento/edit'
+			}, function (resultPermissao) {
+				return res.view('crud.ejs', {
+					fields: [
+						{
+							titulo: 'Descrição',
+							nome: 'descricao'
+						}
+					],
+					records: condicoesPagamento,
+					options: {
+						insert: 'Nova Condição de Pagamento',
+						insertURL: '/condicaopagamento/create',
+						updateURL: '/condicaopagamento/edit',
+						deleteURL: '/condicaopagamento/delete',
+						searchField: {
+							descricao: 'Descrição',
+							type: 'text',
+							nome: 'descricao'
+						},
+						permissoes: resultPermissao
 					}
-				],
-				records: condicoesPagamento,
-				options: {
-					insert: 'Nova Condição de Pagamento',
-					insertURL: '/condicaopagamento/create',
-					updateURL: '/condicaopagamento/edit',
-					deleteURL: '/condicaopagamento/delete',
-					searchField: {
-						descricao: 'Descrição',
-						type: 'text',
-						nome: 'descricao'
-					}
-				}
+				});
 			});
 		});
 	},

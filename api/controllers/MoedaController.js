@@ -34,29 +34,37 @@ module.exports = {
 				console.log(JSON.stringify(err));
 				return res.send(JSON.stringify(err));
 			}
-			return res.view('crud.ejs', {
-				fields: [
-					{
-						titulo: 'Descrição',
-						nome: 'descricao'
-					},
-					{
-						titulo: 'Símbolo',
-						nome: 'simbolo'
+			PermissaoService.hasEditDeletePermissao({
+				userId: req.session.me,
+				insertPath: '/moeda/create',
+				deletePath: '/moeda/delete',
+				editPath: '/moeda/edit'
+			}, function (resultPermissao) {
+				return res.view('crud.ejs', {
+					fields: [
+						{
+							titulo: 'Descrição',
+							nome: 'descricao'
+						},
+						{
+							titulo: 'Símbolo',
+							nome: 'simbolo'
+						}
+					],
+					records: moedas,
+					options: {
+						insert: 'Nova Moeda',
+						insertURL: '/moeda/create',
+						updateURL: '/moeda/edit',
+						deleteURL: '/moeda/delete',
+						searchField: {
+							descricao: 'Descrição',
+							type: 'text',
+							nome: 'descricao'
+						},
+						permissoes: resultPermissao
 					}
-				],
-				records: moedas,
-				options: {
-					insert: 'Nova Moeda',
-					insertURL: '/moeda/create',
-					updateURL: '/moeda/edit',
-					deleteURL: '/moeda/delete',
-					searchField: {
-						descricao: 'Descrição',
-						type: 'text',
-						nome: 'descricao'
-					}
-				}
+				});
 			});
 		});
 	},

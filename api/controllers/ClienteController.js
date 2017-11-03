@@ -29,33 +29,41 @@ module.exports = {
 				console.log(JSON.stringify(err));
 				return res.send(JSON.stringify(err));
 			}
-			return res.view('crud.ejs', {
-				fields: [
-					{
-						titulo: 'RUT',
-						nome: 'rut'
-					},
-					{
-						titulo: 'Nome',
-						nome: 'nome'
-					},
-					{
-						titulo: 'E-mail',
-						nome: 'email'
+			PermissaoService.hasEditDeletePermissao({
+				userId: req.session.me,
+				insertPath: '/cliente/create',
+				deletePath: '/cliente/delete',
+				editPath: '/cliente/edit'
+			}, function (resultPermissao) {
+				return res.view('crud.ejs', {
+					fields: [
+						{
+							titulo: 'RUT',
+							nome: 'rut'
+						},
+						{
+							titulo: 'Nome',
+							nome: 'nome'
+						},
+						{
+							titulo: 'E-mail',
+							nome: 'email'
+						}
+					],
+					records: clientes,
+					options: {
+						insert: 'Novo Cliente',
+						insertURL: '/cliente/create',
+						updateURL: '/cliente/edit',
+						deleteURL: '/cliente/delete',
+						searchField: {
+							descricao: 'Nome',
+							type: 'text',
+							nome: 'nome'
+						},
+						permissoes: resultPermissao
 					}
-				],
-				records: clientes,
-				options: {
-					insert: 'Novo Cliente',
-					insertURL: '/cliente/create',
-					updateURL: '/cliente/edit',
-					deleteURL: '/cliente/delete',
-					searchField: {
-						descricao: 'Nome',
-						type: 'text',
-						nome: 'nome'
-					}
-				}
+				});
 			});
 		});
 	},

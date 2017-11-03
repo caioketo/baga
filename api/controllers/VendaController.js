@@ -231,7 +231,7 @@ module.exports = {
 						produtos[i].updateCampos();
 					}
 
-					FormaPagamento.find().populate('condicoesPagamento').exec(function (err, formasPagamento) {
+					FormaPagamento.find().populate(['condicoesPagamento', 'moeda']).exec(function (err, formasPagamento) {
 						return res.view({produtos: produtos, formasPagamento: getPagamentos(formasPagamento), tabelas: tabelas,
 							vendedor: {
 								nome: 'Vendedor 1'

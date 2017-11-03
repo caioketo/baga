@@ -12,35 +12,45 @@ module.exports = {
 				console.log(JSON.stringify(err));
 				return res.send(JSON.stringify(err));
 			}
-			//return res.view({produtos: produtos});
-			return res.view('crud.ejs', {
-				fields: [
-					{
-						titulo: 'Código',
-						nome: 'codigo'
+			let viewConfig = {
+
+			};
+			PermissaoService.hasEditDeletePermissao({
+				userId: req.session.me,
+				insertPath: '/produto/create',
+				deletePath: '/produto/delete',
+				editPath: '/produto/edit'
+			}, function (resultPermissao) {
+				return res.view('crud.ejs', {
+					fields: [
+						{
+							titulo: 'Código',
+							nome: 'codigo'
+						},
+						{
+							titulo: 'Descrição',
+							nome: 'descricao'
+						},
+						{
+							titulo: 'Quantidade',
+							nome: 'quantidade'
+						}
+					],
+					records: produtos,
+					options: {
+						insert: 'Novo Produto',
+						insertURL: '/produto/create',
+						updateURL: '/produto/edit',
+						deleteURL: '/produto/delete',
+						searchField: {
+							descricao: 'Descrição',
+							type: 'text',
+							nome: 'descricao'
+						},
+						permissoes: resultPermissao
 					},
-					{
-						titulo: 'Descrição',
-						nome: 'descricao'
-					},
-					{
-						titulo: 'Quantidade',
-						nome: 'quantidade'
-					}
-				],
-				records: produtos,
-				options: {
-					insert: 'Novo Produto',
-					insertURL: '/produto/create',
-					updateURL: '/produto/edit',
-					deleteURL: '/produto/delete',
-					searchField: {
-						descricao: 'Descrição',
-						type: 'text',
-						nome: 'descricao'
-					}
-				},
-				filtro: true
+					filtro: true
+				});
 			});
 		});
 	},

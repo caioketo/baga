@@ -25,9 +25,11 @@ module.exports.policies = {
   * access)                                                                  *
   *                                                                          *
   ***************************************************************************/
-  '/dashboard': true,
   '/unauthorized': true,
   '*': 'hasPermission',
+  DashboardController: {
+    '*': true
+  },
   PermissaoController: {
     '*': 'isRoot'
   },

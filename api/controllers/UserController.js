@@ -33,7 +33,7 @@ module.exports = {
 		if (req.wantsJSON) {
 			return res.ok('Logged out successfully!');
 		}
-		return res.redirect('/');
+		return res.redirect('/login');
 	},
 	create: function (req, res) {
 		PermissaoService.getGruposPermissao(function (grupos) {
@@ -74,25 +74,33 @@ module.exports = {
 				console.log(JSON.stringify(err));
 				return res.send(JSON.stringify(err));
 			}
-			return res.view('crud.ejs', {
-				fields: [
-					{
-						titulo: 'User',
-						nome: 'username'
+			PermissaoService.hasEditDeletePermissao({
+				userId: req.session.me,
+				insertPath: '/user/create',
+				deletePath: '/user/delete',
+				editPath: '/user/edit'
+			}, function (resultPermissao) {
+				return res.view('crud.ejs', {
+					fields: [
+						{
+							titulo: 'User',
+							nome: 'username'
+						}
+					],
+					records: grupos,
+					options: {
+						insert: 'Novo User',
+						insertURL: '/user/create',
+						updateURL: '/user/edit',
+						deleteURL: '/user/delete',
+						searchField: {
+							descricao: 'User',
+							type: 'text',
+							nome: 'username'
+						},
+						permissoes: resultPermissao
 					}
-				],
-				records: grupos,
-				options: {
-					insert: 'Novo User',
-					insertURL: '/user/create',
-					updateURL: '/user/edit',
-					deleteURL: '/user/delete',
-					searchField: {
-						descricao: 'User',
-						type: 'text',
-						nome: 'username'
-					}
-				}
+				});
 			});
 		});
 	},

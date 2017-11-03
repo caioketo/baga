@@ -24,20 +24,48 @@
 				        <a class="dropdown-toggle" data-toggle="dropdown" href="#">Cadastros
 				        <span class="caret"></span></a>
 				        <ul class="dropdown-menu">
+				        	<% if (dashboard.produto) { %>
 				        	<li><a href="produto" target="frameGeral">Produtos</a></li>
+				        	<% } %>
+				        	<% if (dashboard.categoria) { %>
 							<li><a href="categoria" target="frameGeral">Categorias</a></li>
+							<% } %>
+							<% if (dashboard.cliente) { %>
 							<li><a href="cliente" target="frameGeral">Clientes</a></li>
+							<% } %>
+							<% if (dashboard.fornecedor) { %>
 							<li><a href="fornecedor" target="frameGeral">Fornecedores</a></li>
+							<% } %>
+							<% if (dashboard.formaPagamento) { %>
 							<li><a href="formaPagamento" target="frameGeral">Formas de Pagamento</a></li>
+							<% } %>
+							<% if (dashboard.condicaoPagamento) { %>
 							<li><a href="condicaoPagamento" target="frameGeral">Condições de Pagamento</a></li>
+							<% } %>
+							<% if (dashboard.vendedor) { %>
 							<li><a href="vendedor" target="frameGeral">Vendedores</a></li>
+							<% } %>
+							<% if (dashboard.tabelaPreco) { %>
 							<li><a href="tabelaPreco" target="frameGeral">Tabela de Preço</a></li>
+							<% } %>
+							<% if (dashboard.conta) { %>
 							<li><a href="conta" target="frameGeral">Contas</a></li>
+							<% } %>
+							<% if (dashboard.moeda) { %>
 							<li><a href="moeda" target="frameGeral">Moedas</a></li>
+							<% } %>
+							<% if (dashboard.loja) { %>
 							<li><a href="loja" target="frameGeral">Lojas</a></li>
+							<% } %>
+							<% if (dashboard.permissao) { %>
 							<li><a href="permissao" target="frameGeral">Permissões</a></li>
+							<% } %>
+							<% if (dashboard.grupopermissao) { %>
 							<li><a href="grupopermissao" target="frameGeral">Grupos Permissões</a></li>
+							<% } %>
+							<% if (dashboard.user) { %>
 							<li><a href="user" target="frameGeral">Usuários</a></li>
+							<% } %>
 				        </ul>
 				    </li>
 					<li><a href="venda" target="frameGeral">Venda</a></li>

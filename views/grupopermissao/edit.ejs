@@ -18,8 +18,12 @@
 	var grupoID = '<%= grupo.id %>';
 	var grupo = <%- JSON.stringify(grupo) %>;
 	var permissoes = <%- JSON.stringify(permissoes) %>;
+	var grupoPermissoesIds = [];
+	grupo.permissoes.forEach(function (element, index) {
+		grupoPermissoesIds.push(element.id);
+	});
 	$('.cbxPermissao:checkbox').each(function () {
-		if (grupo.permissoes.includes($(this).val())) {
+		if (grupoPermissoesIds.includes($(this).val())) {
 			$(this).prop('checked', true);
 		}
 	});

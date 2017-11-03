@@ -35,12 +35,13 @@ module.exports.routes = {
   '/': {
     view: 'homepage'
   },
-  'GET /dashboard': { 
+  /*'GET /dashboard': { 
     view: 'dashboard',
     locals: {
         layout: false
     }
-  },
+  },*/
+  'GET /dashboard': 'DashboardController.dashboard',
   'GET /unauthorized': { 
     view: 'unauthorized',
     locals: {

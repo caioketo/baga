@@ -29,29 +29,37 @@ module.exports = {
 				console.log(JSON.stringify(err));
 				return res.send(JSON.stringify(err));
 			}
-			return res.view('crud.ejs', {
-				fields: [
-					{
-						titulo: 'RUT',
-						nome: 'rut'
-					},
-					{
-						titulo: 'Nome',
-						nome: 'nome'
+			PermissaoService.hasEditDeletePermissao({
+				userId: req.session.me,
+				insertPath: '/fornecedor/create',
+				deletePath: '/fornecedor/delete',
+				editPath: '/fornecedor/edit'
+			}, function (resultPermissao) {
+				return res.view('crud.ejs', {
+					fields: [
+						{
+							titulo: 'RUT',
+							nome: 'rut'
+						},
+						{
+							titulo: 'Nome',
+							nome: 'nome'
+						}
+					],
+					records: fornecedores,
+					options: {
+						insert: 'Novo Fornecedor',
+						insertURL: '/fornecedor/create',
+						updateURL: '/fornecedor/edit',
+						deleteURL: '/fornecedor/delete',
+						searchField: {
+							descricao: 'Nome',
+							type: 'text',
+							nome: 'nome'
+						},
+						permissoes: resultPermissao
 					}
-				],
-				records: fornecedores,
-				options: {
-					insert: 'Novo Fornecedor',
-					insertURL: '/fornecedor/create',
-					updateURL: '/fornecedor/edit',
-					deleteURL: '/fornecedor/delete',
-					searchField: {
-						descricao: 'Nome',
-						type: 'text',
-						nome: 'nome'
-					}
-				}
+				});
 			});
 		});
 	},

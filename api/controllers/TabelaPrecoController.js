@@ -12,25 +12,33 @@ module.exports = {
 				console.log(JSON.stringify(err));
 				return res.send(JSON.stringify(err));
 			}
-			return res.view('crud.ejs', {
-				fields: [
-					{
-						titulo: 'Descrição',
-						nome: 'descricao'
+			PermissaoService.hasEditDeletePermissao({
+				userId: req.session.me,
+				insertPath: '/tabelaPreco/create',
+				deletePath: '/tabelaPreco/delete',
+				editPath: '/tabelaPreco/edit'
+			}, function (resultPermissao) {
+				return res.view('crud.ejs', {
+					fields: [
+						{
+							titulo: 'Descrição',
+							nome: 'descricao'
+						}
+					],
+					records: tabelasPreco,
+					options: {
+						insert: 'Nova Tabela de Preço',
+						insertURL: '/tabelaPreco/create',
+						updateURL: '/tabelaPreco/edit',
+						deleteURL: '/tabelaPreco/delete',
+						searchField: {
+							descricao: 'Descrição',
+							type: 'text',
+							nome: 'descricao'
+						},
+						permissoes: resultPermissao
 					}
-				],
-				records: tabelasPreco,
-				options: {
-					insert: 'Nova Tabela de Preço',
-					insertURL: '/tabelaPreco/create',
-					updateURL: '/tabelaPreco/edit',
-					deleteURL: '/tabelaPreco/delete',
-					searchField: {
-						descricao: 'Descrição',
-						type: 'text',
-						nome: 'descricao'
-					}
-				}
+				});
 			});
 		});
 	},

@@ -12,25 +12,33 @@ module.exports = {
 				console.log(JSON.stringify(err));
 				return res.send(JSON.stringify(err));
 			}
-			return res.view('crud.ejs', {
-				fields: [
-					{
-						titulo: 'Nome',
-						nome: 'nome'
+			PermissaoService.hasEditDeletePermissao({
+				userId: req.session.me,
+				insertPath: '/grupopermissao/create',
+				deletePath: '/grupopermissao/delete',
+				editPath: '/grupopermissao/edit'
+			}, function (resultPermissao) {
+				return res.view('crud.ejs', {
+					fields: [
+						{
+							titulo: 'Nome',
+							nome: 'nome'
+						}
+					],
+					records: grupos,
+					options: {
+						insert: 'Novo Grupo',
+						insertURL: '/grupopermissao/create',
+						updateURL: '/grupopermissao/edit',
+						deleteURL: '/grupopermissao/delete',
+						searchField: {
+							descricao: 'Nome',
+							type: 'text',
+							nome: 'nome'
+						},
+						permissoes: resultPermissao
 					}
-				],
-				records: grupos,
-				options: {
-					insert: 'Novo Grupo',
-					insertURL: '/grupopermissao/create',
-					updateURL: '/grupopermissao/edit',
-					deleteURL: '/grupopermissao/delete',
-					searchField: {
-						descricao: 'Nome',
-						type: 'text',
-						nome: 'nome'
-					}
-				}
+				});
 			});
 		});
 	},
@@ -40,7 +48,7 @@ module.exports = {
 		});
 	},
 	edit: function (req, res) {
-		GrupoPermissao.findOne({id: req.param('id')}).exec(function (err, grupo) {
+		GrupoPermissao.findOne({id: req.param('id')}).populate('permissoes').exec(function (err, grupo) {
 			if (err) {
 				console.log(JSON.stringify(err));
 				return res.send(JSON.stringify(err));

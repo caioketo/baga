@@ -5,7 +5,9 @@
 	<%- include ./filtros/modalFiltroCRUD.ejs %> 	
 <% } %>
 <br>
+<% if (options.permissoes.insert) { %>
 <input type="submit" value="<%= options.insert %>" onclick="window.location='<%= options.insertURL %>';" />
+<% } %>
 <table id='tableCRUD' class="table table-striped">
 	<thead>
 		<tr>
@@ -24,8 +26,12 @@
 					<td><%= r[f.nome] %></td>
 				<% }); %>
 				<td>
+					<% if (options.permissoes.edit) { %>
 					<input type="submit" value="EDIT" onclick="window.location='<%= options.updateURL %>/<%= r.id %>';"/>
+					<% } %>
+					<% if (options.permissoes.delete) { %>
 					<input type="submit" value="DELETE" onclick="deleteRecord('<%= options.deleteURL %>', '<%= r.id %>');"/>
+					<% } %>
 				</td>
 			</tr>
 		<% }); %>

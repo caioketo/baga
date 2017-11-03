@@ -24,30 +24,38 @@ module.exports = {
 		});
 	},
 	index: function (req, res) {
-		Categoria.find().exec(function (err, categorias) {
-			if (err) {
-				console.log(JSON.stringify(err));
-				return res.send(JSON.stringify(err));
-			}
-			return res.view('crud.ejs', {
-				fields: [
-					{
-						titulo: 'Descrição',
-						nome: 'descricao'
-					}
-				],
-				records: categorias,
-				options: {
-					insert: 'Nova Categoria',
-					insertURL: '/categoria/create',
-					updateURL: '/categoria/edit',
-					deleteURL: '/categoria/delete',
-					searchField: {
-						descricao: 'Descrição',
-						type: 'text',
-						nome: 'descricao'
-					}
+		PermissaoService.hasEditDeletePermissao({
+			userId: req.session.me,
+			insertPath: '/categoria/create',
+			deletePath: '/categoria/delete',
+			editPath: '/categoria/edit'
+		}, function (resultPermissao) {
+			Categoria.find().exec(function (err, categorias) {
+				if (err) {
+					console.log(JSON.stringify(err));
+					return res.send(JSON.stringify(err));
 				}
+				return res.view('crud.ejs', {
+					fields: [
+						{
+							titulo: 'Descrição',
+							nome: 'descricao'
+						}
+					],
+					records: categorias,
+					options: {
+						insert: 'Nova Categoria',
+						insertURL: '/categoria/create',
+						updateURL: '/categoria/edit',
+						deleteURL: '/categoria/delete',
+						searchField: {
+							descricao: 'Descrição',
+							type: 'text',
+							nome: 'descricao'
+						},
+						permissoes: resultPermissao
+					}
+				});
 			});
 		});
 	},

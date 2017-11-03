@@ -7,30 +7,38 @@
 
 module.exports = {
 	index: function (req, res) {
-		Vendedor.find().exec(function (err, vendedores) {
-			if (err) {
-				console.log(JSON.stringify(err));
-				return res.send(JSON.stringify(err));
-			}
-			return res.view('crud.ejs', {
-				fields: [
-					{
-						titulo: 'Nome',
-						nome: 'nome'
-					}
-				],
-				records: vendedores,
-				options: {
-					insert: 'Novo Vendedor',
-					insertURL: '/vendedor/create',
-					updateURL: '/vendedor/edit',
-					deleteURL: '/vendedor/delete',
-					searchField: {
-						descricao: 'Nome',
-						type: 'text',
-						nome: 'nome'
-					}
+		PermissaoService.hasEditDeletePermissao({
+			userId: req.session.me,
+			insertPath: '/vendedor/create',
+			deletePath: '/vendedor/delete',
+			editPath: '/vendedor/edit'
+		}, function (resultPermissao) {
+			Vendedor.find().exec(function (err, vendedores) {
+				if (err) {
+					console.log(JSON.stringify(err));
+					return res.send(JSON.stringify(err));
 				}
+				return res.view('crud.ejs', {
+					fields: [
+						{
+							titulo: 'Nome',
+							nome: 'nome'
+						}
+					],
+					records: vendedores,
+					options: {
+						insert: 'Novo Vendedor',
+						insertURL: '/vendedor/create',
+						updateURL: '/vendedor/edit',
+						deleteURL: '/vendedor/delete',
+						searchField: {
+							descricao: 'Nome',
+							type: 'text',
+							nome: 'nome'
+						},
+						permissoes: resultPermissao
+					}
+				});
 			});
 		});
 	},
