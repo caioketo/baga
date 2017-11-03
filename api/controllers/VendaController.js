@@ -16,7 +16,8 @@ function getPagamentos(formasPagamento) {
 				id: id,
 				formaPagamento: formasPagamento[i].id,
 				condicaoPagamento: formasPagamento[i].condicoesPagamento[l].id,
-				descricao: formasPagamento[i].descricao + ' (' + formasPagamento[i].condicoesPagamento[l].descricao + ')'	
+				descricao: formasPagamento[i].descricao + ' (' + formasPagamento[i].condicoesPagamento[l].descricao + ')',
+				cotacao: formasPagamento[i].cotacao
 			});
 			id++;
 		}
@@ -211,16 +212,20 @@ module.exports = {
 		});
 	},
 	create: function (req, res) {
-			Loja.find().exec(function (err, lojas) {
+		let viewObj = {};
+		Loja.find().exec(function (err, lojas) {
 			if (err) {
 				console.log(JSON.stringify(err));
 				return res.send(JSON.stringify(err));
 			}
+			viewObj.lojas = lojas;
 			TabelaPreco.find().exec(function (err, tabelas) {
 				if (err) {
 					console.log(JSON.stringify(err));
 					return res.send(JSON.stringify(err));
 				}
+
+				viewObj.tabelas = tabelas;
 				Produto.find().populate('precos').exec(function (err, produtos) {
 					if (err) {
 						console.log(JSON.stringify(err));
@@ -230,16 +235,30 @@ module.exports = {
 					for (var i = produtos.length - 1; i >= 0; i--) {
 						produtos[i].updateCampos();
 					}
-
+					viewObj.produtos = produtos;
+					viewObj.cliente = {
+						nome: 'Balcão'
+					};
+					viewObj.vendedor = {
+						nome: 'Vendedor 1'
+					};
 					FormaPagamento.find().populate(['condicoesPagamento', 'moeda']).exec(function (err, formasPagamento) {
-						return res.view({produtos: produtos, formasPagamento: getPagamentos(formasPagamento), tabelas: tabelas,
-							vendedor: {
-								nome: 'Vendedor 1'
-							},
-							cliente: {
-								nome: 'Balcão'
-							},
-							lojas: lojas});
+						FormaPagamento.getCotacaoMoedas(formasPagamento, function (_formasPagamento) {
+							viewObj.formasPagamento = getPagamentos(_formasPagamento);
+							if (req.session.me && req.session.me !== '8428e8d3667f3deb63184a4c1109c13aafed55c4') {
+								User.findOne({id: req.session.me}).populate('vendedor').exec(function (err, user) {
+									if (!err && user && user.vendedor) {
+										viewObj.vendedor = user.vendedor;
+										return res.view(viewObj);
+									}
+
+									return res.view(viewObj);
+								});
+							}
+							else {
+								return res.view(viewObj);
+							}
+						});
 					});
 				});
 			});

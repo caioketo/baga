@@ -713,6 +713,10 @@ function getUser(password) {
 		username: $('#username').val(),
 		grupopermissao: selectedGrupo
 	};
+
+	if (selectedVendedor !== -1) {
+		userGet.vendedor = selectedVendedor;
+	}
 	if (password) {		
 		userGet.password = $('#password').val();
 	}
@@ -742,3 +746,57 @@ function createUser() {
 		});
 	}
 }
+
+
+
+function getVendedorById(id) {
+	for (var i = vendedores.length - 1; i >= 0; i--) {
+		if (vendedores[i].id == id) {
+			return vendedores[i];
+		}
+	}
+	return undefined;
+}
+
+function selecionarVendedor() {
+	if (selectedVendedor !== -1) {
+		vendedorObj = getVendedorById(selectedVendedor);
+		$('#vendedor').val(vendedorObj.nome);
+		$('#vendedorMdl').modal('hide');
+	}
+}
+
+
+function findVendedor() {
+	io.socket.get('/vendedor/getAll', function (resData, jwres) {
+		vendedores = resData;
+		$("#tbodyVendedores").empty();
+
+		for (var i = vendedores.length - 1; i >= 0; i--) {
+			$('#tableVendedores > tbody:last-child').append('<tr id="' + vendedores[i].id + '"><td>' + vendedores[i].nome + '</td></tr>');
+		}
+		searchRowsVendedores = $('#tableVendedores tr');
+		searchRowsVendedores.splice(0, 1);
+		searchRowsVendedores.on('click', function (e) {
+			var row = $(this);
+			if (selectedVendedor > -1) {
+				$('#' + selectedVendedor).removeClass('highlight');
+			}
+			row.addClass('highlight');
+			selectedVendedor = row.attr('id');
+		});
+		$("#vendedorNome").bind('keydown', filtrarVendedores);
+		$("#vendedorMdl").modal();
+	});
+};
+
+function filtrarVendedores(e) {
+	setTimeout(function () {
+		var text = $("#vendedorNome").val();
+		var val = $.trim(text).replace(/ +/g, ' ').toLowerCase();
+		searchRowsVendedores.show().filter(function() {
+			var text = $(this).text().replace(/\s+/g, ' ').	toLowerCase();
+			return !~text.indexOf(val);
+		}).hide();
+	}, 200);
+};

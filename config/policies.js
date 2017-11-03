@@ -36,6 +36,34 @@ module.exports.policies = {
   UserController: {
     '*': 'isAuthenticated',
     login: true
+  },
+  LojaController: {
+    '*': 'hasPermission',
+    'getAll': true
+  },
+  FornecedorController: {
+    '*': 'hasPermission',
+    'getAll': true
+  },
+  FormaPagamentoController: {
+    '*': 'hasPermission',
+    'getAll': true
+  },
+  ContaController: {
+    '*': 'hasPermission',
+    'getAll': true
+  },
+  CategoriaController: {
+    '*': 'hasPermission',
+    'getAll': true
+  },
+  ClienteController: {
+    '*': 'hasPermission',
+    'getAll': true
+  },
+  VendedorController: {
+    '*': 'hasPermission',
+    'getAll': true
   }
 
   /***************************************************************************

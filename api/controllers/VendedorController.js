@@ -6,6 +6,15 @@
  */
 
 module.exports = {
+	getAll: function (req, res) {
+		Vendedor.find().exec(function (err, vendedores) {
+			if (err) {
+				console.log(JSON.stringify(err));
+				return res.send(JSON.stringify(err));
+			}
+			return res.send(vendedores);
+		});
+	},
 	index: function (req, res) {
 		PermissaoService.hasEditDeletePermissao({
 			userId: req.session.me,

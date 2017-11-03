@@ -18,8 +18,11 @@ module.exports = {
   			model: 'CondicaoPagamento'
   		},
   		valor: {
-  			type: 'integer'
-  		}
+  			type: 'float'
+  		},
+      cotacao: {
+        type: 'float'
+      }
   }
 };
 

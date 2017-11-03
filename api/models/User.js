@@ -20,6 +20,9 @@ module.exports = {
 		cliente: {
 			model: 'Cliente'
 		},
+		vendedor: {
+			model: 'vendedor'
+		},
 		grupopermissao: {
 			model: 'grupopermissao'
 		}

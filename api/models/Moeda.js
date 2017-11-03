@@ -17,6 +17,9 @@ module.exports = {
   	moedaSite: {
   		type: 'string'
   	}
+  },
+  getMoedasSite: function () {
+    return ['Peso Uruguaio', 'Dólar', 'Peso Argentino', 'Real', 'Euro'];
   }
 };
 

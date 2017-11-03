@@ -1,8 +1,11 @@
 <label>Vendedor: </label>
-<label><%= vendedor.nome %></label>
+<br>
+<input id='vendedor' type="text" value='<%= vendedor.nome %>' onfocus="findVendedor();" />
+<br>
 <br>
 <label>Cliente: </label>
-<label><%= cliente.nome %></label>
+<br>
+<input id='cliente' type="text" value='<%= cliente.nome %>' onfocus="findCliente();" />
 <br>
 <br>
 <label>Produto</label>
@@ -90,6 +93,9 @@
 <label>Total: </label>
 <label id='total'></label>
 <br>
+<label>Total Pago: </label>
+<label id='totalPago'></label>
+<br>
 <label>Forma de Pagamento: </label>
 <select id="formaPagamentoSelect">
 	<% formasPagamento.forEach(function(fp) { %>
@@ -110,8 +116,32 @@
 <br>
 <input type="submit" value="Finalizar Venda" onclick="finalizarVenda();" />
 
-<script>
+<%- include ../modalClientes.ejs %>
+<%- include ../modalVendedores.ejs %>
 
+
+<script>
+	var clientes = [];
+	var selectedCliente = -1;
+	var clienteObj = undefined;
+	var searchRowsCliente = $('#tableClientes tr');
+	$('#clienteMdl').on('shown.bs.modal', function () {
+	  $('#clienteNome').focus()
+	});
+
+	var vendedores = [];
+	<% if (typeof vendedor.id == 'undefined') { %>
+	var selectedVendedor = -1;
+	var vendedorObj = undefined;
+	<% } else { %>
+	var selectedVendedor = '<%= vendedor.id %>';
+	var vendedorObj = <%- JSON.stringify(vendedor) %>;
+	selecionarVendedor(true);
+	<% } %>
+	var searchRowsVendedores = $('#tableVendedores tr');
+	$('#vendedorMdl').on('shown.bs.modal', function () {
+	  $('#vendedorNome').focus()
+	});
 	var itensDaVenda = [];
 	var pagamentos = [];
 	var prodJSON = '<%= JSON.stringify(produtos) %>';
@@ -210,7 +240,7 @@ function getTotal() {
 function getTotalPagto() {
 	var totalPag = 0;
 	pagamentos.forEach(function (pagamento) {
-		totalPag += pagamento.valor;
+		totalPag += (parseInt(pagamento.valor) * pagamento.cotacao);
 	});
 	return totalPag;
 }
@@ -223,16 +253,18 @@ function sumTotal() {
 
 function addPagamento() {
 	var fpID = $('#formaPagamentoSelect').find(":selected").val();
-	var valor = $('#valorFP').val();
+	var valor = parseInt($('#valorFP').val());
 
 	getFP(fpID, function (fp) {
 		var newPagamento = {
 			condicaoPagamento: fp.condicaoPagamento,
 			formaPagamento: fp.formaPagamento,
-			valor: valor
+			valor: valor,
+			cotacao: fp.cotacao
 		};
 		pagamentos.push(newPagamento);
 		$('#tablePagamentos tr:last').after('<tr><td>' + fp.descricao + '</td><td>' + valor + '</td></tr>');
+		$('#totalPago').text(getTotalPagto());
 	});
 }
 
@@ -299,6 +331,117 @@ function getPagamentosForPost(_pagamentos) {
 
 	return pagamentosFP;
 }
+
+
+function getCliente(id) {
+	for (var i = clientes.length - 1; i >= 0; i--) {
+		if (clientes[i].id == id) {
+			return clientes[i];
+		}
+	}
+	return undefined;
+}
+
+function selecionarCliente() {
+	if (selectedCliente !== -1) {
+		clienteObj = getCliente(selectedCliente);
+		$('#cliente').val(clienteObj.nome);
+		$('#clienteMdl').modal('hide');
+	}
+}
+
+
+function findCliente() {
+	io.socket.get('/cliente/getAll', function (resData, jwres) {
+		clientes = resData;
+		$("#tbodyClientes").empty();
+
+		for (var i = clientes.length - 1; i >= 0; i--) {
+			$('#tableClientes > tbody:last-child').append('<tr id="' + clientes[i].id + '"><td>' + clientes[i].nome + '</td></tr>');
+		}
+		searchRowsCliente = $('#tableClientes tr');
+		searchRowsCliente.splice(0, 1);
+		searchRowsCliente.on('click', function (e) {
+			var row = $(this);
+			if (selectedCliente > -1) {
+				$('#' + selectedCliente).removeClass('highlight');
+			}
+			row.addClass('highlight');
+			selectedCliente = row.attr('id');
+		});
+		$("#clienteNome").bind('keydown', filtrarClientes);
+		$("#clienteMdl").modal();
+	});
+};
+
+function filtrarClientes(e) {
+	setTimeout(function () {
+		var text = $("#clienteNome").val();
+		var val = $.trim(text).replace(/ +/g, ' ').toLowerCase();
+		searchRowsCliente.show().filter(function() {
+			var text = $(this).text().replace(/\s+/g, ' ').	toLowerCase();
+			return !~text.indexOf(val);
+		}).hide();
+	}, 200);
+};
+
+
+function getVendedor(id) {
+	for (var i = vendedores.length - 1; i >= 0; i--) {
+		if (vendedores[i].id == id) {
+			return vendedores[i];
+		}
+	}
+	return undefined;
+}
+
+function selecionarVendedor(_fromView) {
+	_fromView = _fromView || false;
+	if (selectedVendedor !== -1) {
+		if (!_fromView) {
+			vendedorObj = getVendedor(selectedVendedor);
+		}
+		$('#vendedor').val(vendedorObj.nome);
+		$('#vendedorMdl').modal('hide');
+	}
+}
+
+
+function findVendedor() {
+	io.socket.get('/vendedor/getAll', function (resData, jwres) {
+		vendedores = resData;
+		$("#tbodyVendedores").empty();
+
+		for (var i = vendedores.length - 1; i >= 0; i--) {
+			$('#tableVendedores > tbody:last-child').append('<tr id="' + vendedores[i].id + '"><td>' + vendedores[i].nome + '</td></tr>');
+		}
+		searchRowsVendedores = $('#tableVendedores tr');
+		searchRowsVendedores.splice(0, 1);
+		searchRowsVendedores.on('click', function (e) {
+			var row = $(this);
+			if (selectedVendedor > -1) {
+				$('#' + selectedVendedor).removeClass('highlight');
+			}
+			row.addClass('highlight');
+			selectedVendedor = row.attr('id');
+		});
+		$("#vendedorNome").bind('keydown', filtrarVendedores);
+		$("#vendedorMdl").modal();
+	});
+};
+
+function filtrarVendedores(e) {
+	setTimeout(function () {
+		var text = $("#vendedorNome").val();
+		var val = $.trim(text).replace(/ +/g, ' ').toLowerCase();
+		searchRowsVendedores.show().filter(function() {
+			var text = $(this).text().replace(/\s+/g, ' ').	toLowerCase();
+			return !~text.indexOf(val);
+		}).hide();
+	}, 200);
+};
+
+
 function finalizarVenda() {
 	var totalItens = getTotal();
 	var totalPagto = getTotalPagto();
@@ -311,8 +454,8 @@ function finalizarVenda() {
 		itens: getItensForPost(itensDaVenda),
 		pagamentos: pagamentos,
 		total: totalItens,
-		cliente: 1,
-		vendedor: 1
+		cliente: selectedCliente,
+		vendedor: selectedVendedor
 	}}, function (resData) {
 		if (resData.statusCode == 200) {
 			document.location = '/venda';

@@ -13,6 +13,13 @@
 <input id='grupopermissao' type="text" value='' onfocus="findGrupoPermissao();" />
 <br>
 <br>
+
+<label>Vendedor: </label>
+<br>
+<input id='vendedor' type="text" value='' onfocus="findVendedor();" />
+<br>
+<br>
+
 <input type="submit" value="Salvar" onclick="createUser();" />
 
 
@@ -48,7 +55,7 @@
     </div>
   </div>
 </div>
-
+<%- include ../modalVendedores.ejs %>
 
 
 <script>
@@ -58,5 +65,12 @@
 	var searchRowsGrupo = $('#tableGrupo tr');
 	$('#grupoMdl').on('shown.bs.modal', function () {
 	  $('#grupoInput').focus()
+	});
+	var vendedores = [];
+	var selectedVendedor = -1;
+	var vendedorObj = undefined;
+	var searchRowsVendedores = $('#tableVendedores tr');
+	$('#vendedorMdl').on('shown.bs.modal', function () {
+	  $('#vendedorNome').focus()
 	});
 </script>

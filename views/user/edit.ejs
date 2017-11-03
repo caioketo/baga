@@ -3,6 +3,16 @@
 <input id='username' type="text" value='<%= user.username %>' />
 <br>
 
+<label>Vendedor: </label>
+<br>
+<% if (typeof user.vendedor == 'undefined') { %>
+<input id='vendedor' type="text" value='' onfocus="findVendedor();" />
+<% } else { %>
+<input id='vendedor' type="text" value='<%= user.vendedor.nome %>' onfocus="findVendedor();" />
+<% } %>
+<br>
+<br>
+
 <label>Grupo de Permissões</label>
 <br>
 <input id='grupopermissao' type="text" value='' onfocus="findGrupoPermissao();" />
@@ -45,7 +55,7 @@
 </div>
 
 
-
+<%- include ../modalVendedores.ejs %>
 <script>
 	var userID = '<%= user.id %>';
 	var grupos = <%- JSON.stringify(grupos) %>;
@@ -59,5 +69,19 @@
 	selecionarGrupoPermissao();
 	$('#grupoMdl').on('shown.bs.modal', function () {
 	  $('#grupoInput').focus()
+	});
+
+
+	var vendedores = [];
+	<% if (typeof user.vendedor == 'undefined') { %>
+	var selectedVendedor = -1;
+	var vendedorObj = undefined;
+	<% } else { %>
+	var selectedVendedor = '<%= user.vendedor.id %>';
+	var vendedorObj = <%- JSON.stringify(user.vendedor) %>;
+	<% } %>
+	var searchRowsVendedores = $('#tableVendedores tr');
+	$('#vendedorMdl').on('shown.bs.modal', function () {
+	  $('#vendedorNome').focus()
 	});
 </script>

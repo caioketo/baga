@@ -7,7 +7,7 @@
 
 module.exports = {
 	teste: function (req, res) {
-		CotacaoService.getCotacao({}, function (result) {
+		CotacaoService.getCotacao(function (result) {
 			return res.send(result);
 		});
 	},
@@ -74,11 +74,11 @@ module.exports = {
 				console.log(JSON.stringify(err));
 				return res.send(JSON.stringify(err));
 			}
-			return res.view({moeda: moedas[0], moedasSite: ['Peso Uruguaio', 'Dólar', 'Peso Argentino', 'Real', 'Euro']});
+			return res.view({moeda: moedas[0], moedasSite: Moeda.getMoedasSite()});
 		});
 	},
 	create: function (req, res) {
-		return res.view({moedasSite: ['Peso Uruguaio', 'Dólar', 'Peso Argentino', 'Real', 'Euro']});
+		return res.view({moedasSite: Moeda.getMoedasSite()});
 	},
 	editPost: function (req, res) {
 		Moeda.update({id: req.body.id}, req.body.moeda).exec(function (err, moedaDB) {

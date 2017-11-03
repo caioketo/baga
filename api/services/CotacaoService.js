@@ -6,7 +6,7 @@ function isEmpty(str) {
 //CotacaoService.js
 module.exports = {
 
-	getCotacao: function (options, done) {
+	getCotacao: function (done) {
 		let httpOptions = {
 			port: 80,
 			host: 'gales.com.uy',
@@ -106,7 +106,6 @@ module.exports = {
 		        	}
 		        }
 		        moedas.push(curObj);
-		        console.log(JSON.stringify(moedas));
 		        done(moedas);
 		    });
 	    }).on('error', function(e) {

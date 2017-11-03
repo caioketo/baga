@@ -105,7 +105,7 @@ module.exports = {
 		});
 	},
 	edit: function (req, res) {
-		User.findOne({id: req.param('id')}).populate('grupopermissao').exec(function (err, user) {
+		User.findOne({id: req.param('id')}).populate(['grupopermissao', 'vendedor']).exec(function (err, user) {
 			if (err) {
 				console.log(JSON.stringify(err));
 				return res.send(JSON.stringify(err));
