@@ -32,6 +32,9 @@ module.exports = {
       numero: {
         type: 'integer',
         autoIncrement: true
+      },
+      desconto: {
+        type: 'float'
       }
   },
   beforeCreate: function(obj, next) {

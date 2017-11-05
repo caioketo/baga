@@ -34,6 +34,9 @@ module.exports = {
 			}
 			return res.view('dashboard', {dashboard: permissoes, layout: false});
 		});
+	},
+	teste: function (req, res) {
+		return res.view('.\\venda\\modalDesconto');
 	}
 };
 

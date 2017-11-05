@@ -85,10 +85,13 @@
 	<tbody>
 	</tbody>
 </table>
-
+<input type="submit" value="Desconto" onclick="showDescontoMdl();" />
 <br>
 <label>Sub-Total: </label>
 <label id='subTotal'></label>
+<br>
+<label>Desconto: </label>
+<label id='descontoTotal'></label>
 <br>
 <label>Total: </label>
 <label id='total'></label>
@@ -118,9 +121,11 @@
 
 <%- include ../modalClientes.ejs %>
 <%- include ../modalVendedores.ejs %>
+<%- include ./modalDesconto.ejs %>
 
 
 <script>
+	var descontoAplicado = 0;
 	var clientes = [];
 	<% if (typeof cliente.id == 'undefined') { %>
 	var selectedCliente = -1;
@@ -182,6 +187,23 @@
 	var selectedLoja = -1;
 	var selectedTabela = -1;
 
+
+function showDescontoMdl() {
+	$("#descontoMdl").modal();
+}
+
+function aplicarDesconto() {
+	let tipoDesc = $("input[name='desconto']:checked").attr('id');
+	let valorDesc = parseFloat($("#descontoInput").val());
+
+	if (tipoDesc == 'descontoPct') {
+		valorDesc = getTotal() * (valorDesc / 100);
+	}
+	descontoAplicado = valorDesc;
+	$('#descontoTotal').text(valorDesc);
+	$("#descontoMdl").modal('hide');
+	sumTotal();
+}
 
 function showProdutos() {
 	searchRows.on('click', function (e) {
@@ -254,7 +276,8 @@ function getTotalPagto() {
 function sumTotal() {
 	var sumTotal = getTotal();
 	$('#subTotal').text(sumTotal);
-	$('#total').text(sumTotal);
+	$('#total').text(sumTotal - descontoAplicado);
+	$('#descontoTotal').text(descontoAplicado);
 }
 
 function addPagamento() {
@@ -456,8 +479,9 @@ function filtrarVendedores(e) {
 
 function finalizarVenda() {
 	var totalItens = getTotal();
+	var totalVenda = totalItens - descontoAplicado;
 	var totalPagto = getTotalPagto();
-	if (totalPagto < totalItens) {
+	if (totalPagto < totalVenda) {
 		alert('Pagamento insuficiente!');
 		return;
 	}
@@ -465,9 +489,10 @@ function finalizarVenda() {
 	io.socket.post('/venda/createPost', { venda: {
 		itens: getItensForPost(itensDaVenda),
 		pagamentos: pagamentos,
-		total: totalItens,
+		total: totalVenda,
 		cliente: selectedCliente,
-		vendedor: selectedVendedor
+		vendedor: selectedVendedor,
+		desconto: descontoAplicado
 	}}, function (resData) {
 		if (resData.statusCode == 200) {
 			document.location = '/venda';

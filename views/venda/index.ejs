@@ -5,6 +5,7 @@
 			<th>Data</th>
 			<th>Cliente</th>
 			<th>Vendedor</th>
+			<th>Desconto</th>
 			<th>Total</th>
 			<th></th>
 		</tr>
@@ -15,6 +16,7 @@
 				<td onclick="getDetailVenda('<%= v.id %>');"><%= moment(v.createdAt).format('DD/MM/YYYY') %></td>
 				<td onclick="getDetailVenda('<%= v.id %>');"><%= v.cliente.nome %></td>
 				<td onclick="getDetailVenda('<%= v.id %>');"><%= v.vendedor.nome %></td>
+				<td onclick="getDetailVenda('<%= v.id %>');"><%= v.desconto %></td>
 				<td onclick="getDetailVenda('<%= v.id %>');"><%= v.total %></td>
 				<td><input type="submit" value="CANCELAR" onclick="cancelarVenda('<%= v.id %>');"/></td>
 			</tr>
