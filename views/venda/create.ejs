@@ -35,7 +35,7 @@
 		<label> Tabela: </label>
 		<select id="tabelaPreco">
 			<% tabelas.forEach(function(t) { %>
-				<option id=<%=t.id%>> <%= t.descricao %> </option>
+				<option id='<%=t.id%>' value='<%=t.id%>'> <%= t.descricao %> </option>
 			<% }); %>
 		</select>
 		<br>
@@ -122,8 +122,14 @@
 
 <script>
 	var clientes = [];
+	<% if (typeof cliente.id == 'undefined') { %>
 	var selectedCliente = -1;
 	var clienteObj = undefined;
+	<% } else { %>
+	var selectedCliente = '<%= cliente.id %>';
+	var clienteObj = <%- JSON.stringify(cliente) %>;
+	selecionarCliente(true);
+	<% } %>
 	var searchRowsCliente = $('#tableClientes tr');
 	$('#clienteMdl').on('shown.bs.modal', function () {
 	  $('#clienteNome').focus()
@@ -342,11 +348,17 @@ function getCliente(id) {
 	return undefined;
 }
 
-function selecionarCliente() {
+function selecionarCliente(_fromView) {
+	_fromView = _fromView || false;
 	if (selectedCliente !== -1) {
-		clienteObj = getCliente(selectedCliente);
+		if (!_fromView) {
+			clienteObj = getCliente(selectedCliente);
+		}
 		$('#cliente').val(clienteObj.nome);
 		$('#clienteMdl').modal('hide');
+		if (clienteObj.tabelaPreco) {
+			$('#tabelaPreco').val(clienteObj.tabelaPreco);
+		}
 	}
 }
 

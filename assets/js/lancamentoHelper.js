@@ -192,7 +192,7 @@ function getFP(id, cb) {
 function sumPagamentos() {
 	var valorPags = 0;
 	for (var i = pagamentos.length - 1; i >= 0; i--) {
-		valorPags += pagamentos[i].valor;
+		valorPags += (pagamentos[i].valor * pagamentos[i].cotacao);
 	}
 	return valorPags;
 }
@@ -204,7 +204,8 @@ function addPagamento() {
 	getFP(fpID, function (fp) {
 		var newPagamento = {
 			formaPagamento: fp,
-			valor: valor
+			valor: valor,
+			cotacao: fp.cotacao
 		};
 		if ((sumPagamentos() + valor) > valorConta) {
 			//PAGAMENTO MAIOR TROCO?

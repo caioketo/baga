@@ -12,11 +12,11 @@
 	<tbody>
 		<% vendas.forEach(function (v) { %>
 			<tr id='<%= v.id %>'>
-				<td onclick='getDetailVenda(<%= v.id %>);'><%= moment(v.createdAt).format('DD/MM/YYYY') %></td>
-				<td onclick='getDetailVenda(<%= v.id %>);'><%= v.cliente.nome %></td>
-				<td onclick='getDetailVenda(<%= v.id %>);'><%= v.vendedor.nome %></td>
-				<td onclick='getDetailVenda(<%= v.id %>);'><%= v.total %></td>
-				<td><input type="submit" value="CANCELAR" onclick="cancelarVenda(<%= v.id %>);"/></td>
+				<td onclick="getDetailVenda('<%= v.id %>');"><%= moment(v.createdAt).format('DD/MM/YYYY') %></td>
+				<td onclick="getDetailVenda('<%= v.id %>');"><%= v.cliente.nome %></td>
+				<td onclick="getDetailVenda('<%= v.id %>');"><%= v.vendedor.nome %></td>
+				<td onclick="getDetailVenda('<%= v.id %>');"><%= v.total %></td>
+				<td><input type="submit" value="CANCELAR" onclick="cancelarVenda('<%= v.id %>');"/></td>
 			</tr>
 		<% }); %>
 	</tbody>
@@ -101,7 +101,7 @@
 	function getDetailVenda(id) {
 		io.socket.get('/venda/getDetail', {vendaID: id}, function (resData) {
 			let venda = resData.venda;
-			$('#titleVenda').text('Venda ' + venda.id);
+			$('#titleVenda').text('Venda ' + venda.numero);
 			$('#tableItens > tbody').empty();
 			$('#tablePagamentos > tbody').empty();
 			for (var i = venda.itens.length - 1; i >= 0; i--) {

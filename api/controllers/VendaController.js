@@ -236,30 +236,18 @@ module.exports = {
 						produtos[i].updateCampos();
 					}
 					viewObj.produtos = produtos;
-					viewObj.cliente = {
-						nome: 'Balcão'
-					};
-					viewObj.vendedor = {
-						nome: 'Vendedor 1'
-					};
-					FormaPagamento.find().populate(['condicoesPagamento', 'moeda']).exec(function (err, formasPagamento) {
-						FormaPagamento.getCotacaoMoedas(formasPagamento, function (_formasPagamento) {
-							viewObj.formasPagamento = getPagamentos(_formasPagamento);
-							if (req.session.me && req.session.me !== '8428e8d3667f3deb63184a4c1109c13aafed55c4') {
-								User.findOne({id: req.session.me}).populate('vendedor').exec(function (err, user) {
-									if (!err && user && user.vendedor) {
-										viewObj.vendedor = user.vendedor;
-										return res.view(viewObj);
-									}
-
+					Cliente.getDefault(function (_cliente) {
+						viewObj.cliente = _cliente;
+						Vendedor.getDefault({userId: req.session.me}, function (_vendedor) {
+							viewObj.vendedor = _vendedor;
+							FormaPagamento.find().populate(['condicoesPagamento', 'moeda']).exec(function (err, formasPagamento) {
+								FormaPagamento.getCotacaoMoedas(formasPagamento, function (_formasPagamento) {
+									viewObj.formasPagamento = getPagamentos(_formasPagamento);
 									return res.view(viewObj);
 								});
-							}
-							else {
-								return res.view(viewObj);
-							}
+							});
 						});
-					});
+					});					
 				});
 			});
 		});	

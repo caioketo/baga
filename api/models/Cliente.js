@@ -20,6 +20,24 @@ module.exports = {
 		tabelaPreco: {
 			model: 'TabelaPreco'
 		}
+  },
+  getDefault: function (done) {
+  	if (sails.config.baga.clienteId && sails.config.baga.clienteId.length > 0) {
+		this.findOne({id: sails.config.baga.clienteId}).exec(function (err, cliente) {
+			if (err) {
+				console.log(JSON.stringify(err));
+				return done({
+					nome: 'Balcão'
+				});
+			}
+			return done(cliente);
+		});			
+	}
+	else {
+		return done({
+			nome: 'Balcão'
+		});
+	}
   }
 };
 

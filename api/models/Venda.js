@@ -33,6 +33,22 @@ module.exports = {
         type: 'integer',
         autoIncrement: true
       }
+  },
+  beforeCreate: function(obj, next) {
+    Venda.find().max('numero').exec(function (err, vendas) {
+      if (err) {
+        console.log(err);
+        next(err);
+      }
+      let venda = vendas[0];
+      if (!venda || !venda.numero) {
+        obj['numero'] = 1;
+      }
+      else {
+        obj['numero'] = venda.numero + 1;
+      }
+      next(null);
+    });
   }
 };
 
