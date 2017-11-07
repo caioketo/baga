@@ -14,7 +14,7 @@
 			<tr id='<%= l.id %>'>
 				<td><%= moment(l.data).format('DD/MM/YYYY') %></td>
 				<td><%= l.descricao %></td>
-				<td>$U</td>
+				<td><%= l.moeda.descricao %></td>
 				<td><%= l.valor %></td>
 				<% total += parseInt(l.valor, 0); %>
 			</tr>

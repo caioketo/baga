@@ -34,7 +34,7 @@
 			$("#tbodyCC").empty();
 			var total = 0;
 			for (var i = lancamentos.length - 1; i >= 0; i--) {
-				$('#tableCC > tbody:last-child').append('<tr id="' + lancamentos[i].id + '"><td>' + moment(lancamentos[i].vencimento).format('DD/MM/YYYY') + '</td><td>' + lancamentos[i].descricao + '</td><td>$U</td><td>' + lancamentos[i].valor +'</td></tr>');
+				$('#tableCC > tbody:last-child').append('<tr id="' + lancamentos[i].id + '"><td>' + moment(lancamentos[i].vencimento).format('DD/MM/YYYY') + '</td><td>' + lancamentos[i].descricao + '</td><td>' + lancamentos[i].moeda.descricao +'</td><td>' + lancamentos[i].valor +'</td></tr>');
 				total += parseInt(lancamentos[i].valor, 0);
 			}
 			$('#tableCC > tbody').after('<tfoot><tr><th></th><th></th><th>Total:</th><th>' + total.toString() + '</th></tr></tfoot>');

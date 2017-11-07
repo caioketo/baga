@@ -59,7 +59,7 @@ function createCR() {
 		vencimento: $('#vencimento').val(),
 		descricao: $('#descricao').val(),
 		valor: $('#valor').val(),
-		moeda: 1
+		moeda: moedaPadrao
 	};
 	io.socket.post('/lancamento/createCRPost', { lancamento: crObj }, function (resData) {
 		if (resData.statusCode == 200) {
@@ -131,7 +131,7 @@ function createCP() {
 		vencimento: $('#vencimento').val(),
 		descricao: $('#descricao').val(),
 		valor: $('#valor').val(),
-		moeda: 1
+		moeda: moedaPadrao
 	};
 	io.socket.post('/lancamento/createCPPost', { lancamento: cpObj }, function (resData) {
 		if (resData.statusCode == 200) {

@@ -143,7 +143,7 @@ module.exports = {
 		});
 	},
 	createCR: function (req, res) {
-		return res.view();
+		return res.view({moeda: sails.config.baga.moedaId});
 	},
 	createCRPost: function (req, res) {
 		req.body.lancamento.pago = false;
@@ -160,7 +160,7 @@ module.exports = {
 		});
 	},
 	createCP: function (req, res) {
-		return res.view();
+		return res.view({moeda: sails.config.baga.moedaId});
 	},
 	createCPPost: function (req, res) {
 		req.body.lancamento.pago = false;

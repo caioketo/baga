@@ -16,7 +16,7 @@
 				<td><%= l.cliente.nome %></td>
 				<td><%= l.descricao %></td>
 				<td><%= l.valor %></td>				
-				<td>$U</td>
+				<td><%= l.moeda.simbolo %></td>
 				<td> <%= moment(l.vencimento).format('DD/MM/YYYY') %></td>
 				<td><input type="submit" value="BAIXAR" onclick="baixarConta('<%= l.id %>', <%= l.valor %>, true, '/lancamento/contasReceber');"/></td>
 				<td><input type="submit" value="DELETE" onclick="deleteRecord('/lancamento/delete', '<%= l.id %>');"/></td>
