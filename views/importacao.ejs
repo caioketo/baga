@@ -1,0 +1,16 @@
+<label>JSON</label>
+<br>
+<textarea id="json" cols="50" rows="5"> </textarea>
+<br>
+<input type="submit" value="Importar Produto" onclick="importProduto();" />
+
+
+<script>
+	function importProduto() {
+		let data = JSON.parse($('#json').val());
+
+		io.socket.post('/produto/import', { produtos: data }, function (resData) {
+			console.log(resData);
+		});
+	}
+</script>

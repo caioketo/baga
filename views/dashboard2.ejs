@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Projeto Baga</title>
+
+    <!-- Viewport mobile tag for sensible mobile support -->
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+    <link rel="stylesheet" href="/styles/bootstrap.css">
+    <link rel="stylesheet" href="/styles/importer.css">
+    <link rel="stylesheet" href="/styles/dashboard.css">
+  </head>
+
+  <body>
+	<div id="wrapper">
+		<ul class="nav nav-tabs">
+			<li class="nav-item">
+				<a id="tabCadastros" class="nav-link active" onclick="changeTab(0);">Cadastros</a>
+			</li>
+			<li class="nav-item">
+				<a id="tabVendas" class="nav-link" onclick="changeTab(1);">Vendas</a>
+			</li>
+			<li class="nav-item">
+				<a id="tabFinanceiro" class="nav-link" onclick="changeTab(2);">Financeiro</a>
+			</li>
+		</ul>
+
+		<nav id="menuCadastros" class="nav flex-column menu-dashboard">			
+			<% if (dashboard.produto) { %>
+        	<a class="nav-link" href="produto" target="frameGeral">Produtos</a>
+        	<% } %>
+        	<% if (dashboard.categoria) { %>
+    		<a class="nav-link" href="categoria" target="frameGeral">Categorias</a>
+			<% } %>
+			<% if (dashboard.cliente) { %>
+			<a class="nav-link" href="cliente" target="frameGeral">Clientes</a>
+			<% } %>
+			<% if (dashboard.fornecedor) { %>
+			<a class="nav-link" href="fornecedor" target="frameGeral">Fornecedores</a>
+			<% } %>
+			<% if (dashboard.formaPagamento) { %>
+			<a class="nav-link" href="formaPagamento" target="frameGeral">Formas de Pagamento</a>
+			<% } %>
+			<% if (dashboard.condicaoPagamento) { %>
+			<a class="nav-link" href="condicaoPagamento" target="frameGeral">Condições de Pagamento</a>
+			<% } %>
+			<% if (dashboard.vendedor) { %>
+			<a class="nav-link" href="vendedor" target="frameGeral">Vendedores</a>
+			<% } %>
+			<% if (dashboard.tabelaPreco) { %>
+			<a class="nav-link" href="tabelaPreco" target="frameGeral">Tabela de Preço</a>
+			<% } %>
+			<% if (dashboard.conta) { %>
+			<a class="nav-link" href="conta" target="frameGeral">Contas</a>
+			<% } %>
+			<% if (dashboard.moeda) { %>
+			<a class="nav-link" href="moeda" target="frameGeral">Moedas</a>
+			<% } %>
+			<% if (dashboard.loja) { %>
+			<a class="nav-link" href="loja" target="frameGeral">Lojas</a>
+			<% } %>
+			<% if (dashboard.permissao) { %>
+			<a class="nav-link" href="permissao" target="frameGeral">Permissões</a>
+			<% } %>
+			<% if (dashboard.grupopermissao) { %>
+			<a class="nav-link" href="grupopermissao" target="frameGeral">Grupos Permissões</a>
+			<% } %>
+			<% if (dashboard.user) { %>
+			<a class="nav-link" href="user" target="frameGeral">Usuários</a>
+			<% } %>
+		</nav>
+
+		<nav id="menuFinanceiro" class="nav flex-column menu-dashboard">
+			<a class="nav-link" href="lancamento/caixa" target="frameGeral">Caixa</a>
+			<a class="nav-link" href="lancamento/contasReceber" target="frameGeral">Contas à Receber</a>
+			<a class="nav-link" href="lancamento/contasPagar" target="frameGeral">Contas à Pagar</a>
+			<a class="nav-link" href="lancamento/contasCorrente" target="frameGeral">Contas Corrente</a>
+		</nav>
+
+		<nav id="menuVendas" class="nav flex-column menu-dashboard">
+			<a class="nav-link" href="venda" target="frameGeral">Vendas do dia</a>
+			<a class="nav-link" href="venda/create" target="frameGeral">Nova Venda</a>
+		</nav>
+
+		<div id="page-wrapper">
+			<div class="container-fluid">
+				<div class="row">
+					<iframe id="frameGeral" name="frameGeral" src="" class="frame-dashboard"></iframe>
+				</div>
+			</div>
+		</div>
+	</div>
+
+    <script src="/js/dependencies/jquery-3.2.1.min.js"></script>
+    <script src="/js/bootstrap.bundle.js"></script>
+  </body>
+</html>
+
+<script>
+	var selectedTab = $("#tabCadastros");
+	var selectedMenu = $("#menuCadastros");
+	$("#menuFinanceiro").toggle();
+	$("#menuVendas").toggle();
+	function changeTab(index) {
+		if (selectedTab) {
+			selectedTab.removeClass('active');
+		}
+		if (selectedMenu) {
+			selectedMenu.toggle();
+		}
+		switch (index) {
+			case 0: //cadastros;
+				selectedTab = $("#tabCadastros");
+				selectedMenu = $("#menuCadastros");
+				break;
+			case 1: //cadastros;
+				selectedTab = $("#tabVendas");
+				selectedMenu = $("#menuVendas");
+				break;
+			case 2: //cadastros;
+				selectedTab = $("#tabFinanceiro");
+				selectedMenu = $("#menuFinanceiro");
+				break;
+		}
+		selectedTab.addClass('active');
+		selectedMenu.toggle();
+	}
+</script>

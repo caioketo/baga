@@ -8,7 +8,7 @@
 module.exports = {
 	dashboard: function (req, res) {
 		if (req.session.me == '8428e8d3667f3deb63184a4c1109c13aafed55c4') {
-			return res.view('dashboard', {dashboard: 
+			return res.view('dashboard2', {dashboard: 
 				{
 					produto: true,
 					categoria: true,
@@ -32,11 +32,14 @@ module.exports = {
 				console.log(JSON.stringify(err));
 				return res.send(JSON.stringify(err));
 			}
-			return res.view('dashboard', {dashboard: permissoes, layout: false});
+			return res.view('dashboard2', {dashboard: permissoes, layout: false});
 		});
 	},
 	teste: function (req, res) {
 		return res.view('.\\venda\\modalDesconto');
+	},
+	importacao: function (req, res) {
+		return res.view('importacao');
 	}
 };
 

@@ -30,7 +30,7 @@ function findCliente() {
 		searchRows.splice(0, 1);
 		searchRows.on('click', function (e) {
 			var row = $(this);
-			if (selectedCliente > -1) {
+			if (selectedCliente) {
 				$('#' + selectedCliente).removeClass('highlight');
 			}
 			row.addClass('highlight');
@@ -102,7 +102,7 @@ function findFornecedor() {
 		searchRows.splice(0, 1);
 		searchRows.on('click', function (e) {
 			var row = $(this);
-			if (selectedFornecedor > -1) {
+			if (selectedFornecedor) {
 				$('#' + selectedFornecedor).removeClass('highlight');
 			}
 			row.addClass('highlight');

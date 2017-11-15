@@ -6,8 +6,45 @@
  */
 
 module.exports = {
+	import: function (req, res) {
+		req.body.produtos.forEach(function (produto, index) {
+			let prod = {
+				descricao: produto.descricao,
+				categoria: produto.categoria,
+				quantidade: 0,
+				custo: 0
+			};
+			Produto.create(prod).exec(function (err, prodDB) {
+				if (err) {
+					console.log(JSON.stringify(err));
+					return res.send(JSON.stringify(err));
+				}
+				console.log(JSON.stringify(prodDB));
+				Preco.create({
+					produto: prodDB.id,
+					tabelaPreco: '59e76d14ed28230400ba32b2',
+					valor: produto.preco
+				}).exec(function (err, preco) {
+					if (err) {
+						console.log(JSON.stringify(err));
+					}
+				});
+				Preco.create({
+					produto: prodDB.id,
+					tabelaPreco: '59ee024af1b60d60281297a1',
+					valor: produto.preco2
+				}).exec(function (err, preco) {
+					if (err) {
+						console.log(JSON.stringify(err));
+					}
+				});
+			});
+		});
+
+		return res.send("OK");
+	},
 	index: function (req, res) {
-		Produto.find().exec(function (err, produtos) {
+		Produto.find().populate('categoria').exec(function (err, produtos) {
 			if (err) {
 				console.log(JSON.stringify(err));
 				return res.send(JSON.stringify(err));

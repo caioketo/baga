@@ -118,7 +118,7 @@ function findCategoria() {
 		searchRows.splice(0, 1);
 		searchRows.on('click', function (e) {
 			var row = $(this);
-			if (selectedCategoria > -1) {
+			if (selectedCategoria) {
 				$('#' + selectedCategoria).removeClass('highlight');
 			}
 			row.addClass('highlight');

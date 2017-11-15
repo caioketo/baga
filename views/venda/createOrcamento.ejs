@@ -99,32 +99,12 @@
 <label>Total: </label>
 <label id='total'></label>
 <br>
-<label>Total Pago: </label>
-<label id='totalPago'></label>
-<br>
-<label>Forma de Pagamento: </label>
-<select id="formaPagamentoSelect">
-	<% formasPagamento.forEach(function(fp) { %>
-		<option value="<%= fp.id %>"><%= fp.descricao %></option>
-	<% }); %>
-</select>
-<input id='valorFP' type="number" value='0' name='valorFP'>
-<input id='addPagamento' type="submit" value="+" onclick="addPagamento();"/>
-<br>
-<table id='tablePagamentos' class='table table-striped'>
-	<thead>
-		<th>Forma de Pagamento</th>
-		<th>Valor</th>
-	</thead>
-	<tbody>
-	</tbody>
-</table>
-<br>
-<input type="submit" value="Finalizar Venda" onclick="finalizarVenda();" />
+<input type="submit" value="Finalizar Orçamento" onclick="finalizarOrcamento();" />
 
 <%- include ../modalClientes.ejs %>
 <%- include ../modalVendedores.ejs %>
 <%- include ./modalDesconto.ejs %>
+
 
 <script src="/js/vendaHelper.js"></script>
 <script>

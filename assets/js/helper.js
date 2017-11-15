@@ -289,7 +289,7 @@ function showContasModal(cb) {
 	searchRows.splice(0, 1);
 	searchRows.on('click', function (e) {
 		var row = $(this);
-		if (selectedConta > -1) {
+		if (selectedConta) {
 			$('#' + selectedConta).removeClass('highlight');
 		}
 		row.addClass('highlight');
@@ -388,7 +388,7 @@ function findMoeda() {
 		searchRowsMoeda.splice(0, 1);
 		searchRowsMoeda.on('click', function (e) {
 			var row = $(this);
-			if (selectedMoeda > -1) {
+			if (selectedMoeda) {
 				$('#' + selectedMoeda).removeClass('highlight');
 			}
 			row.addClass('highlight');
@@ -529,7 +529,7 @@ function findFormaPagamento() {
 		searchRowsFP.splice(0, 1);
 		searchRowsFP.on('click', function (e) {
 			var row = $(this);
-			if (selectedFormaPagamento > -1) {
+			if (selectedFormaPagamento) {
 				$('#' + selectedFormaPagamento).removeClass('highlight');
 			}
 			row.addClass('highlight');
@@ -677,7 +677,7 @@ function findGrupoPermissao() {
 	searchRowsGrupo.splice(0, 1);
 	searchRowsGrupo.on('click', function (e) {
 		var row = $(this);
-		if (selectedGrupo > -1) {
+		if (selectedGrupo) {
 			$('#' + selectedGrupo).removeClass('highlight');
 		}
 		row.addClass('highlight');
@@ -779,7 +779,7 @@ function findVendedor() {
 		searchRowsVendedores.splice(0, 1);
 		searchRowsVendedores.on('click', function (e) {
 			var row = $(this);
-			if (selectedVendedor > -1) {
+			if (selectedVendedor) {
 				$('#' + selectedVendedor).removeClass('highlight');
 			}
 			row.addClass('highlight');
