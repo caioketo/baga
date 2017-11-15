@@ -85,7 +85,31 @@
 		<div id="page-wrapper">
 			<div class="container-fluid">
 				<div class="row">
-					<iframe id="frameGeral" name="frameGeral" src="" class="frame-dashboard"></iframe>
+					<div id="loader" class="loading-indicator" style="background:url(../images/loader.gif) center center no-repeat; width: 1000px; height: 500px; position: absolute;"></div>
+
+<script>
+var indicator;
+var iframeGeral;
+function content_finished_loading(iframe) {
+	if (indicator) {
+    	indicator.style.display = 'none';
+    }
+    if (iframeGeral) {
+    	iframeGeral.style.display = 'block';
+    }
+    window.top.scrollTo(0,0);
+};
+function content_start_loading() {
+    if (indicator) {
+    	indicator.style.display = 'block';
+    }
+    if (iframeGeral) {
+    	iframeGeral.style.display = 'none';
+    }
+};
+</script>
+
+					<iframe id="frameGeral" name="frameGeral" src="" class="frame-dashboard" onload="content_finished_loading(this);"></iframe>
 				</div>
 			</div>
 		</div>
@@ -97,6 +121,14 @@
 </html>
 
 <script>
+	$(document).ready(function() {
+		indicator = document.querySelector('.loading-indicator');
+		iframeGeral = $("#frameGeral")[0];
+		$(".nav-link").click(function(){
+			content_start_loading();
+		});
+	});
+	
 	var selectedTab = $("#tabCadastros");
 	var selectedMenu = $("#menuCadastros");
 	$("#menuFinanceiro").toggle();
@@ -124,5 +156,5 @@
 		}
 		selectedTab.addClass('active');
 		selectedMenu.toggle();
-	}
+	}	
 </script>
