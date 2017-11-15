@@ -35,8 +35,8 @@ function showDescontoMdl() {
 }
 
 function aplicarDesconto() {
-	let tipoDesc = $("input[name='desconto']:checked").attr('id');
-	let valorDesc = parseFloat($("#descontoInput").val());
+	var tipoDesc = $("input[name='desconto']:checked").attr('id');
+	var valorDesc = parseFloat($("#descontoInput").val());
 
 	if (tipoDesc == 'descontoPct') {
 		valorDesc = getTotal() * (valorDesc / 100);
@@ -177,7 +177,7 @@ function addProduto() {
 }
 
 function getItensForPost(_itens) {
-	let itensFP = [];
+	var itensFP = [];
 	for (var i = _itens.length - 1; i >= 0; i--) {
 		itensFP.push({
 			produto: _itens[i].produto.id,
@@ -191,7 +191,7 @@ function getItensForPost(_itens) {
 }
 
 function getPagamentosForPost(_pagamentos) {
-	let pagamentosFP = [];
+	var pagamentosFP = [];
 
 	for (var i = _pagamentos.length - 1; i >= 0; i--) {
 		pagamentosFP.push({

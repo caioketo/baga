@@ -19,7 +19,15 @@ module.exports = {
 	*/
   	tipo: {
   		type: 'integer'
-  	}
+  	},
+    tipoDesc: function () {
+      switch (this.tipo) {
+        case 0: return 'Caixa';
+        case 1: return 'Conta à Receber';
+        case 2: return 'Conta à Pagar';
+        case 3: return 'Conta Corrente';
+      }
+    }
   }
 };
 
