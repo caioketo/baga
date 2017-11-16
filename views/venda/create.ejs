@@ -47,27 +47,33 @@
         <label>Produto: </label>
 		<input id='produtoNome' type="text" value='' name='produtoNome' />
 		<br>
-		<table id='tableProdutos' class="table table-striped">
-			<thead>
-				<tr>
-					<th>Descrição</th>
-					<% tabelas.forEach(function (t) { %>
-						<th><%= t.descricao %></th>
-					<% }); %>
-				</tr>
-			</thead>
-			<tbody>
-				<% produtos.forEach(function(p) { %>
-					<tr id='<%= p.id %>'>
-						<td><%= p.descricao %></td>
+		<div style="max-height: 350px; overflow-y: scroll; overflow-x: hidden;">
+			<table id='tableProdutos' class="table table-striped">
+				<thead>
+					<tr>
+						<th>Descrição</th>
 						<% tabelas.forEach(function (t) { %>
-							<td><%= p[t.descricao] %></td>
+							<th><%= t.descricao %></th>
 						<% }); %>
 					</tr>
-				<% }); %>
-			</tbody>
-		</table>
+				</thead>
+				<tbody>
+					<% produtos.forEach(function(p) { %>
+						<tr id='<%= p.id %>'>
+							<td><%= p.descricao %></td>
+							<% tabelas.forEach(function (t) { %>
+								<% p.precos.forEach(function (preco) { %>
+									<% if (preco.tabelaPreco == t.id) { %>
+										<td><%= preco.valor %></td>
+									<% } %>
+								<% }); %>
+							<% }); %>
+						</tr>
+					<% }); %>
+				</tbody>
+			</table>
 		</div>
+	</div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
         <button type="button" class="btn btn-primary" onclick="selecionarProduto();">Selecionar</button>

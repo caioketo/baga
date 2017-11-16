@@ -18,19 +18,13 @@ module.exports = {
   		model: 'tabelaPreco'
   	},
     tabelaNome: function (produto, i, cb) {
-      if (Number.isInteger(this.tabelaPreco)) {
-        //pegar tabela
-        TabelaPreco.findOne({id: this.tabelaPreco}).exec(function (err, tabela) {
-          if (err) {
-            return "";
-          }
-          cb(produto, i, tabela.descricao);
-        });
-        return "";
-      }
-      else {
-        return this.tabelaPreco.descricao;
-      }
+      TabelaPreco.findOne({id: this.tabelaPreco}).exec(function (err, tabela) {
+        if (err) {
+          return "";
+        }
+        cb(produto, i, tabela.descricao);
+      });
+      return "";
     }
   }
 };

@@ -211,6 +211,47 @@ module.exports = {
 			return res.send({statusCode: 200});
 		});
 	},
+	createOrcamento: function (req, res) {
+		let viewObj = {};
+		Loja.find().exec(function (err, lojas) {
+			if (err) {
+				console.log(JSON.stringify(err));
+				return res.send(JSON.stringify(err));
+			}
+			console.log('lojas');
+			viewObj.lojas = lojas;
+			TabelaPreco.find().exec(function (err, tabelas) {
+				if (err) {
+					console.log(JSON.stringify(err));
+					return res.send(JSON.stringify(err));
+				}
+				console.log('tabelas');
+				viewObj.tabelas = tabelas;
+				Produto.find().populate('precos').exec(function (err, produtos) {
+					if (err) {
+						console.log(JSON.stringify(err));
+						return res.send(JSON.stringify(err));
+					}
+					console.log('produtos');
+					viewObj.produtos = produtos;
+					Cliente.getDefault(function (_cliente) {
+						console.log('cliente');
+						viewObj.cliente = _cliente;
+						Vendedor.getDefault({userId: req.session.me}, function (_vendedor) {
+							console.log('vendedor');
+							viewObj.vendedor = _vendedor;
+							FormaPagamento.find().populate(['condicoesPagamento', 'moeda']).exec(function (err, formasPagamento) {
+								FormaPagamento.getCotacaoMoedas(formasPagamento, function (_formasPagamento) {
+									viewObj.formasPagamento = getPagamentos(_formasPagamento);
+									return res.view(viewObj);
+								});
+							});
+						});
+					});	
+				});
+			});
+		});	
+	},
 	create: function (req, res) {
 		let viewObj = {};
 		Loja.find().exec(function (err, lojas) {
@@ -231,10 +272,7 @@ module.exports = {
 						console.log(JSON.stringify(err));
 						return res.send(JSON.stringify(err));
 					}
-
-					for (var i = produtos.length - 1; i >= 0; i--) {
-						produtos[i].updateCampos();
-					}
+					
 					viewObj.produtos = produtos;
 					Cliente.getDefault(function (_cliente) {
 						viewObj.cliente = _cliente;

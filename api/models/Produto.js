@@ -30,16 +30,17 @@ module.exports = {
       categoria: {
         model: 'Categoria'
       },
-      updateCampos: function () {
+      updateCampos: function (cb) {
+        let maxI = this.precos.length - 1;
         for (var i = 0; i < this.precos.length; i++) {
-          if (this.precos[i].tabelaNome) {
-            this[this.precos[i].tabelaNome] = this.precos[i].valor;
-          }
-          else {
-            this.precos[i].tabelaNome(this, i, function (produto, i, nome) {
-              produto[nome] = produto.precos[i].valor;
-            });
-          }
+          this.precos[i].tabelaNome(this, i, function (produto, _i, nome) {
+            produto[nome] = produto.precos[_i].valor;
+            //console.log(produto.toJSON());
+            console.log(_i);
+            if (_i == maxI && cb) {
+              cb();
+            }
+          });
         }
       }
   }
