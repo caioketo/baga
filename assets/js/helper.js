@@ -250,9 +250,6 @@ function createFornecedor() {
 	}
 }
 
-
-
-
 function getConta(id) {
 	for (var i = contas.length - 1; i >= 0; i--) {
 		if (contas[i].id == id) {
@@ -422,7 +419,8 @@ function validateLoja(loja) {
 function getLoja() {
 	return {
 		nome: $('#nome').val(),
-		rut: $('#rut').val()
+		rut: $('#rut').val(),
+		estoque: selectedEstoque
 	};
 }
 
@@ -800,3 +798,42 @@ function filtrarVendedores(e) {
 		}).hide();
 	}, 200);
 };
+
+/**
+	###ESTOQUES###
+*/
+
+function validateEstoque(estoque) {
+	return true;
+}
+
+
+function getEstoque() {
+	return {
+		descricao: $('#descricao').val()
+	};
+}
+
+function editEstoque() {
+	var estoque = getEstoque();
+	if (validateEstoque(estoque)) {
+		io.socket.post('/estoque/editPost', { estoque: estoque, id: estoqueID }, function (resData) {
+			if (resData.statusCode == 200) {
+				document.location = '/estoque';
+			}
+		});
+	}
+}
+
+
+function createEstoque() {
+	var estoque = getEstoque();
+
+	if (validateEstoque(estoque)) {
+		io.socket.post('/estoque/createPost', { estoque: estoque }, function (resData) {
+			if (resData.statusCode == 200) {
+				document.location = '/estoque';
+			}
+		});
+	}
+}

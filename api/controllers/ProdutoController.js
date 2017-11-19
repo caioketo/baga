@@ -67,10 +67,6 @@ module.exports = {
 						{
 							titulo: 'Descrição',
 							nome: 'descricao'
-						},
-						{
-							titulo: 'Quantidade',
-							nome: 'quantidade'
 						}
 					],
 					records: produtos,
@@ -98,35 +94,27 @@ module.exports = {
 		});
 	},
 	edit: function(req, res) {
-		Categoria.find().exec(function (err, categorias) {
+		Produto.find({id: req.param('id')}).populate(['categoria', 'precos', 'estoques']).exec(function (err, produto) {
 			if (err) {
 				console.log(JSON.stringify(err));
 				return res.send(JSON.stringify(err));
 			}
-			Produto.find({id: req.param('id')}).populate('precos').populate('categoria').exec(function (err, produto) {
+			produto = produto[0];
+			TabelaPreco.find().exec(function (err, tabelas) {
 				if (err) {
 					console.log(JSON.stringify(err));
 					return res.send(JSON.stringify(err));
 				}
-				produto = produto[0];
-				TabelaPreco.find().exec(function (err, tabelas) {
+
+				Estoque.find().exec(function (err, estoques) {
 					if (err) {
 						console.log(JSON.stringify(err));
 						return res.send(JSON.stringify(err));
 					}
-					for (var i = produto.precos.length - 1; i >= 0; i--) {
-						for (var l = tabelas.length - 1; l >= 0; l--) {
-							if (produto.precos[i].tabelaPreco == tabelas[l].id) {
-								produto.precos[i].tabelaNome = tabelas[l].descricao;
-							}
-						}
-					}
-
-					return res.view({produto: produto, tabelasPreco: tabelas, categorias: categorias});
+					return res.view({produto: produto, tabelasPreco: tabelas, estoques: estoques});
 				});
 			});
-		});
-		
+		});		
 	},
 	create: function (req, res) {
 		TabelaPreco.find().exec(function (err, tabelasPreco) {
@@ -134,7 +122,13 @@ module.exports = {
 				console.log(JSON.stringify(err));
 				return res.send(JSON.stringify(err));
 			}
-			return res.view({tabelasPreco: tabelasPreco});
+			Estoque.find().exec(function (err, estoques) {
+				if (err) {
+					console.log(JSON.stringify(err));
+					return res.send(JSON.stringify(err));
+				}
+				return res.view({tabelasPreco: tabelasPreco, estoques: estoques});
+			});
 		});
 	},
 	editPost: function (req, res) {

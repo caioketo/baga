@@ -6,8 +6,22 @@
 <br>
 <input id='rut' type="text" value='<%= loja.rut %>' name='rut' />
 <br>
+<label>Estoque</label>
+<br>
+<input id='estoque' type="text" value='' onfocus="findEstoque();" />
+<br>
 <input type="submit" value="Salvar" onclick="editLoja();" />
+
+<%- include ../modalEstoques.ejs %>
 
 <script>
 	var lojaID = '<%= loja.id %>';
+	var estoques =  <%- JSON.stringify(estoques) %>;
+	<% if (typeof loja.estoque !== 'undefined') { %>
+		var selectedEstoque =  '<%= loja.estoque.id %>';
+		var estoqueObj = <%- JSON.stringify(loja.estoque) %>;
+	<%} else { %>
+		var selectedEtoque;
+		var estoqueObj;
+	<% } %>
 </script>

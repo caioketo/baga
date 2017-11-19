@@ -253,42 +253,68 @@ module.exports = {
 		});	
 	},
 	create: function (req, res) {
+		let dbCalls = [];
 		let viewObj = {};
-		Loja.find().exec(function (err, lojas) {
-			if (err) {
-				console.log(JSON.stringify(err));
-				return res.send(JSON.stringify(err));
-			}
-			viewObj.lojas = lojas;
+
+		dbCalls.push(function (callback) {
+			Produto.find().populate('precos').exec(function (err, produtos) {
+				if (err) {
+					callback(err);
+				}
+				
+				viewObj.produtos = produtos;
+				callback(null, produtos);	
+			});
+		});
+		
+		dbCalls.push(function (callback) {
+			Loja.find().exec(function (err, lojas) {
+				if (err) {
+					callback(err);
+				}
+				viewObj.lojas = lojas;
+				callback(null, lojas);
+			});
+		});
+
+		dbCalls.push(function (callback) {
 			TabelaPreco.find().exec(function (err, tabelas) {
 				if (err) {
 					console.log(JSON.stringify(err));
-					return res.send(JSON.stringify(err));
+					callback(err);
 				}
 
 				viewObj.tabelas = tabelas;
-				Produto.find().populate('precos').exec(function (err, produtos) {
-					if (err) {
-						console.log(JSON.stringify(err));
-						return res.send(JSON.stringify(err));
-					}
-					
-					viewObj.produtos = produtos;
-					Cliente.getDefault(function (_cliente) {
-						viewObj.cliente = _cliente;
-						Vendedor.getDefault({userId: req.session.me}, function (_vendedor) {
-							viewObj.vendedor = _vendedor;
-							FormaPagamento.find().populate(['condicoesPagamento', 'moeda']).exec(function (err, formasPagamento) {
-								FormaPagamento.getCotacaoMoedas(formasPagamento, function (_formasPagamento) {
-									viewObj.formasPagamento = getPagamentos(_formasPagamento);
-									return res.view(viewObj);
-								});
-							});
-						});
-					});					
+				callback(null, tabelas);
+			});
+		});
+		dbCalls.push(function (callback) {
+			Cliente.getDefault(function (_cliente) {
+				viewObj.cliente = _cliente;
+				callback(null, _cliente);
+			});
+		});
+		dbCalls.push(function (callback) {
+			Vendedor.getDefault({userId: req.session.me}, function (_vendedor) {
+				viewObj.vendedor = _vendedor;
+				callback(null, _vendedor);
+			});
+		});
+		dbCalls.push(function (callback) {
+			FormaPagamento.find().populate(['condicoesPagamento', 'moeda']).exec(function (err, formasPagamento) {
+				FormaPagamento.getCotacaoMoedas(formasPagamento, function (_formasPagamento) {
+					viewObj.formasPagamento = getPagamentos(_formasPagamento);
+					callback(null, _formasPagamento);
 				});
 			});
-		});	
+		});
+
+		async.parallel(dbCalls, function (err, results) {
+			if (err) {
+				console.log(JSON.stringify(err));
+			}
+			return res.view(viewObj);
+		});
 	}
 };
 

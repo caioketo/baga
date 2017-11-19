@@ -10,9 +10,26 @@
 <br>
 <input id='categoria' type="text" value='' name='categoria' onfocus="findCategoria();" />
 <br>
-<label>Quantidade</label>
 <br>
-<input id='quantidade' type="number" value='' name='quantidade' />
+<label>Quantidades</label>
+<br>
+<div>
+	<div id="newQtde">
+		<select id="estoques"></select>
+		<input id='quantidade' type="number" value=''  />
+		<input type="submit" value="Adicionar Quantidade" onclick="addQtde();" />	
+	</div>
+	<table id='tableQtdes'>
+		<thead>
+			<tr>
+				<th>Estoque</th>
+				<th>Quantidade</th>
+			</tr>
+		</thead>
+		<tbody>
+		</tbody>
+	</table>
+</div>
 <br>
 <label>Preço de Custo</label>
 <br>
@@ -78,9 +95,10 @@
 
 <script>
 	var tabelasDePreco = <%- JSON.stringify(tabelasPreco) %>;
+	var estoques = <%- JSON.stringify(estoques) %>;
 	var categorias = [];
-	var selectedCategoria = -1;
-	var categoriaObj = undefined;
+	var selectedCategoria;
+	var categoriaObj;
 	var searchRows = $('#tableCategorias tr');
 	$('#categoriaMdl').on('shown.bs.modal', function () {
 	  $('#cateogriaInput').focus()

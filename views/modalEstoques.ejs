@@ -1,0 +1,95 @@
+<!-- MODAL -->
+<div class="modal fade" id="estoqueMdl" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Procurar Estoques</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <label>Estoque</label>
+  		<br>
+  		<input id='estoqueInput' type="text" value=''/>
+  		<br>
+
+		<table id='tableEstoques' class="table table-striped">
+			<thead>
+				<th>Estoque</th>
+			</thead>
+			<tbody id="tbodyEstoques">
+			</tbody>
+		</table>
+
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+        <button id="confirm" type="button" class="btn btn-primary" onclick="selecionarEstoque();">Selecionar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  $('#estoqueMdl').on('shown.bs.modal', function () {
+    $('#estoqueInput').focus()
+  });
+  var estoqueSR = $('#tableEstoques tr');
+  var estoques = [];
+
+  function findEstoque() {
+    io.socket.get('/estoque/getAll', function (resData, jwres) {
+      estoques = resData;
+      $("#tbodyEstoques").empty();
+
+      for (var i = estoques.length - 1; i >= 0; i--) {
+        $('#tableEstoques > tbody:last-child').append('<tr id="' + estoques[i].id + '"><td>' + estoques[i].descricao + '</td></tr>');
+      }
+      estoqueSR = $('#tableEstoques tr');
+      estoqueSR.splice(0, 1);
+      estoqueSR.on('click', function (e) {
+        var row = $(this);
+        if (selectedEstoque) {
+          $('#' + selectedEstoque).removeClass('highlight');
+        }
+        row.addClass('highlight');
+        selectedEstoque = row.attr('id');
+      });
+      $("#estoqueInput").bind('keydown', filtrarEstoques);
+      $("#estoqueMdl").modal();
+    });
+  };
+
+
+  function filtrarEstoques(e) {
+    setTimeout(function () {
+      var text = $("#estoqueInput").val();
+      var val = $.trim(text).replace(/ +/g, ' ').toLowerCase();
+      searchRows.show().filter(function() {
+        var text = $(this).text().replace(/\s+/g, ' '). toLowerCase();
+        return !~text.indexOf(val);
+      }).hide();
+    }, 200);
+  };
+
+
+  function selecionarEstoque() {
+    if (selectedEstoque) {
+      estoqueObj = getEstoqueObj(selectedEstoque);
+      $('#estoque').val(estoqueObj.descricao);
+      //$("#estoque").prop('disabled', true);
+      $('#estoqueMdl').modal('hide');
+      $('#quantidade').focus();
+    }
+  }
+
+  function getEstoqueObj(id) {
+    for (var i = estoques.length - 1; i >= 0; i--) {
+      if (estoques[i].id == id) {
+        return estoques[i];
+      }
+    }
+    return undefined;
+  }
+</script>

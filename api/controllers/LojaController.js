@@ -64,12 +64,18 @@ module.exports = {
 		});
 	},
 	edit: function(req, res) {
-		Loja.find({id: req.param('id')}).exec(function (err, lojas) {
-			if (err) {
-				console.log(JSON.stringify(err));
-				return res.send(JSON.stringify(err));
+		Estoque.find().exec(function (_err, _estoques) {
+			if (_err) {
+				console.log(JSON.stringify(_err));
+				return res.send(JSON.stringify(_err));
 			}
-			return res.view({loja: lojas[0]});
+			Loja.find({id: req.param('id')}).populate('estoque').exec(function (err, lojas) {
+				if (err) {
+					console.log(JSON.stringify(err));
+					return res.send(JSON.stringify(err));
+				}
+				return res.view({loja: lojas[0], estoques: _estoques});
+			});
 		});
 	},
 	create: function (req, res) {

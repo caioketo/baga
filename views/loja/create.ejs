@@ -6,4 +6,15 @@
 <br>
 <input id='rut' type="text" name='rut' />
 <br>
+<label>Estoque</label>
+<br>
+<input id='estoque' type="text" value='' onfocus="findEstoque();" />
+<br>
 <input type="submit" value="Salvar" onclick="createLoja();" />
+
+<%- include ../modalEstoques.ejs %>
+
+<script>
+	var selectedEstoque;
+	var estoqueObj;
+</script>

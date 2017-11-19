@@ -10,9 +10,26 @@
 <br>
 <input id='categoria' type="text" value='' name='categoria' onfocus="findCategoria();" />
 <br>
-<label>Quantidade</label>
 <br>
-<input id='quantidade' type="number" value='<%= produto.quantidade %>' name='quantidade' />
+<label>Quantidades</label>
+<br>
+<div>
+	<div id="newQtde">
+		<select id="estoques"></select>
+		<input id='quantidade' type="number" value=''  />
+		<input type="submit" value="Adicionar Quantidade" onclick="addQtde();" />	
+	</div>
+	<table id='tableQtdes' class="table table-striped">
+		<thead>
+			<tr>
+				<th>Estoque</th>
+				<th>Quantidade</th>
+			</tr>
+		</thead>
+		<tbody>
+		</tbody>
+	</table>
+</div>
 <br>
 <label>Preço de Custo</label>
 <br>
@@ -53,7 +70,7 @@
       <div class="modal-body">
         <label>Categoria</label>
 		<br>
-		<input id='cateogriaInput' type="text" value='' name='cateogriaInput' />
+		<input id='categoriaInput' type="text" value='' name='categoriaInput' />
 		<br>
 
 		<table id='tableCategorias' class="table table-striped">
@@ -80,14 +97,16 @@
 		selecionarCategoria();
 	});
 	var tabelasDePreco = <%- JSON.stringify(tabelasPreco) %>;
+	var estoques = <%- JSON.stringify(estoques) %>;
 	var precos = <%- JSON.stringify(produto.precos) %>;
+	var quantidades = <%- JSON.stringify(produto.estoques) %>;
 
-	var categorias =  <%- JSON.stringify(categorias) %>;
+	var categorias = [];
 	<% if (typeof produto.categoria !== 'undefined') { %>
 		var selectedCategoria =  '<%= produto.categoria.id %>';
 		var categoriaObj = <%- JSON.stringify(produto.categoria) %>;
 	<%} else { %>
-		var selectedCategoria = -1;
+		var selectedCategoria;
 		var categoriaObj;
 	<% } %>
 	var searchRows = $('#tableCategorias tr');

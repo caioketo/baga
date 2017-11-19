@@ -1,6 +1,0 @@
-<input type="submit" value="Novo Produto" onclick="window.location='/produto/create';" />
-<ul>
-<% produtos.forEach(function(n) { %>
-  <li onclick="window.location='/produto/edit/<%= n.id %>'"> <%= n.descricao %> </li>
-<% }); %>
-</ul>

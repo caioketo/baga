@@ -13,6 +13,9 @@ module.exports = {
   	},
 	rut: {
 		type: 'string'
+	},
+	estoque: {
+		model: 'estoque'
 	}
   }
 };
