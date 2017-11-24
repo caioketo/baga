@@ -23,7 +23,11 @@
 			<tr id='<%= r.id %>'>
 				<td><%= r.id %></td>
 				<% fields.forEach(function (f) { %>
+					<% if (typeof f.isFunction !== 'undefined' && f.isFunction) { %>
+					<td><%= r[f.nome]() %></td>
+					<% } else { %>
 					<td><%= r[f.nome] %></td>
+					<% } %>
 				<% }); %>
 				<td>
 					<% if (options.permissoes.edit) { %>

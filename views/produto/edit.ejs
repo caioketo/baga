@@ -6,6 +6,10 @@
 <br>
 <input id='descricao' type="text" value='<%= produto.descricao %>' name='descricao' />
 <br>
+<label>Fornecedor</label>
+<br>
+<input id='fornecedor' type="text" value='' name='fornecedor' onfocus="findFornecedor();" />
+<br>
 <label>Categoria</label>
 <br>
 <input id='categoria' type="text" value='' name='categoria' onfocus="findCategoria();" />
@@ -90,11 +94,25 @@
   </div>
 </div>
 
+<%- include ../modalFornecedores.ejs %>
+
 
 <script>
 	var produtoID = '<%= produto.id %>';
 	$(document).ready(function() {
 		selecionarCategoria();
+	});
+	var fornecedores = [];
+	<% if (produto.fornecedor) { %>
+		var selectedFornecedor = '<%- produto.fornecedor.id %>';
+		var fornecedorObj = <%- JSON.stringify(produto.fornecedor) %>;
+	<% } else { %>
+		var selectedFornecedor = -1;
+		var fornecedorObj = undefined;
+	<% } %>
+	var fornecedorSR = $('#tableFornecedores tr');
+	$('#fornecedorMdl').on('shown.bs.modal', function () {
+	  $('#fornecedorNome').focus()
 	});
 	var tabelasDePreco = <%- JSON.stringify(tabelasPreco) %>;
 	var estoques = <%- JSON.stringify(estoques) %>;

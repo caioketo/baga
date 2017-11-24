@@ -6,6 +6,10 @@
 <br>
 <input id='descricao' type="text" value='' name='descricao' />
 <br>
+<label>Fornecedor</label>
+<br>
+<input id='fornecedor' type="text" value='' name='fornecedor' onfocus="findFornecedor();" />
+<br>
 <label>Categoria</label>
 <br>
 <input id='categoria' type="text" value='' name='categoria' onfocus="findCategoria();" />
@@ -19,7 +23,7 @@
 		<input id='quantidade' type="number" value=''  />
 		<input type="submit" value="Adicionar Quantidade" onclick="addQtde();" />	
 	</div>
-	<table id='tableQtdes'>
+	<table id='tableQtdes' class="table table-striped">
 		<thead>
 			<tr>
 				<th>Estoque</th>
@@ -43,7 +47,7 @@
 		<input id='venda' type="number" value='' name='venda' />
 		<input type="submit" value="Adicionar Preço" onclick="addPreco();" />	
 	</div>
-	<table id='tablePrecos'>
+	<table id='tablePrecos' class="table table-striped">
 		<thead>
 			<tr>
 				<th>Tabela</th>
@@ -92,8 +96,16 @@
   </div>
 </div>
 
+<%- include ../modalFornecedores.ejs %>
 
 <script>
+	var fornecedores = [];
+	var selectedFornecedor = -1;
+	var fornecedorObj = undefined;
+	var fornecedorSR = $('#tableFornecedores tr');
+	$('#fornecedorMdl').on('shown.bs.modal', function () {
+	  $('#fornecedorNome').focus()
+	});
 	var tabelasDePreco = <%- JSON.stringify(tabelasPreco) %>;
 	var estoques = <%- JSON.stringify(estoques) %>;
 	var categorias = [];

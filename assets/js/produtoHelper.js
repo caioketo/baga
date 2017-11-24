@@ -45,6 +45,10 @@ if ($('#estoques').has('option').length <= 0 ) {
 	$('#newQtde').hide();
 }
 
+if (typeof fornecedorObj !== 'undefined') {
+	selecionarFornecedor(true);
+}
+
 function getTabelaNome(preco) {
 	for (var i = tabelasDePreco.length - 1; i >= 0; i--) {
 		if (preco.tabelaPreco == tabelasDePreco[i].id) {
@@ -68,7 +72,7 @@ function addPrecoHtml(preco) {
 
 function addQuantidadeHtml(qtde) {
 	$('#tableQtdes tr:last').after('<tr><td>' + qtde.estoqueNome + '</td><td>' + qtde.quantidade + '</td></tr>');
-	$("#tableQtdes option[value='" + $("#estoques").val() + "']").remove();
+	$("#estoques option[value='" + $("#estoques").val() + "']").remove();
 }
 
 function addPreco() {
@@ -114,7 +118,8 @@ function getProduto() {
 		custo: $('#custo').val(),
 		precos: precos,
 		categoria: selectedCategoria,
-		estoques: quantidades
+		estoques: quantidades,
+		fornecedor: selectedFornecedor
 	};
 }
 
@@ -192,6 +197,63 @@ function filtrarCategorias(e) {
 		var text = $("#categoriaInput").val();
 		var val = $.trim(text).replace(/ +/g, ' ').toLowerCase();
 		searchRows.show().filter(function() {
+			var text = $(this).text().replace(/\s+/g, ' ').	toLowerCase();
+			return !~text.indexOf(val);
+		}).hide();
+	}, 200);
+};
+
+
+
+function getFornecedor(id) {
+	for (var i = fornecedores.length - 1; i >= 0; i--) {
+		if (fornecedores[i].id == id) {
+			return fornecedores[i];
+		}
+	}
+	return undefined;
+}
+
+function selecionarFornecedor(view) {
+	if (selectedFornecedor !== -1) {
+		if (!view) {
+			fornecedorObj = getFornecedor(selectedFornecedor);
+		}		
+		$('#fornecedor').val(fornecedorObj.nome);
+		$("fornecedor").prop('disabled', true);
+		$('#fornecedorMdl').modal('hide');
+	}
+}
+
+
+function findFornecedor() {
+	io.socket.get('/fornecedor/getAll', function (resData, jwres) {
+		fornecedores = resData;
+		$("#tbodyFornecedores").empty();
+
+		for (var i = fornecedores.length - 1; i >= 0; i--) {
+			$('#tableFornecedores > tbody:last-child').append('<tr id="' + fornecedores[i].id + '"><td>' + fornecedores[i].nome + '</td></tr>');
+		}
+		fornecedorSR = $('#tableFornecedores tr');
+		fornecedorSR.splice(0, 1);
+		fornecedorSR.on('click', function (e) {
+			var row = $(this);
+			if (selectedFornecedor) {
+				$('#' + selectedFornecedor).removeClass('highlight');
+			}
+			row.addClass('highlight');
+			selectedFornecedor = row.attr('id');
+		});
+		$("#fornecedorNome").bind('keydown', filtrarFornecedores);
+		$("#fornecedorMdl").modal();
+	});
+};
+
+function filtrarFornecedores(e) {
+	setTimeout(function () {
+		var text = $("#fornecedorNome").val();
+		var val = $.trim(text).replace(/ +/g, ' ').toLowerCase();
+		fornecedorSR.show().filter(function() {
 			var text = $(this).text().replace(/\s+/g, ' ').	toLowerCase();
 			return !~text.indexOf(val);
 		}).hide();

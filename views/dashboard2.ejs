@@ -59,6 +59,9 @@
 			<% if (dashboard.loja) { %>
 			<a class="nav-link" href="loja" target="frameGeral">Lojas</a>
 			<% } %>
+			<% if (dashboard.estoque) { %>
+			<a class="nav-link" href="estoque" target="frameGeral">Estoques</a>
+			<% } %>
 			<% if (dashboard.permissao) { %>
 			<a class="nav-link" href="permissao" target="frameGeral">Permissões</a>
 			<% } %>
@@ -82,6 +85,7 @@
 			<a class="nav-link" href="venda/create" target="frameGeral">Nova Venda</a>
 			<a class="nav-link" href="venda/orcamentos" target="frameGeral">Orçamentos do dia</a>
 			<a class="nav-link" href="venda/createOrcamento" target="frameGeral">Novo Orçamento</a>
+			<a class="nav-link" href="movimentacao" target="frameGeral">Movimentações</a>
 		</nav>
 
 		<div id="page-wrapper">

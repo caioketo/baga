@@ -37,6 +37,7 @@
   });
   var estoqueSR = $('#tableEstoques tr');
   var estoques = [];
+  var estoqueSelectedCB = undefined;
 
   function findEstoque() {
     io.socket.get('/estoque/getAll', function (resData, jwres) {
@@ -81,6 +82,10 @@
       //$("#estoque").prop('disabled', true);
       $('#estoqueMdl').modal('hide');
       $('#quantidade').focus();
+
+      if (estoqueSelectedCB) {
+        estoqueSelectedCB(estoqueObj);
+      }
     }
   }
 

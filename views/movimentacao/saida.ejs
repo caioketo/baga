@@ -2,11 +2,9 @@
 <br>
 <input id='descricao' type="text" autofocus/>
 <br>
-<label>Estoque Saída</label>
-<label style="padding-left: 100px;">Estoque Entrada</label>
+<label>Estoque</label>
 <br>
 <input id="estoqueSaida" type="text" onfocus="findEstoqueES(1);" />
-<input style="margin-left: 20px;" id="estoqueEntrada" type="text" onfocus="findEstoqueES(0);" />
 
 
 <div>
@@ -110,7 +108,7 @@
 	function createClick() {
 		createMovimentacao(function (resData) {
 			if (resData.statusCode == 200) {
-				document.location = '/movimentacao';
+				document.location = '/movimentacao/indexSaida';
 			}
 		})
 	}

@@ -38,6 +38,9 @@ module.exports = {
     },
     venda: {
       model: 'Venda'
+    },
+    abertura: {
+      model: 'abertura'
     }
   }
 };

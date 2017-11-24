@@ -1,3 +1,5 @@
 .highlight { background: LightSkyBlue !important; }
 
 .invalid { background: #EE4635 !important; }
+
+.modal-header { display: block !important; }

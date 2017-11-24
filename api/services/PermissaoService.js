@@ -182,6 +182,9 @@ module.exports = {
 					if (element.path == '/loja') {
 						dashboardPermissoes.loja = true;
 					}
+					if (element.path == '/estoque') {
+						dashboardPermissoes.estoque = true;
+					}
 					if (element.path == '/grupopermissao') {
 						dashboardPermissoes.grupopermissao = true;
 					}

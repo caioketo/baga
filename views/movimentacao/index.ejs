@@ -1,0 +1,113 @@
+<input type="submit" value="Nova <%= titulo %>" onclick="window.location = '<%= insertURL %>';"/>
+<table id="tableMovimentacoes" class='table table-striped'>
+	<thead>
+		<tr>
+			<th>Data</th>
+			<th>Descrição</th>
+			<% if (entradaSaida == 2) { %>
+			<th>Estoque Saída</th>
+			<% } else if (entradaSaida == 1) { %>
+			<th>Estoque Entrada</th>
+			<% } else if (entradaSaida == 0) { %>
+			<th>Estoque Saída</th>
+			<th>Estoque Entrada</th>
+			<% } %>
+			<th></th>
+		</tr>
+	</thead>
+	<tbody>
+		<% movimentacoes.forEach(function (m) { %>
+			<tr id='<%= m.id %>'>
+				<td onclick="getDetail('<%= m.id %>');"><%= moment(m.createdAt).format('DD/MM/YYYY') %></td>
+				<td onclick="getDetail('<%= m.id %>');"><%= m.descricao %></td>
+				<% if (entradaSaida == 2) { %>
+				<td onclick="getDetail('<%= m.id %>');"><%= m.estoqueSaida.descricao %></td>
+				<% } else if (entradaSaida == 1) { %>
+				<td onclick="getDetail('<%= m.id %>');"><%= m.estoqueEntrada.descricao %></td>
+				<% } else if (entradaSaida == 0) { %>
+				<td onclick="getDetail('<%= m.id %>');"><%= m.estoqueSaida.descricao %></td>
+				<td onclick="getDetail('<%= m.id %>');"><%= m.estoqueEntrada.descricao %></td>
+				<% } %>
+				<td><input type="submit" value="CANCELAR" onclick="cancelarMovimentacao('<%= m.id %>');"/></td>
+			</tr>
+		<% }); %>
+	</tbody>
+</table>
+
+
+<div class="modal fade" id="detailModal" role="dialog" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header" style="display: block !important;">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 id="titleMovimentacao" class="modal-title">Movimentação </h4>
+      </div>
+      <div class="modal-body">
+		<table id='tableItens' class='table table-striped'>
+			<thead>
+				<th>Produto</th>
+				<th>Quantidade</th>
+			</thead>
+			<tbody>
+			</tbody>
+		</table>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Fechar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- Modal Dialog -->
+<div class="modal fade" id="confirmDelete" role="dialog" aria-labelledby="confirmDeleteLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title">Cancelar <%= titulo %></h4>
+      </div>
+      <div class="modal-body">
+        <p>Tem certeza disso ?</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+        <button type="button" class="btn btn-danger" id="confirm">Confirmar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+	function cancelarMovimentacao(id) {
+		//cancelar venda
+		$('#confirmDelete').modal({
+		  backdrop: 'static',
+		  keyboard: false
+		})
+		.one('click', '#confirm', function(e) {
+			io.socket.post('/movimentacao/cancelar', { id: id }, function (resData) {
+				if (!resData) {
+
+				}
+				if (resData.statusCode == 200) {
+					window.location.reload();
+				}
+			});
+		});
+	}
+
+	function getDetail(id) {
+		io.socket.get('/movimentacao/getDetail', {id: id}, function (resData) {
+			let movimentacao = resData.movimentacao;
+			$('#titleMovimentacao').text('<%= titulo %> ' + movimentacao.numero);
+			$('#tableItens > tbody').empty();
+			for (var i = movimentacao.items.length - 1; i >= 0; i--) {
+				let item = movimentacao.items[i];
+				$('#tableItens > tbody:last-child').append('<tr id="' + item.id + '"><td>' + item.produto.descricao + '</td><td>' + item.quantidade +'</td></tr>');
+			}
+			$('#detailModal').modal();
+		});
+	}
+</script>

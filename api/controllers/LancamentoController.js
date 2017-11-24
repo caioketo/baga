@@ -129,15 +129,21 @@ module.exports = {
 		});
 	},
 	caixa: function (req, res) {
-		getFormasPagamento(function (formasPagamento) {
-			getContas(0, function (contas) {
-				Lancamento.find({conta: contas}).populate(['cliente', 'moeda']).exec(function (err, lancamentos) {
-					if (err) {
-						console.log(JSON.stringify(err));
-						return res.send(JSON.stringify(err));
-					}
+		CaixaService.getAbertura(function (err, abertura) {
+			if (err) {
+				console.log(JSON.stringify(err));
+				return res.send(JSON.stringify(err));
+			}
+			getFormasPagamento(function (formasPagamento) {
+				getContas(0, function (contas) {
+					Lancamento.find({conta: contas, abertura: abertura.id}).populate(['cliente', 'moeda']).exec(function (err, lancamentos) {
+						if (err) {
+							console.log(JSON.stringify(err));
+							return res.send(JSON.stringify(err));
+						}
 
-					return res.view({lancamentos: lancamentos, moment: moment, formasPagamento: formasPagamento, total: 0});
+						return res.view({lancamentos: lancamentos, moment: moment, formasPagamento: formasPagamento, total: 0});
+					});
 				});
 			});
 		});
@@ -210,19 +216,25 @@ module.exports = {
 	},
 	suprimentoSangria: function (req, res) {
 		let pagamento = req.body.pagamento;
-		getContas(0, function (contas) {
-			Lancamento.create({
-				data: new Date(),
-				vencimento: new Date(),
-				valor: pagamento.valor,
-				conta: contas[0],
-				descricao: pagamento.descricao,
-				moeda: pagamento.formaPagamento.moeda
-			}).exec(function (err, pagamentoConta) {
-				if (err) {
-					console.log(JSON.stringify(err));
-				}
-				return res.send({statusCode: 200});
+		CaixaService.getAbertura(function (err, abertura) {
+			if (err) {
+				console.log(JSON.stringify(err));
+			}
+			getContas(0, function (contas) {
+				Lancamento.create({
+					data: new Date(),
+					vencimento: new Date(),
+					valor: pagamento.valor,
+					conta: contas[0],
+					descricao: pagamento.descricao,
+					moeda: pagamento.formaPagamento.moeda,
+					abertura: abertura
+				}).exec(function (err, pagamentoConta) {
+					if (err) {
+						console.log(JSON.stringify(err));
+					}
+					return res.send({statusCode: 200});
+				});
 			});
 		});
 	}

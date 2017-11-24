@@ -44,7 +44,7 @@ module.exports = {
 		return res.send("OK");
 	},
 	index: function (req, res) {
-		Produto.find().populate('categoria').exec(function (err, produtos) {
+		Produto.find().populate(['categoria', 'estoques']).exec(function (err, produtos) {
 			if (err) {
 				console.log(JSON.stringify(err));
 				return res.send(JSON.stringify(err));
@@ -67,6 +67,11 @@ module.exports = {
 						{
 							titulo: 'Descrição',
 							nome: 'descricao'
+						},
+						{
+							titulo: 'Quantidade Total',
+							nome: 'quantidadeTotal',
+							isFunction: true
 						}
 					],
 					records: produtos,
@@ -94,7 +99,7 @@ module.exports = {
 		});
 	},
 	edit: function(req, res) {
-		Produto.find({id: req.param('id')}).populate(['categoria', 'precos', 'estoques']).exec(function (err, produto) {
+		Produto.find({id: req.param('id')}).populate(['categoria', 'precos', 'estoques', 'fornecedor']).exec(function (err, produto) {
 			if (err) {
 				console.log(JSON.stringify(err));
 				return res.send(JSON.stringify(err));

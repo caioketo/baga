@@ -21,6 +21,7 @@ module.exports = {
 					conta: true,
 					moeda: true,
 					loja: true,
+					estoque: true,
 					permissao: true,
 					grupopermissao: true,
 					user: true
