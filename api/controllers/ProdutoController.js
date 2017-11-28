@@ -6,6 +6,26 @@
  */
 
 module.exports = {
+	findByCodigo: function (req, res) {
+		let codigoDesc = req.body.codigo;
+		Produto.findOne({codigo: codigoDesc}).populate(['precos', 'estoques']).exec(function (err, produto) {
+			if (!err && produto) {
+				return res.send({ produto: produto });
+			}
+			else {
+				if (err) {
+					console.log(JSON.stringify(err));
+				}
+				Produto.find({descricao: {contains: codigoDesc}}).populate(['precos', 'estoques']).exec(function (err, produtos) {
+					if (err) {
+						console.log(JSON.stringify(err));
+						return res.send(JSON.stringify(err));
+					}
+					return res.send({ produtos: produtos });
+				})
+			}
+		});
+	},
 	import: function (req, res) {
 		req.body.produtos.forEach(function (produto, index) {
 			let prod = {

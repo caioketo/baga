@@ -3,3 +3,5 @@
 .invalid { background: #EE4635 !important; }
 
 .modal-header { display: block !important; }
+
+.modal-scrollable { max-height: 350px; overflow-y: scroll; overflow-x: hidden; }

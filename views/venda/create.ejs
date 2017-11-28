@@ -11,16 +11,16 @@
 <label>Produto</label>
 <br>
 <input id='lojaNome' type="text" value='' name='lojaNome' disabled="true" style="width: 100px;" />
-<input id='produto' type="text" value='' placeholder="Produto..." name='produto' onkeyup="search()" onfocus="showProdutos();"/>
+<input id='produto' type="text" value='' placeholder="Produto..." name='produto' onfocus="showProdutos();"/>
 <input id='qtde' type="number" value='1' name='qtde'>
 <br>
 <label>Desconto</label>
-<input id='descontoProduto' type="number" value='0'>
+<input id='descontoProduto' type="number" value='0' onfocus="descontoProduto();">
 <input id='addProduto' type="submit" value="+" onclick="addProduto();"/>
 
 <!-- MODAL -->
 <div class="modal fade" id="produtosMdl" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-  <div class="modal-dialog" role="document">
+  <div class="modal-dialog" role="document" style="max-width: 800px !important;">
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title" id="exampleModalLabel">Procurar Produtos</h5>
@@ -47,11 +47,14 @@
         <label>Produto: </label>
 		<input id='produtoNome' type="text" value='' name='produtoNome' />
 		<br>
-		<div style="max-height: 350px; overflow-y: scroll; overflow-x: hidden;">
+		<div class="modal-scrollable">
 			<table id='tableProdutos' class="table table-striped">
 				<thead>
 					<tr>
 						<th>Descrição</th>
+						<% estoques.forEach(function (e) { %>
+							<th>Qtde. <%= e.descricao %></th>
+						<% }); %>
 						<% tabelas.forEach(function (t) { %>
 							<th><%= t.descricao %></th>
 						<% }); %>
@@ -61,13 +64,32 @@
 					<% produtos.forEach(function(p) { %>
 						<tr id='<%= p.id %>'>
 							<td><%= p.descricao %></td>
-							<% tabelas.forEach(function (t) { %>
-								<% p.precos.forEach(function (preco) { %>
-									<% if (preco.tabelaPreco == t.id) { %>
-										<td><%= preco.valor %></td>
+							<% var achou = false; %>
+							<% for (var i = 0; i < estoques.length; i++) { %>
+								<% for (var pI = 0; pI < p.estoques.length; pI++) { %>
+									<% if (p.estoques[pI].estoque == estoques[i].id) { %>
+										<td><%= p.estoques[pI].quantidade %></td>
+										<% achou = true; %>
+										<% break; %>
 									<% } %>
-								<% }); %>
-							<% }); %>
+								<% }; %>
+								<% if (!achou) { %>
+										<td>0</td>
+								<% } %>
+							<% }; %>
+							<% achou = false; %>
+							<% for (var i = 0; i < tabelas.length; i++) { %>
+								<% for (var pI = 0; pI < p.precos.length; pI++) { %>
+									<% if (p.precos[pI].tabelaPreco == tabelas[i].id) { %>
+										<td><%= p.precos[pI].valor %></td>
+										<% achou = true; %>
+										<% break; %>
+									<% } %>
+								<% }; %>
+								<% if (!achou) { %>
+										<td>0</td>
+								<% } %>
+							<% }; %>
 						</tr>
 					<% }); %>
 				</tbody>
@@ -89,6 +111,7 @@
 		<th>Produto</th>
 		<th>Preço</th>
 		<th>Quantidade</th>
+		<th>Desconto</th>
 		<th>Total</th>
 	</thead>
 	<tbody>
@@ -150,19 +173,10 @@
 	var vendedorObj = <%- JSON.stringify(vendedor) %>;
 	selecionarVendedor(true);
 	<% } %>
-	var prodJSON = '<%= JSON.stringify(produtos) %>';
-	prodJSON = prodJSON.replace(/&quot;/g, '"');
-	var produtos = JSON.parse(prodJSON);
 
-	var lojasJSON = '<%= JSON.stringify(lojas) %>';
-	lojasJSON = lojasJSON.replace(/&quot;/g, '"');
-	var lojas = JSON.parse(lojasJSON);
-
-	var tabelasJSON = '<%= JSON.stringify(tabelas) %>';
-	tabelasJSON = tabelasJSON.replace(/&quot;/g, '"');
-	var tabelas = JSON.parse(tabelasJSON);
-
-	var fpsJSON = '<%= JSON.stringify(formasPagamento) %>';
-	fpsJSON = fpsJSON.replace(/&quot;/g, '"');
-	var formasPagamento = JSON.parse(fpsJSON);
+	var produtos = <%- JSON.stringify(produtos) %>;
+	var lojas = <%- JSON.stringify(lojas) %>;
+	var tabelas = <%- JSON.stringify(tabelas) %>;
+	var estoques = <%- JSON.stringify(estoques) %>;
+	var formasPagamento = <%- JSON.stringify(formasPagamento) %>;
 </script>

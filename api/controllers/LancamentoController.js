@@ -134,6 +134,9 @@ module.exports = {
 				console.log(JSON.stringify(err));
 				return res.send(JSON.stringify(err));
 			}
+			if (typeof abertura == 'undefined') {
+				return res.redirect('/abertura/abrirCaixa');
+			}
 			getFormasPagamento(function (formasPagamento) {
 				getContas(0, function (contas) {
 					Lancamento.find({conta: contas, abertura: abertura.id}).populate(['cliente', 'moeda']).exec(function (err, lancamentos) {

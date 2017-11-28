@@ -17,6 +17,9 @@ module.exports = {
   		quantidade: {
   			type: 'float'
   		},
+      desconto: {
+        type: 'float'
+      },
   		custo: {
   			type: 'float'
   		},

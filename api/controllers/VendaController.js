@@ -172,43 +172,50 @@ module.exports = {
 		})
 	},
 	createPost: function (req, res) {
-		Venda.create(req.body.venda).exec(function (err, vendaDB) {
+		CaixaService.getAbertura(function (err, abertura) {
 			if (err) {
 				console.log(JSON.stringify(err));
 				return res.send(JSON.stringify(err));
 			}
-			Venda.findOne({id: vendaDB.id}).populate(['itens', 'pagamentos']).exec(function (err, venda) {
-				venda.itens.forEach(function (item, index) {
-					Produto.findOne({id: item.produto}).exec(function (err, produto) {
-						if (err) {
-							console.log(JSON.stringify(err));
-						}
-						Produto.update({id: item.produto}, {quantidade: (produto.quantidade - item.quantidade)}).exec(function (err, _produto) {
+			req.body.venda.abertura = abertura.id;
+			Venda.create(req.body.venda).exec(function (err, vendaDB) {
+				if (err) {
+					console.log(JSON.stringify(err));
+					return res.send(JSON.stringify(err));
+				}
+				Venda.findOne({id: vendaDB.id}).populate(['itens', 'pagamentos']).exec(function (err, venda) {
+					venda.itens.forEach(function (item, index) {
+						Produto.findOne({id: item.produto}).exec(function (err, produto) {
 							if (err) {
 								console.log(JSON.stringify(err));
 							}
+							Produto.update({id: item.produto}, {quantidade: (produto.quantidade - item.quantidade)}).exec(function (err, _produto) {
+								if (err) {
+									console.log(JSON.stringify(err));
+								}
+							});
 						});
 					});
-				});
 
-				venda.pagamentos.forEach(function (pagamento, index) {
-					//lancar pagamento na conta....
-					FormaPagamento.findOne({id: pagamento.formaPagamento}).populate(['moeda', 'conta', 'condicoesPagamento']).exec(function (err, _formaPagamento) {
-						if (err) {
-							console.log(JSON.stringify(err));
-						}
-
-						_formaPagamento.condicoesPagamento.forEach(function (condicao, index) {
-							if (condicao.id == pagamento.condicaoPagamento) {
-								lancarPagamento(vendaDB.numero, vendaDB.cliente, pagamento, _formaPagamento, condicao);
+					venda.pagamentos.forEach(function (pagamento, index) {
+						//lancar pagamento na conta....
+						FormaPagamento.findOne({id: pagamento.formaPagamento}).populate(['moeda', 'conta', 'condicoesPagamento']).exec(function (err, _formaPagamento) {
+							if (err) {
+								console.log(JSON.stringify(err));
 							}
+
+							_formaPagamento.condicoesPagamento.forEach(function (condicao, index) {
+								if (condicao.id == pagamento.condicaoPagamento) {
+									lancarPagamento(vendaDB.numero, vendaDB.cliente, pagamento, _formaPagamento, condicao);
+								}
+							});
 						});
 					});
 				});
-			});
-				 
+					 
 
-			return res.send({statusCode: 200});
+				return res.send({statusCode: 200});
+			});
 		});
 	},
 	createOrcamento: function (req, res) {
@@ -253,67 +260,93 @@ module.exports = {
 		});	
 	},
 	create: function (req, res) {
-		let dbCalls = [];
-		let viewObj = {};
-
-		dbCalls.push(function (callback) {
-			Produto.find().populate('precos').exec(function (err, produtos) {
-				if (err) {
-					callback(err);
-				}
-				
-				viewObj.produtos = produtos;
-				callback(null, produtos);	
-			});
-		});
-		
-		dbCalls.push(function (callback) {
-			Loja.find().exec(function (err, lojas) {
-				if (err) {
-					callback(err);
-				}
-				viewObj.lojas = lojas;
-				callback(null, lojas);
-			});
-		});
-
-		dbCalls.push(function (callback) {
-			TabelaPreco.find().exec(function (err, tabelas) {
-				if (err) {
-					console.log(JSON.stringify(err));
-					callback(err);
-				}
-
-				viewObj.tabelas = tabelas;
-				callback(null, tabelas);
-			});
-		});
-		dbCalls.push(function (callback) {
-			Cliente.getDefault(function (_cliente) {
-				viewObj.cliente = _cliente;
-				callback(null, _cliente);
-			});
-		});
-		dbCalls.push(function (callback) {
-			Vendedor.getDefault({userId: req.session.me}, function (_vendedor) {
-				viewObj.vendedor = _vendedor;
-				callback(null, _vendedor);
-			});
-		});
-		dbCalls.push(function (callback) {
-			FormaPagamento.find().populate(['condicoesPagamento', 'moeda']).exec(function (err, formasPagamento) {
-				FormaPagamento.getCotacaoMoedas(formasPagamento, function (_formasPagamento) {
-					viewObj.formasPagamento = getPagamentos(_formasPagamento);
-					callback(null, _formasPagamento);
-				});
-			});
-		});
-
-		async.parallel(dbCalls, function (err, results) {
+		CaixaService.getAbertura(function (err, abertura) {
 			if (err) {
 				console.log(JSON.stringify(err));
+				return res.send(JSON.stringify(err));
 			}
-			return res.view(viewObj);
+
+			if (typeof abertura == 'undefined') {
+				return res.redirect('/abertura/abrirCaixa');
+			}
+			let dbCalls = [];
+			let viewObj = {};
+
+			dbCalls.push(function (callback) {
+				Produto.find().populate(['precos', 'estoques']).exec(function (err, produtos) {
+					if (err) {
+						callback(err);
+					}
+					
+					viewObj.produtos = produtos;
+					callback(null, produtos);	
+				});
+			});
+			
+			dbCalls.push(function (callback) {
+				Loja.find().exec(function (err, lojas) {
+					if (err) {
+						callback(err);
+					}
+					viewObj.lojas = lojas;
+					callback(null, lojas);
+				});
+			});
+
+			dbCalls.push(function (callback) {
+				TabelaPreco.find().exec(function (err, tabelas) {
+					if (err) {
+						console.log(JSON.stringify(err));
+						callback(err);
+					}
+
+					viewObj.tabelas = tabelas;
+					callback(null, tabelas);
+				});
+			});
+
+			dbCalls.push(function (callback) {
+				Estoque.find().exec(function (err, estoques) {
+					if (err) {
+						console.log(JSON.stringify(err));
+						callback(err);
+					}
+
+					viewObj.estoques = estoques;
+					callback(null, estoques);
+				});
+			});
+
+			dbCalls.push(function (callback) {
+				Cliente.getDefault(function (_cliente) {
+					viewObj.cliente = _cliente;
+					callback(null, _cliente);
+				});
+			});
+			
+			dbCalls.push(function (callback) {
+				Vendedor.getDefault({userId: req.session.me}, function (_vendedor) {
+					viewObj.vendedor = _vendedor;
+					callback(null, _vendedor);
+				});
+			});
+
+			dbCalls.push(function (callback) {
+				FormaPagamento.find().populate(['condicoesPagamento', 'moeda']).exec(function (err, formasPagamento) {
+					FormaPagamento.getCotacaoMoedas(formasPagamento, function (_formasPagamento) {
+						viewObj.formasPagamento = getPagamentos(_formasPagamento);
+						callback(null, _formasPagamento);
+					});
+				});
+			});
+
+			async.parallel(dbCalls, function (err, results) {
+				if (err) {
+					console.log(JSON.stringify(err));
+					return res.send(JSON.stringify(err));
+				}
+				return res.view(viewObj);
+			});
 		});
 	}
 };

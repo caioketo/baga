@@ -1,0 +1,56 @@
+<label>Forma de Pagamento: </label>
+<br>
+<select id="formaPagamentoSelect">
+	<% formasPagamento.forEach(function(fp) { %>
+		<option value="<%= fp.id %>"><%= fp.descricao %></option>
+	<% }); %>
+</select>
+<input id='valorFP' type="number" value='0' name='valorFP'>
+<input type="submit" value="+" onclick="addPagamento();"/>
+<table id='tablePagamentos' class='table table-striped'>
+	<thead>
+		<th>Forma de Pagamento</th>
+		<th>Valor</th>
+	</thead>
+	<tbody>
+	</tbody>
+</table>
+<input type="submit" value="Confirmar" onclick="fecharCaixa();"/>
+<script>
+	var formasPagamento = <%- JSON.stringify(formasPagamento) %>;
+	var pagamentos = [];
+
+	function addPagamento() {
+		var fpID = $('#formaPagamentoSelect').find(":selected").val();
+		var valor = $('#valorFP').val();
+
+		getFPArray(fpID, function (fp) {
+			var newPagamento = {
+				formaPagamento: fp,
+				valor: valor
+			};
+			pagamentos.push(newPagamento);
+			$('#tablePagamentos tr:last').after('<tr><td>' + fp.descricao + '</td><td>' + valor + '</td></tr>');
+		});
+	}
+
+	function getFPArray(id, cb) {
+		formasPagamento.forEach(function (fp) {
+			if (fp.id == id) {
+				cb(fp);
+			}
+		});
+	}
+
+	function fecharCaixa() {
+		var fechamento = {
+			pagamentos: pagamentos
+		};
+
+		io.socket.post('/abertura/fecharCaixaPost', { fechamento: fechamento }, function (resData) {
+			if (resData.statusCode == 200) {
+				window.location = '/';
+			}
+		});
+	}
+</script>

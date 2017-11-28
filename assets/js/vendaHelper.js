@@ -26,9 +26,16 @@ $('#qtde').keypress(function (e) {
 });
 
 var selectedProd = undefined;
+var selectedProduto = undefined;
 var selectedLoja = -1;
 var selectedTabela = -1;
+var descType = 0;
+var descontoProd = {};
 
+function descontoProduto() {
+	descType = 1;
+	showDescontoMdl();
+}
 
 function showDescontoMdl() {
 	$("#descontoMdl").modal();
@@ -37,14 +44,27 @@ function showDescontoMdl() {
 function aplicarDesconto() {
 	var tipoDesc = $("input[name='desconto']:checked").attr('id');
 	var valorDesc = parseFloat($("#descontoInput").val());
-
-	if (tipoDesc == 'descontoPct') {
-		valorDesc = getTotal() * (valorDesc / 100);
+	if (descType == 0) {
+		if (tipoDesc == 'descontoPct') {
+			valorDesc = getTotal() * (valorDesc / 100);
+		}
+		descontoAplicado = valorDesc;
+		$('#descontoTotal').text(valorDesc);
+		sumTotal();
 	}
-	descontoAplicado = valorDesc;
-	$('#descontoTotal').text(valorDesc);
+	else {
+		if (tipoDesc == 'descontoPct') {
+			var precoProd = getPrecoVenda(selectedProduto);
+			if (parseInt($('#qtde').val()) > 1) {
+				precoProd = precoProd * parseInt($('#qtde').val();
+			}
+			valorDesc = precoProd * (valorDesc / 100);
+		}
+		descType = 0;
+		descontoProd = valorDesc;
+		$("#descontoProduto").text(descontoProd);
+	}
 	$("#descontoMdl").modal('hide');
-	sumTotal();
 }
 
 function showProdutos() {
@@ -68,6 +88,7 @@ function selecionarProduto() {
 	selectedTabela = $('#tabelaPreco option:selected').attr("id");
 	$('#lojaNome').val(getLojaNome(selectedLoja));
 	getProduto(selectedProd, function (produto) {
+		selectedProduto = produto;
 		$("#produto").val(produto.descricao);
 		$("#produtosMdl").modal('hide');
 	});
@@ -164,11 +185,15 @@ function addProduto() {
 			qtde: $('#qtde').val(),
 			venda: valorProd,
 			custo: produto.custo,
-			total: (valorProd * $('#qtde').val()),
-			loja: selectedLoja
+			total: (valorProd * $('#qtde').val()) - descontoProd,
+			loja: selectedLoja,
+			desconto: descontoProd
 		};
+		descontoProd = 0;
 		itensDaVenda.push(newItem);
-		$('#tableItens tr:last').after('<tr><td>' + getLojaNome(newItem.loja) + '</td><td>' + produto.descricao + '</td><td>' + newItem.venda + '</td><td>' + newItem.qtde + '</td><td>' + newItem.total + '</td></tr>');
+		$('#tableItens tr:last').after('<tr><td>' + getLojaNome(newItem.loja) + '</td><td>' + produto.descricao + 
+			'</td><td>' + newItem.venda + '</td><td>' + newItem.qtde + '</td><td>' + newItem.desconto + '</td><td>' + 
+			newItem.total + '</td></tr>');
 		sumTotal();
 		$('#produto').val('');
 		$('#lojaNome').val('');

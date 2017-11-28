@@ -1,6 +1,6 @@
 module.exports = {
 	getAbertura: function (done) {
-		Abertura.find().sort('createdAt DESC').limit(1).exec(function (err, aberturas) {
+		Abertura.find({fechamento: null}).sort('createdAt DESC').limit(1).exec(function (err, aberturas) {
 			if (err) {
 				return done(err);
 			}
@@ -20,6 +20,9 @@ module.exports = {
 				else {
 					return done(null, undefined);
 				}
+			}
+			else {
+				return done(null, undefined);
 			}
 		});
 	}

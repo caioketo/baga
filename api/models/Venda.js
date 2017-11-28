@@ -35,6 +35,12 @@ module.exports = {
       },
       desconto: {
         type: 'float'
+      },
+      abertura: {
+        model: 'abertura'
+      },
+      impresso: {
+        type: 'integer'
       }
   },
   beforeCreate: function(obj, next) {

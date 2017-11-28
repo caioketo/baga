@@ -1,50 +1,13 @@
-<label>Notas</label>
-<label>$U 20</label>
-<input id="nota20" type="number" value="0" />
-<label>$U 20</label>
-<input id="nota50" type="number" value="0" />
-<label>$U 20</label>
-<input id="nota100" type="number" value="0" />
-<label>$U 20</label>
-<input id="nota200" type="number" value="0" />
-<label>$U 20</label>
-<input id="nota500" type="number" value="0" />
-<label>$U 20</label>
-<input id="nota1000" type="number" value="0" />
-<label>$U 20</label>
-<input id="nota2000" type="number" value="0" />
+<h1>Abertura de Caixa</h1>
+
+<%- include ../modalContador.ejs %>
 <br>
-<label>Moedas</label>
-<label>$U 20</label>
-<input id="moeda1" type="number" value="0" />
-<label>$U 20</label>
-<input id="moeda2" type="number" value="0" />
-<label>$U 20</label>
-<input id="moeda5" type="number" value="0" />
-<label>$U 20</label>
-<input id="moeda10" type="number" value="0" />
-<label>$U 20</label>
-<input id="moeda50" type="number" value="0" />
-<label>$U 20</label>
 <input type="submit" value="Confirmar" onclick="abrirCaixa();">
 
 <script>
 	function abrirCaixa() {
-		var nota20 = parseInt($("#nota20").val());
-		var nota50 = parseInt($("#nota50").val());
-		var nota100 = parseInt($("#nota100").val());
-		var nota200 = parseInt($("#nota200").val());
-		var nota500 = parseInt($("#nota500").val());
-		var nota1000 = parseInt($("#nota1000").val());
-		var nota2000 = parseInt($("#nota2000").val());
-		var moeda1 = parseInt($("#moeda1").val());
-		var moeda2 = parseInt($("#moeda2").val());
-		var moeda5 = parseInt($("#moeda5").val());
-		var moeda10 = parseInt($("#moeda10").val());
-		var moeda50 = parseInt($("#moeda50").val());
 		var abertura = {
-			valorTotal: (moeda1) + (moeda2 * 2) + (moeda5 * 5) + (moeda10 * 10) + ((moeda50 + nota50) * 50) + (nota20 * 20) + 
-							(nota100 * 100) + (nota200 * 200) + (nota500 * 500) + (nota1000 * 1000) + (nota2000 * 2000)
+			valorTotal: getTotalContador()
 		};
 
 		console.log(JSON.stringify(abertura));
