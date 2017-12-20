@@ -11,6 +11,9 @@ module.exports = {
   		venda: {
   			model: 'Venda'
   		},
+      produtoDescricao: {
+        type: 'string'
+      },
   		produto: {
   			model: 'Produto'
   		},

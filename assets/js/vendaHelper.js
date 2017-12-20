@@ -30,7 +30,7 @@ var selectedProduto = undefined;
 var selectedLoja = -1;
 var selectedTabela = -1;
 var descType = 0;
-var descontoProd = {};
+var descontoProd = 0;
 
 function descontoProduto() {
 	descType = 1;
@@ -56,7 +56,7 @@ function aplicarDesconto() {
 		if (tipoDesc == 'descontoPct') {
 			var precoProd = getPrecoVenda(selectedProduto);
 			if (parseInt($('#qtde').val()) > 1) {
-				precoProd = precoProd * parseInt($('#qtde').val();
+				precoProd = precoProd * parseInt($('#qtde').val());
 			}
 			valorDesc = precoProd * (valorDesc / 100);
 		}
@@ -205,6 +205,7 @@ function getItensForPost(_itens) {
 	var itensFP = [];
 	for (var i = _itens.length - 1; i >= 0; i--) {
 		itensFP.push({
+			produtoDescricao: _itens[i].produto.descricao, 
 			produto: _itens[i].produto.id,
 			quantidade: _itens[i].qtde,
 			custo: _itens[i].custo,

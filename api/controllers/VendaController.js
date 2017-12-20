@@ -5,7 +5,13 @@
  * @help        :: See http://sailsjs.org/#!/documentation/concepts/Controllers
  */
 var moment = require('moment');
+var fs = require('fs');
+var jsreport = require('jsreport-core')();
+jsreport.use(require('jsreport-handlebars')());
+jsreport.use(require('jsreport-phantom-pdf')());
 
+
+var helpers = 'function now() { return new Date().toLocaleDateString(); } function nowPlus20Days() { var date = new Date(); date.setDate(date.getDate() + 20); return date.toLocaleDateString(); } function total(itens) {    var sum = 0;    itens.forEach(function (i) {	sum += i.preco;    });    return sum;}';
 
 function getPagamentos(formasPagamento) {
 	let pagamentos = [];
@@ -67,6 +73,36 @@ function lancarPagamento(venda, cliente, pagamento, formaPagamento, condicaoPaga
 
 
 module.exports = {
+	printaVenda: function (req, res) {
+		Venda.findOne({id: req.param('id')}).populate(['itens', 'cliente', 'vendedor']).exec(function (err, _venda) {
+			if (err) {
+				console.log(JSON.stringify(err));
+				return res.send(JSON.stringify(err));
+			}
+			_venda.createdAtMoment = moment(_venda.createdAt).format('DD/MM/YYYY');
+			console.log(JSON.stringify(_venda));
+			jsreport.init().then(function () {
+				jsreport.render({
+					template: {
+						content: fs.readFileSync("./views/venda/vendaImpresso.html", 'utf8'),
+						//content: vendaTemplate,
+						engine: 'handlebars',
+						recipe: 'phantom-pdf',
+						helpers: helpers
+					},
+					scripts: [{
+						content: "function now() {return new Date().toLocaleDateString()}function nowPlus20Days() {    var date = new Date()    date.setDate(date.getDate() + 20);    return date.toLocaleDateString();}function total(itens) {    var sum = 0;    itens.forEach(function (i) {        console.log('Calculating item ' + i.name + '; you should see this message in debug run')        sum += i.price    })    return sum}"
+					}],
+					data: _venda
+				}).then(function(resp) {
+					return resp.stream.pipe(res);
+					//fs.writeFileSync('report.pdf', resp.content);
+					//return fs.createReadStream('report.pdf').pipe(res);
+					//return res.send(resp.content);
+				});
+			});
+		});
+	},
 	cancelarVenda: function (req, res) {
 		Venda.update({id: req.body.id}, {cancelada: true}).exec(function (err, _venda) {
 			if (err) {
