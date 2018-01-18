@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Projeto Baga</title>
+    <title>Sistema</title>
 
     <!-- Viewport mobile tag for sensible mobile support -->
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
@@ -15,34 +15,34 @@
 	<div id="wrapper">
 		<ul class="nav nav-tabs">
 			<li class="nav-item">
-				<a id="tabCadastros" class="nav-link active" onclick="changeTab(0);">Cadastros</a>
+				<a id="tabCadastros" class="nav-link active" onclick="changeTab(0);">Entradas</a>
 			</li>
 			<li class="nav-item">
-				<a id="tabVendas" class="nav-link" onclick="changeTab(1);">Vendas</a>
+				<a id="tabVendas" class="nav-link" onclick="changeTab(1);">Ventas</a>
 			</li>
 			<li class="nav-item">
 				<a id="tabEstoques" class="nav-link" onclick="changeTab(3);">Estoques</a>
 			</li>
 			<li class="nav-item">
-				<a id="tabFinanceiro" class="nav-link" onclick="changeTab(2);">Financeiro</a>
+				<a id="tabFinanceiro" class="nav-link" onclick="changeTab(2);">Financiero</a>
 			</li>
 		</ul>
 
 		<nav id="menuCadastros" class="nav flex-column menu-dashboard">			
 			<% if (dashboard.produto) { %>
-        	<a class="nav-link" href="produto" target="frameGeral">Produtos</a>
+        	<a class="nav-link" href="produto" target="frameGeral">Productos</a>
         	<% } %>
         	<% if (dashboard.categoria) { %>
-    		<a class="nav-link" href="categoria" target="frameGeral">Categorias</a>
+    		<a class="nav-link" href="categoria" target="frameGeral">Categorías</a>
 			<% } %>
 			<% if (dashboard.cliente) { %>
 			<a class="nav-link" href="cliente" target="frameGeral">Clientes</a>
 			<% } %>
 			<% if (dashboard.fornecedor) { %>
-			<a class="nav-link" href="fornecedor" target="frameGeral">Fornecedores</a>
+			<a class="nav-link" href="fornecedor" target="frameGeral">Proveedores</a>
 			<% } %>
 			<% if (dashboard.formaPagamento) { %>
-			<a class="nav-link" href="formaPagamento" target="frameGeral">Formas de Pagamento</a>
+			<a class="nav-link" href="formaPagamento" target="frameGeral">Formas de Pago</a>
 			<% } %>
 			<% if (dashboard.condicaoPagamento) { %>
 			<a class="nav-link" href="condicaoPagamento" target="frameGeral">Condições de Pagamento</a>
@@ -51,50 +51,49 @@
 			<a class="nav-link" href="vendedor" target="frameGeral">Vendedores</a>
 			<% } %>
 			<% if (dashboard.tabelaPreco) { %>
-			<a class="nav-link" href="tabelaPreco" target="frameGeral">Tabela de Preço</a>
+			<a class="nav-link" href="tabelaPreco" target="frameGeral">Tabla de Precio</a>
 			<% } %>
 			<% if (dashboard.conta) { %>
-			<a class="nav-link" href="conta" target="frameGeral">Contas</a>
+			<a class="nav-link" href="conta" target="frameGeral">Cuentas</a>
 			<% } %>
 			<% if (dashboard.moeda) { %>
-			<a class="nav-link" href="moeda" target="frameGeral">Moedas</a>
+			<a class="nav-link" href="moeda" target="frameGeral">Monedas</a>
 			<% } %>
 			<% if (dashboard.loja) { %>
-			<a class="nav-link" href="loja" target="frameGeral">Lojas</a>
+			<a class="nav-link" href="loja" target="frameGeral">Tiendas</a>
 			<% } %>
 			<% if (dashboard.estoque) { %>
 			<a class="nav-link" href="estoque" target="frameGeral">Estoques</a>
 			<% } %>
 			<% if (dashboard.permissao) { %>
-			<a class="nav-link" href="permissao" target="frameGeral">Permissões</a>
+			<a class="nav-link" href="permissao" target="frameGeral">Permisos</a>
 			<% } %>
 			<% if (dashboard.grupopermissao) { %>
-			<a class="nav-link" href="grupopermissao" target="frameGeral">Grupos Permissões</a>
+			<a class="nav-link" href="grupopermissao" target="frameGeral">Grupos de Permisos</a>
 			<% } %>
 			<% if (dashboard.user) { %>
-			<a class="nav-link" href="user" target="frameGeral">Usuários</a>
+			<a class="nav-link" href="user" target="frameGeral">Usuarios</a>
 			<% } %>
 		</nav>
 
 		<nav id="menuEstoques" class="nav flex-column menu-dashboard">
-			<a class="nav-link" href="movimentacao" target="frameGeral">Movimentações</a>
+			<a class="nav-link" href="movimentacao" target="frameGeral">Movimiento de Inventario</a>
 			<a class="nav-link" href="movimentacao/indexEntrada" target="frameGeral">Entradas</a>
-			<a class="nav-link" href="movimentacao/indexSaida" target="frameGeral">Saídas</a>
+			<a class="nav-link" href="movimentacao/indexSaida" target="frameGeral">Salidas</a>
 		</nav>
 
 		<nav id="menuFinanceiro" class="nav flex-column menu-dashboard">
-			<a class="nav-link" href="lancamento/caixa" target="frameGeral">Caixa</a>
-			<a class="nav-link" href="lancamento/contasReceber" target="frameGeral">Contas à Receber</a>
-			<a class="nav-link" href="lancamento/contasPagar" target="frameGeral">Contas à Pagar</a>
-			<a class="nav-link" href="lancamento/contasCorrente" target="frameGeral">Contas Corrente</a>
+			<a class="nav-link" href="lancamento/caixa" target="frameGeral">Caja</a>
+			<a class="nav-link" href="lancamento/contasReceber" target="frameGeral">Cuentas a Recibir</a>
+			<a class="nav-link" href="lancamento/contasPagar" target="frameGeral">Cuentas a Pagar</a>
+			<a class="nav-link" href="lancamento/contasCorrente" target="frameGeral">Cuentas Corrientes</a>
 		</nav>
 
 		<nav id="menuVendas" class="nav flex-column menu-dashboard">
-			<a class="nav-link" href="venda" target="frameGeral">Vendas do dia</a>
-			<a class="nav-link" href="venda/create" target="frameGeral">Nova Venda</a>
-			<a class="nav-link" href="venda/orcamentos" target="frameGeral">Orçamentos do dia</a>
-			<a class="nav-link" href="venda/createOrcamento" target="frameGeral">Novo Orçamento</a>
-			<a class="nav-link" href="movimentacao" target="frameGeral">Movimentações</a>
+			<a class="nav-link" href="venda" target="frameGeral">Ventas del día</a>
+			<a class="nav-link" href="venda/create" target="frameGeral">Nueva Venta</a>
+			<a class="nav-link" href="venda/orcamentos" target="frameGeral">Presupuesto del día</a>
+			<a class="nav-link" href="venda/createOrcamento" target="frameGeral">Nuevo Presupuesto</a>
 		</nav>
 
 		<div id="page-wrapper">
