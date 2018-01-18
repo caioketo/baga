@@ -8,13 +8,13 @@
 <input id='cliente' type="text" value='<%= cliente.nome %>' onfocus="findCliente();" />
 <br>
 <br>
-<label>Produto</label>
+<label>Producto</label>
 <br>
 <input id='lojaNome' type="text" value='' name='lojaNome' disabled="true" style="width: 100px;" />
 <input id='produto' type="text" value='' placeholder="Produto..." name='produto' onkeyup="search()" onfocus="showProdutos();"/>
 <input id='qtde' type="number" value='1' name='qtde'>
 <br>
-<label>Desconto</label>
+<label>Descuento</label>
 <input id='descontoProduto' type="number" value='0'>
 <input id='addProduto' type="submit" value="+" onclick="addProduto();"/>
 
@@ -23,20 +23,20 @@
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel">Procurar Produtos</h5>
+        <h5 class="modal-title" id="exampleModalLabel">Búsqueda Productos</h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
       <div class="modal-body">
       	
-      	<label>Loja: </label>
+      	<label>Tienda: </label>
 		<select id="loja">
 			<% lojas.forEach(function(loja) { %>
 				<option id=<%=loja.id%>> <%= loja.nome %> </option>
 			<% }); %>
 		</select>
-		<label> Tabela: </label>
+		<label> Tabla: </label>
 		<select id="tabelaPreco">
 			<% tabelas.forEach(function(t) { %>
 				<option id='<%=t.id%>' value='<%=t.id%>'> <%= t.descricao %> </option>
@@ -45,7 +45,7 @@
 		<br>
 		<br>
 
-        <label>Produto: </label>
+        <label>Producto: </label>
 		<input id='produtoNome' type="text" value='' name='produtoNome' />
 		<br>
 		<div style="max-height: 350px; overflow-y: scroll; overflow-x: hidden;">
@@ -83,30 +83,30 @@
   </div>
 </div>
 
-<label>Itens</label>
+<label>Artículos</label>
 <table id='tableItens'  class="table table-striped">
 	<thead>
-		<th>Loja</th>
-		<th>Produto</th>
-		<th>Preço</th>
-		<th>Quantidade</th>
+		<th>Tienda</th>
+		<th>Producto</th>
+		<th>Precio</th>
+		<th>Cantidad</th>
 		<th>Total</th>
 	</thead>
 	<tbody>
 	</tbody>
 </table>
-<input type="submit" value="Desconto" onclick="showDescontoMdl();" />
+<input type="submit" value="Descuento" onclick="showDescontoMdl();" />
 <br>
 <label>Sub-Total: </label>
 <label id='subTotal'></label>
 <br>
-<label>Desconto: </label>
+<label>Descuento: </label>
 <label id='descontoTotal'></label>
 <br>
 <label>Total: </label>
 <label id='total'></label>
 <br>
-<input type="submit" value="Finalizar Orçamento" onclick="finalizarOrcamento();" />
+<input type="submit" value="Finalizar Presupuesto" onclick="finalizarOrcamento();" />
 
 <%- include ../modalClientes.ejs %>
 <%- include ../modalVendedores.ejs %>

@@ -6,28 +6,28 @@
 <br>
 <input id='descricao' type="text" value='' name='descricao' />
 <br>
-<label>Fornecedor</label>
+<label>Proveedor</label>
 <br>
 <input id='fornecedor' type="text" value='' name='fornecedor' onfocus="findFornecedor();" />
 <br>
-<label>Categoria</label>
+<label>Categoría</label>
 <br>
 <input id='categoria' type="text" value='' name='categoria' onfocus="findCategoria();" />
 <br>
 <br>
-<label>Quantidades</label>
+<label>Cantidades</label>
 <br>
 <div>
 	<div id="newQtde">
 		<select id="estoques"></select>
 		<input id='quantidade' type="number" value=''  />
-		<input type="submit" value="Adicionar Quantidade" onclick="addQtde();" />	
+		<input type="submit" value="Adicionar Cantidad" onclick="addQtde();" />	
 	</div>
 	<table id='tableQtdes' class="table table-striped">
 		<thead>
 			<tr>
 				<th>Estoque</th>
-				<th>Quantidade</th>
+				<th>Cantidad</th>
 			</tr>
 		</thead>
 		<tbody>
@@ -35,23 +35,23 @@
 	</table>
 </div>
 <br>
-<label>Preço de Custo</label>
+<label>Precio de Costo</label>
 <br>
 <input id='custo' type="number" value='' name='custo' />
 <br>
-<label>Preços de Venda</label>
+<label>Precios de Venta</label>
 <br>
 <div>
 	<div id="newPreco">
 		<select id="tabelasPreco"></select>
 		<input id='venda' type="number" value='' name='venda' />
-		<input type="submit" value="Adicionar Preço" onclick="addPreco();" />	
+		<input type="submit" value="Adicionar Precio" onclick="addPreco();" />	
 	</div>
 	<table id='tablePrecos' class="table table-striped">
 		<thead>
 			<tr>
-				<th>Tabela</th>
-				<th>Preço</th>
+				<th>Tabla</th>
+				<th>Precio</th>
 			</tr>
 		</thead>
 		<tbody>
@@ -72,20 +72,20 @@
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel">Procurar Categorias</h5>
+        <h5 class="modal-title" id="exampleModalLabel">Busquedá Categorías</h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
       <div class="modal-body">
-        <label>Categoria</label>
+        <label>Categoría</label>
 		<br>
 		<input id='categoriaInput' type="text" value='' />
 		<br>
 
 		<table id='tableCategorias' class="table table-striped">
 			<thead>
-				<th>Categoria</th>
+				<th>Categoría</th>
 			</thead>
 			<tbody id="tbodyCategorias">
 			</tbody>

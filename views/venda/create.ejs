@@ -8,10 +8,10 @@
 <input id='cliente' type="text" value='<%= cliente.nome %>' onfocus="findCliente();" />
 <br>
 <br>
-<label>Loja</label>
-<label>Produto</label>
-<label>Quantidade</label>
-<label>Desconto</label>
+<label>Tienda</label>
+<label>Producto</label>
+<label>Cantidad</label>
+<label>Descuento</label>
 <br>
 <input id='lojaNome' type="text" value='' name='lojaNome' disabled="true" style="width: 100px;" />
 <input id='produto' type="text" value='' placeholder="Produto..." name='produto' onfocus=""/>
@@ -24,19 +24,19 @@
   <div class="modal-dialog" role="document" style="max-width: 800px !important;">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel">Procurar Produtos</h5>
+        <h5 class="modal-title" id="exampleModalLabel">Busquedá Productos</h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
       <div class="modal-body">
-      	<label>Loja: </label>
+      	<label>Tienda: </label>
 		<select id="loja">
 			<% lojas.forEach(function(loja) { %>
 				<option id=<%=loja.id%>> <%= loja.nome %> </option>
 			<% }); %>
 		</select>
-		<label> Tabela: </label>
+		<label> Tabla: </label>
 		<select id="tabelaPreco">
 			<% tabelas.forEach(function(t) { %>
 				<option id='<%=t.id%>' value='<%=t.id%>'> <%= t.descricao %> </option>
@@ -45,7 +45,7 @@
 		<br>
 		<br>
 
-        <label>Produto: </label>
+        <label>Producto: </label>
 		<input id='produtoNome' type="text" value='' name='produtoNome' />
 		<br>
 		<div class="modal-scrollable">
@@ -54,7 +54,7 @@
 					<tr>
 						<th>Descripción</th>
 						<% estoques.forEach(function (e) { %>
-							<th>Qtde. <%= e.descricao %></th>
+							<th>Cantidad <%= e.descricao %></th>
 						<% }); %>
 						<% tabelas.forEach(function (t) { %>
 							<th><%= t.descricao %></th>
@@ -105,25 +105,25 @@
   </div>
 </div>
 
-<label>Itens</label>
+<label>Artículos</label>
 <table id='tableItens'  class="table table-striped">
 	<thead>
-		<th>Loja</th>
-		<th>Produto</th>
-		<th>Preço</th>
-		<th>Quantidade</th>
-		<th>Desconto</th>
+		<th>Tienda</th>
+		<th>Producto</th>
+		<th>Precio</th>
+		<th>Cantidad</th>
+		<th>Descuento</th>
 		<th>Total</th>
 	</thead>
 	<tbody>
 	</tbody>
 </table>
-<input type="submit" value="Desconto" onclick="showDescontoMdl();" />
+<input type="submit" value="Descuento" onclick="showDescontoMdl();" />
 <br>
 <label>Sub-Total: </label>
 <label id='subTotal'></label>
 <br>
-<label>Desconto: </label>
+<label>Descuento: </label>
 <label id='descontoTotal'></label>
 <br>
 <label>Total: </label>
@@ -132,7 +132,7 @@
 <label>Total Pago: </label>
 <label id='totalPago'></label>
 <br>
-<label>Forma de Pagamento: </label>
+<label>Forma de Pago: </label>
 <select id="formaPagamentoSelect">
 	<% formasPagamento.forEach(function(fp) { %>
 		<option value="<%= fp.id %>"><%= fp.descricao %></option>
@@ -143,14 +143,14 @@
 <br>
 <table id='tablePagamentos' class='table table-striped'>
 	<thead>
-		<th>Forma de Pagamento</th>
+		<th>Forma de Pago</th>
 		<th>Valor</th>
 	</thead>
 	<tbody>
 	</tbody>
 </table>
 <br>
-<input type="submit" value="Finalizar Venda" onclick="finalizarVenda();" />
+<input type="submit" value="Finalizar Venta" onclick="finalizarVenda();" />
 
 <%- include ../modalClientes.ejs %>
 <%- include ../modalVendedores.ejs %>
