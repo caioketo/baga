@@ -9,7 +9,7 @@ module.exports = function(req, res, next) {
 			console.log(_path);
 		}
 		PermissaoService.hasPermissao({
-			userId: req.session.me,
+			req: req,
 			path: req.path
 		}, function (authorized) {
 			if (!authorized) {

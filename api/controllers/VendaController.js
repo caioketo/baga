@@ -167,12 +167,18 @@ module.exports = {
 		});
 	},
 	index: function (req, res) {
-		Venda.find({cancelada: false}).populate(['cliente', 'vendedor']).exec(function (err, vendas) {
-			if (err) {
-				console.log(JSON.stringify(err));
-				return res.send(JSON.stringify(err));
-			}
-			return res.view({vendas: vendas, moment: moment});
+		PermissaoService.isFiscal({userId: req.session.me }, function (fiscal) {
+			var query = Venda.find({cancelada: false});
+			if (fiscal) {
+				query.where({impresso: { '>': 0 }});
+			} 
+			query.populate(['cliente', 'vendedor']).exec(function (err, vendas) {
+				if (err) {
+					console.log(JSON.stringify(err));
+					return res.send(JSON.stringify(err));
+				}
+				return res.view({vendas: vendas, moment: moment});
+			});
 		});
 	},
 	getDetail: function (req, res) {
@@ -270,27 +276,33 @@ module.exports = {
 				}
 				console.log('tabelas');
 				viewObj.tabelas = tabelas;
-				Produto.find().populate('precos').exec(function (err, produtos) {
-					if (err) {
-						console.log(JSON.stringify(err));
-						return res.send(JSON.stringify(err));
+				PermissaoService.isFiscal({userId: req.session.me }, function (fiscal) {
+					var query = Produto.find();
+					if (fiscal) {
+						query.where({fiscal: true});
 					}
-					console.log('produtos');
-					viewObj.produtos = produtos;
-					Cliente.getDefault(function (_cliente) {
-						console.log('cliente');
-						viewObj.cliente = _cliente;
-						Vendedor.getDefault({userId: req.session.me}, function (_vendedor) {
-							console.log('vendedor');
-							viewObj.vendedor = _vendedor;
-							FormaPagamento.find().populate(['condicoesPagamento', 'moeda']).exec(function (err, formasPagamento) {
-								FormaPagamento.getCotacaoMoedas(formasPagamento, function (_formasPagamento) {
-									viewObj.formasPagamento = getPagamentos(_formasPagamento);
-									return res.view(viewObj);
+					query.populate('precos').exec(function (err, produtos) {
+						if (err) {
+							console.log(JSON.stringify(err));
+							return res.send(JSON.stringify(err));
+						}
+						console.log('produtos');
+						viewObj.produtos = produtos;
+						Cliente.getDefault(function (_cliente) {
+							console.log('cliente');
+							viewObj.cliente = _cliente;
+							Vendedor.getDefault({userId: req.session.me}, function (_vendedor) {
+								console.log('vendedor');
+								viewObj.vendedor = _vendedor;
+								FormaPagamento.find().populate(['condicoesPagamento', 'moeda']).exec(function (err, formasPagamento) {
+									FormaPagamento.getCotacaoMoedas(formasPagamento, function (_formasPagamento) {
+										viewObj.formasPagamento = getPagamentos(_formasPagamento);
+										return res.view(viewObj);
+									});
 								});
 							});
-						});
-					});	
+						});	
+					});
 				});
 			});
 		});	
@@ -309,13 +321,19 @@ module.exports = {
 			let viewObj = {};
 
 			dbCalls.push(function (callback) {
-				Produto.find().populate(['precos', 'estoques']).exec(function (err, produtos) {
-					if (err) {
-						callback(err);
-					}
-					
-					viewObj.produtos = produtos;
-					callback(null, produtos);	
+				PermissaoService.isFiscal({userId: req.session.me }, function (fiscal) {
+					var query = Produto.find();
+					if (fiscal) {
+						query.where({fiscal: true});
+					} 
+					query.populate(['precos', 'estoques']).exec(function (err, produtos) {
+						if (err) {
+							callback(err);
+						}
+						
+						viewObj.produtos = produtos;
+						callback(null, produtos);
+					});
 				});
 			});
 			

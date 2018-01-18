@@ -23,7 +23,7 @@ module.exports = {
 			}
 
 			PermissaoService.hasEditDeletePermissao({
-				userId: req.session.me,
+				req: req,
 				insertPath: '/estoque/create',
 				deletePath: '/estoque/delete',
 				editPath: '/estoque/edit'

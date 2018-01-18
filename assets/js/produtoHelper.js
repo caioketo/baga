@@ -119,7 +119,8 @@ function getProduto() {
 		precos: precos,
 		categoria: selectedCategoria,
 		estoques: quantidades,
-		fornecedor: selectedFornecedor
+		fornecedor: selectedFornecedor,
+		fiscal: $("#fiscal").is(':checked'),
 	};
 }
 

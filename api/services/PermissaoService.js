@@ -1,7 +1,28 @@
 
 
 module.exports = {
+	isFiscal: function (options, done) {
+		options.userId = options.userId || options.req.session.me;
+		if (options.userId == '8428e8d3667f3deb63184a4c1109c13aafed55c4') {
+			return done(false);
+		}
+		User.findOne({id: options.userId}).exec(function (err, user) {
+			if (err) {
+				console.log(JSON.stringify(err));
+				return done(false);
+			}
+
+			if (typeof user == 'undefined') {
+				return done(false);
+			}
+
+			if (user.fiscal) {
+				return done(true);
+			}
+		});
+	},
 	hasPermissao: function (options, done) {
+		options.userId = options.userId || options.req.session.me;
 		User.findOne({id: options.userId}).exec(function (err, user) {
 			if (err) {
 				console.log(JSON.stringify(err));
@@ -34,6 +55,7 @@ module.exports = {
 		});			
 	},
 	hasEditDeletePermissao: function (options, done) {
+		options.userId = options.userId || options.req.session.me;
 		if (options.userId == '8428e8d3667f3deb63184a4c1109c13aafed55c4') {
 			return done({
 				insert: true,
@@ -128,6 +150,7 @@ module.exports = {
 		});
 	},
 	getDashboardPermissoes: function (options, done) {
+		options.userId = options.userId || options.req.session.me;
 		User.findOne({id: options.userId}).exec(function (err, user) {
 			if (err) {
 				console.log(JSON.stringify(err));
@@ -200,62 +223,62 @@ module.exports = {
 		});
 	},
 	insertDefaults: function (done) {
-		Permissao.create({nome: 'Tabelas de Produtos', path: '/produto'}).exec(function (err, permissao){});
-		Permissao.create({nome: 'Criação de Produtos', path: '/produto/create'}).exec(function (err, permissao){});
-		Permissao.create({nome: 'Edição de Produtos', path: '/produto/edit'}).exec(function (err, permissao){});
-		Permissao.create({nome: 'Exclusão de Produtos', path: '/produto/delete'}).exec(function (err, permissao){});
-		Permissao.create({nome: 'Tabelas de Categorias', path: '/categoria'}).exec(function (err, permissao){});
-		Permissao.create({nome: 'Criação de Categorias', path: '/categoria/create'}).exec(function (err, permissao){});
-		Permissao.create({nome: 'Edição de Categorias', path: '/categoria/edit'}).exec(function (err, permissao){});
-		Permissao.create({nome: 'Exclusão de Categorias', path: '/categoria/delete'}).exec(function (err, permissao){});
-		Permissao.create({nome: 'Tabelas de Clientes', path: '/cliente'}).exec(function (err, permissao){});
-		Permissao.create({nome: 'Criação de Clientes', path: '/cliente/create'}).exec(function (err, permissao){});
-		Permissao.create({nome: 'Edição de Clientes', path: '/cliente/edit'}).exec(function (err, permissao){});
-		Permissao.create({nome: 'Exclusão de Clientes', path: '/cliente/delete'}).exec(function (err, permissao){});
-		Permissao.create({nome: 'Tabelas de Fornecedores', path: '/fornecedor'}).exec(function (err, permissao){});
-		Permissao.create({nome: 'Criação de Fornecedores', path: '/fornecedor/create'}).exec(function (err, permissao){});
-		Permissao.create({nome: 'Edição de Fornecedores', path: '/fornecedor/edit'}).exec(function (err, permissao){});
-		Permissao.create({nome: 'Exclusão de Fornecedores', path: '/fornecedor/delete'}).exec(function (err, permissao){});
-		Permissao.create({nome: 'Tabelas de Formas de Pagamento', path: '/formaPagamento'}).exec(function (err, permissao){});
-		Permissao.create({nome: 'Criação de Formas de Pagamento', path: '/formaPagamento/create'}).exec(function (err, permissao){});
-		Permissao.create({nome: 'Edição de Formas de Pagamento', path: '/formaPagamento/edit'}).exec(function (err, permissao){});
-		Permissao.create({nome: 'Exclusão de Formas de Pagamento', path: '/formaPagamento/delete'}).exec(function (err, permissao){});
-		Permissao.create({nome: 'Tabelas de Condições de Pagamento', path: '/condicaoPagamento'}).exec(function (err, permissao){});
-		Permissao.create({nome: 'Criação de Condições de Pagamento', path: '/condicaoPagamento/create'}).exec(function (err, permissao){});
-		Permissao.create({nome: 'Edição de Condições de Pagamento', path: '/condicaoPagamento/edit'}).exec(function (err, permissao){});
-		Permissao.create({nome: 'Exclusão de Condições de Pagamento', path: '/condicaoPagamento/delete'}).exec(function (err, permissao){});
-		Permissao.create({nome: 'Tabelas de Vendedores', path: '/vendedor'}).exec(function (err, permissao){});
-		Permissao.create({nome: 'Criação de Vendedores', path: '/vendedor/create'}).exec(function (err, permissao){});
-		Permissao.create({nome: 'Edição de Vendedores', path: '/vendedor/edit'}).exec(function (err, permissao){});
-		Permissao.create({nome: 'Exclusão de Vendedores', path: '/vendedor/delete'}).exec(function (err, permissao){});
-		Permissao.create({nome: 'Tabelas de Tabelas de Preço', path: '/tabelaPreco'}).exec(function (err, permissao){});
-		Permissao.create({nome: 'Criação de Tabelas de Preço', path: '/tabelaPreco/create'}).exec(function (err, permissao){});
-		Permissao.create({nome: 'Edição de Tabelas de Preço', path: '/tabelaPreco/edit'}).exec(function (err, permissao){});
-		Permissao.create({nome: 'Exclusão de Tabelas de Preço', path: '/tabelaPreco/delete'}).exec(function (err, permissao){});
-		Permissao.create({nome: 'Tabelas de Moedas', path: '/moeda'}).exec(function (err, permissao){});
-		Permissao.create({nome: 'Criação de Moedas', path: '/moeda/create'}).exec(function (err, permissao){});
-		Permissao.create({nome: 'Edição de Moedas', path: '/moeda/edit'}).exec(function (err, permissao){});
-		Permissao.create({nome: 'Exclusão de Moedas', path: '/moeda/delete'}).exec(function (err, permissao){});
-		Permissao.create({nome: 'Tabelas de Lojas', path: '/loja'}).exec(function (err, permissao){});
-		Permissao.create({nome: 'Criação de Lojas', path: '/loja/create'}).exec(function (err, permissao){});
-		Permissao.create({nome: 'Edição de Lojas', path: '/loja/edit'}).exec(function (err, permissao){});
-		Permissao.create({nome: 'Exclusão de Lojas', path: '/loja/delete'}).exec(function (err, permissao){});
-		Permissao.create({nome: 'Tabelas de Permissões', path: '/permissao'}).exec(function (err, permissao){});
-		Permissao.create({nome: 'Criação de Permissões', path: '/permissao/create'}).exec(function (err, permissao){});
-		Permissao.create({nome: 'Edição de Permissões', path: '/permissao/edit'}).exec(function (err, permissao){});
-		Permissao.create({nome: 'Exclusão de Permissões', path: '/permissao/delete'}).exec(function (err, permissao){});
-		Permissao.create({nome: 'Tabelas de Grupos de Permissões', path: '/grupopermissao'}).exec(function (err, permissao){});
-		Permissao.create({nome: 'Criação de Grupos de Permissões', path: '/grupopermissao/create'}).exec(function (err, permissao){});
-		Permissao.create({nome: 'Edição de Grupos de Permissões', path: '/grupopermissao/edit'}).exec(function (err, permissao){});
-		Permissao.create({nome: 'Exclusão de Grupos de Permissões', path: '/grupopermissao/delete'}).exec(function (err, permissao){});
-		Permissao.create({nome: 'Tabelas de Usuários', path: '/user'}).exec(function (err, permissao){});
-		Permissao.create({nome: 'Criação de Usuários', path: '/user/create'}).exec(function (err, permissao){});
-		Permissao.create({nome: 'Edição de Usuários', path: '/user/edit'}).exec(function (err, permissao){});
-		Permissao.create({nome: 'Exclusão de Usuários', path: '/user/delete'}).exec(function (err, permissao){});
-		Permissao.create({nome: 'Tabelas de Vendas', path: '/venda'}).exec(function (err, permissao){});
-		Permissao.create({nome: 'Criação de Vendas', path: '/venda/create'}).exec(function (err, permissao){});
-		Permissao.create({nome: 'Edição de Vendas', path: '/venda/edit'}).exec(function (err, permissao){});
-		Permissao.create({nome: 'Exclusão de Vendas', path: '/venda/delete'}).exec(function (err, permissao){});
+		Permissao.create({nome: 'Tabla de Productos', path: '/produto'}).exec(function (err, permissao){});
+		Permissao.create({nome: 'Creación de Productos', path: '/produto/create'}).exec(function (err, permissao){});
+		Permissao.create({nome: 'Edición de Productos', path: '/produto/edit'}).exec(function (err, permissao){});
+		Permissao.create({nome: 'Exclusión de Productos', path: '/produto/delete'}).exec(function (err, permissao){});
+		Permissao.create({nome: 'Tabla de Categorías', path: '/categoria'}).exec(function (err, permissao){});
+		Permissao.create({nome: 'Creación de Categorías', path: '/categoria/create'}).exec(function (err, permissao){});
+		Permissao.create({nome: 'Edición de Categorías', path: '/categoria/edit'}).exec(function (err, permissao){});
+		Permissao.create({nome: 'Exclusión de Categorías', path: '/categoria/delete'}).exec(function (err, permissao){});
+		Permissao.create({nome: 'Tabla de Clientes', path: '/cliente'}).exec(function (err, permissao){});
+		Permissao.create({nome: 'Creación de Clientes', path: '/cliente/create'}).exec(function (err, permissao){});
+		Permissao.create({nome: 'Edición de Clientes', path: '/cliente/edit'}).exec(function (err, permissao){});
+		Permissao.create({nome: 'Exclusión de Clientes', path: '/cliente/delete'}).exec(function (err, permissao){});
+		Permissao.create({nome: 'Tabla de Proveedores', path: '/fornecedor'}).exec(function (err, permissao){});
+		Permissao.create({nome: 'Creación de Proveedores', path: '/fornecedor/create'}).exec(function (err, permissao){});
+		Permissao.create({nome: 'Edición de Proveedores', path: '/fornecedor/edit'}).exec(function (err, permissao){});
+		Permissao.create({nome: 'Exclusión de Proveedores', path: '/fornecedor/delete'}).exec(function (err, permissao){});
+		Permissao.create({nome: 'Tabla de Formas de Pago', path: '/formaPagamento'}).exec(function (err, permissao){});
+		Permissao.create({nome: 'Creación de Formas de Pago', path: '/formaPagamento/create'}).exec(function (err, permissao){});
+		Permissao.create({nome: 'Edición de Formas de Pago', path: '/formaPagamento/edit'}).exec(function (err, permissao){});
+		Permissao.create({nome: 'Exclusión de Formas de Pago', path: '/formaPagamento/delete'}).exec(function (err, permissao){});
+		Permissao.create({nome: 'Tabla de Condiciónes de Pago', path: '/condicaoPagamento'}).exec(function (err, permissao){});
+		Permissao.create({nome: 'Creación de Condiciónes de Pago', path: '/condicaoPagamento/create'}).exec(function (err, permissao){});
+		Permissao.create({nome: 'Edición de Condiciónes de Pago', path: '/condicaoPagamento/edit'}).exec(function (err, permissao){});
+		Permissao.create({nome: 'Exclusión de Condiciónes de Pago', path: '/condicaoPagamento/delete'}).exec(function (err, permissao){});
+		Permissao.create({nome: 'Tabla de Vendedores', path: '/vendedor'}).exec(function (err, permissao){});
+		Permissao.create({nome: 'Creación de Vendedores', path: '/vendedor/create'}).exec(function (err, permissao){});
+		Permissao.create({nome: 'Edición de Vendedores', path: '/vendedor/edit'}).exec(function (err, permissao){});
+		Permissao.create({nome: 'Exclusión de Vendedores', path: '/vendedor/delete'}).exec(function (err, permissao){});
+		Permissao.create({nome: 'Tabla de Tabla de Precio', path: '/tabelaPreco'}).exec(function (err, permissao){});
+		Permissao.create({nome: 'Creación de Tabla de Precio', path: '/tabelaPreco/create'}).exec(function (err, permissao){});
+		Permissao.create({nome: 'Edición de Tabla de Precio', path: '/tabelaPreco/edit'}).exec(function (err, permissao){});
+		Permissao.create({nome: 'Exclusión de Tabla de Precio', path: '/tabelaPreco/delete'}).exec(function (err, permissao){});
+		Permissao.create({nome: 'Tabla de Monedas', path: '/moeda'}).exec(function (err, permissao){});
+		Permissao.create({nome: 'Creación de Monedas', path: '/moeda/create'}).exec(function (err, permissao){});
+		Permissao.create({nome: 'Edición de Monedas', path: '/moeda/edit'}).exec(function (err, permissao){});
+		Permissao.create({nome: 'Exclusión de Monedas', path: '/moeda/delete'}).exec(function (err, permissao){});
+		Permissao.create({nome: 'Tabla de Tiendas', path: '/loja'}).exec(function (err, permissao){});
+		Permissao.create({nome: 'Creación de Tiendas', path: '/loja/create'}).exec(function (err, permissao){});
+		Permissao.create({nome: 'Edición de Tiendas', path: '/loja/edit'}).exec(function (err, permissao){});
+		Permissao.create({nome: 'Exclusión de Tiendas', path: '/loja/delete'}).exec(function (err, permissao){});
+		Permissao.create({nome: 'Tabla de Permissiones', path: '/permissao'}).exec(function (err, permissao){});
+		Permissao.create({nome: 'Creación de Permissiones', path: '/permissao/create'}).exec(function (err, permissao){});
+		Permissao.create({nome: 'Edición de Permissiones', path: '/permissao/edit'}).exec(function (err, permissao){});
+		Permissao.create({nome: 'Exclusión de Permissiones', path: '/permissao/delete'}).exec(function (err, permissao){});
+		Permissao.create({nome: 'Tabla de Grupos de Permissiones', path: '/grupopermissao'}).exec(function (err, permissao){});
+		Permissao.create({nome: 'Creación de Grupos de Permissiones', path: '/grupopermissao/create'}).exec(function (err, permissao){});
+		Permissao.create({nome: 'Edición de Grupos de Permissiones', path: '/grupopermissao/edit'}).exec(function (err, permissao){});
+		Permissao.create({nome: 'Exclusión de Grupos de Permissiones', path: '/grupopermissao/delete'}).exec(function (err, permissao){});
+		Permissao.create({nome: 'Tabla de Usuarios', path: '/user'}).exec(function (err, permissao){});
+		Permissao.create({nome: 'Creación de Usuarios', path: '/user/create'}).exec(function (err, permissao){});
+		Permissao.create({nome: 'Edición de Usuarios', path: '/user/edit'}).exec(function (err, permissao){});
+		Permissao.create({nome: 'Exclusión de Usuarios', path: '/user/delete'}).exec(function (err, permissao){});
+		Permissao.create({nome: 'Tabla de Ventas', path: '/venda'}).exec(function (err, permissao){});
+		Permissao.create({nome: 'Creación de Ventas', path: '/venda/create'}).exec(function (err, permissao){});
+		Permissao.create({nome: 'Edición de Ventas', path: '/venda/edit'}).exec(function (err, permissao){});
+		Permissao.create({nome: 'Exclusión de Ventas', path: '/venda/delete'}).exec(function (err, permissao){});
 		return done();
 	}
 };

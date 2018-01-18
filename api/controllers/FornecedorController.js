@@ -30,7 +30,7 @@ module.exports = {
 				return res.send(JSON.stringify(err));
 			}
 			PermissaoService.hasEditDeletePermissao({
-				userId: req.session.me,
+				req: req,
 				insertPath: '/fornecedor/create',
 				deletePath: '/fornecedor/delete',
 				editPath: '/fornecedor/edit'

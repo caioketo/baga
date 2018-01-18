@@ -64,50 +64,56 @@ module.exports = {
 		return res.send("OK");
 	},
 	index: function (req, res) {
-		Produto.find().populate(['categoria', 'estoques']).exec(function (err, produtos) {
-			if (err) {
-				console.log(JSON.stringify(err));
-				return res.send(JSON.stringify(err));
-			}
-			let viewConfig = {
+		PermissaoService.isFiscal({userId: req.session.me }, function (fiscal) {
+			var query = Produto.find();
+			if (fiscal) {
+				query.where({fiscal: true});
+			} 
+			query.populate(['categoria', 'estoques']).exec(function (err, produtos) {
+				if (err) {
+					console.log(JSON.stringify(err));
+					return res.send(JSON.stringify(err));
+				}
+				let viewConfig = {
 
-			};
-			PermissaoService.hasEditDeletePermissao({
-				userId: req.session.me,
-				insertPath: '/produto/create',
-				deletePath: '/produto/delete',
-				editPath: '/produto/edit'
-			}, function (resultPermissao) {
-				return res.view('crud.ejs', {
-					fields: [
-						{
-							titulo: 'Código',
-							nome: 'codigo'
+				};
+				PermissaoService.hasEditDeletePermissao({
+					req: req,
+					insertPath: '/produto/create',
+					deletePath: '/produto/delete',
+					editPath: '/produto/edit'
+				}, function (resultPermissao) {
+					return res.view('crud.ejs', {
+						fields: [
+							{
+								titulo: 'Código',
+								nome: 'codigo'
+							},
+							{
+								titulo: 'Descrição',
+								nome: 'descricao'
+							},
+							{
+								titulo: 'Quantidade Total',
+								nome: 'quantidadeTotal',
+								isFunction: true
+							}
+						],
+						records: produtos,
+						options: {
+							insert: 'Novo Produto',
+							insertURL: '/produto/create',
+							updateURL: '/produto/edit',
+							deleteURL: '/produto/delete',
+							searchField: {
+								descricao: 'Descrição',
+								type: 'text',
+								nome: 'descricao'
+							},
+							permissoes: resultPermissao
 						},
-						{
-							titulo: 'Descrição',
-							nome: 'descricao'
-						},
-						{
-							titulo: 'Quantidade Total',
-							nome: 'quantidadeTotal',
-							isFunction: true
-						}
-					],
-					records: produtos,
-					options: {
-						insert: 'Novo Produto',
-						insertURL: '/produto/create',
-						updateURL: '/produto/edit',
-						deleteURL: '/produto/delete',
-						searchField: {
-							descricao: 'Descrição',
-							type: 'text',
-							nome: 'descricao'
-						},
-						permissoes: resultPermissao
-					},
-					filtro: true
+						filtro: true
+					});
 				});
 			});
 		});

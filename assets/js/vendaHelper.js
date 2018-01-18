@@ -16,7 +16,16 @@ var searchRows = $('#tableProdutos tr');
 searchRows.splice(0, 1);
 $('#produto').keypress(function (e) {
 	if (e.keyCode == 13) {
-		$('#addProduto').click();
+		findProduto($('#produto').val(), function (produto) {
+			if (typeof produto == 'undefined') {
+				showProdutos();
+			}
+			else {
+				selectedProd = produto.id;
+				selecionarProduto();
+				$("#qtde").focus();
+			}
+		});
 	}
 });
 $('#qtde').keypress(function (e) {
@@ -64,6 +73,7 @@ function aplicarDesconto() {
 		descontoProd = valorDesc;
 		$("#descontoProduto").text(descontoProd);
 	}
+	$("#descontoInput").val('0');
 	$("#descontoMdl").modal('hide');
 }
 
@@ -198,6 +208,7 @@ function addProduto() {
 		$('#produto').val('');
 		$('#lojaNome').val('');
 		$('#qtde').val('1');
+		$('#produto').focus();
 	});
 }
 
@@ -367,3 +378,19 @@ function finalizarVenda() {
 		}
 	});
 }
+
+
+function findProduto(codigo, cb) {
+	var found = false;
+	for (var i = 0; i < produtos.length; i++) {
+		if (produtos[i].codigo == codigo) {
+			found = true;
+			cb(produtos[i]);
+			break;
+		}
+	}
+
+	if (!found) {
+		cb(undefined);
+	}
+} 

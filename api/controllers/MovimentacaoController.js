@@ -11,13 +11,19 @@ function create(cb) {
 	let viewObj = {};
 
 	dbCalls.push(function (callback) {
-		Produto.find().populate('estoques').exec(function (err, produtos) {
-			if (err) {
-				callback(err);
-			}
-			
-			viewObj.produtos = produtos;
-			callback(null, produtos);	
+		PermissaoService.isFiscal({userId: req.session.me }, function (fiscal) {
+			var query = Produto.find();
+			if (fiscal) {
+				query.where({fiscal: true});
+			} 
+			query.populate('estoques').exec(function (err, produtos) {
+				if (err) {
+					callback(err);
+				}
+				
+				viewObj.produtos = produtos;
+				callback(null, produtos);	
+			});
 		});
 	});
 	

@@ -1,0 +1,153 @@
+<label>Produto Promoção</label>
+<br>
+<input id="produto" type="text" onfocus="findProduto(true);" style="width: 400px;" />
+
+<div>
+	<label>Produtos que compoem??</label>
+	<label style="padding-left: 360px;">Quantidade</label>
+	<br>
+	<input id="produtoDetail" type="text" onfocus="findProduto(false);" style="width: 400px;" />
+	<input id="quantidade" type="number" style="margin-left: 20px;">
+	<input type="submit" onclick="addProduto();" value="+">
+	<br>
+	<br>
+	<table id='tableProdutos' class="table table-striped">
+		<thead>
+			<tr>
+				<th>Produto</th>
+				<th>Quantidade</th>
+			</tr>
+		</thead>
+		<tbody>
+		</tbody>
+	</table>
+</div>
+
+
+
+<div class="modal fade" id="produtosMdl" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Procurar Produtos</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+      	<label>Produto: </label>
+		<input id='produtoNome' type="text" value='' name='produtoNome' autofocus/>
+		<br>
+		<div style="max-height: 350px; overflow-y: scroll; overflow-x: hidden;">
+			<table id='tableProdutos' class="table table-striped">
+				<thead>
+					<tr>
+						<th>Descripción</th>
+					</tr>
+				</thead>
+				<tbody>
+					<% produtos.forEach(function(p) { %>
+						<tr id='<%= p.id %>'>
+							<td><%= p.descricao %></td>
+						</tr>
+					<% }); %>
+				</tbody>
+			</table>
+		</div>
+	</div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+        <button type="button" class="btn btn-primary" onclick="selecionarProduto();">Selecionar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+<script>
+	var promocao = {};
+	var findPrincipal = false;
+	var items = [];
+	var inputSelected;
+	var selectedProduto;
+	var produtoObj;
+	var produtos = <%- JSON.stringify(produtos) %>;
+	var produtosSR = $('#tableProdutos tr');
+	produtosSR.splice(0, 1);
+
+
+function addProduto() {
+	if (selectedProduto) {
+		var quantidade = $("#quantidade").val();
+		addProdutoHtml({descricao: produtoObj.descricao, quantidade: quantidade});
+		items.push({
+			produto: selectedProduto,
+			quantidade: quantidade
+		});
+
+		$("#produto").val('');
+		$("#quantidade").val('');
+		$("#produtoDetail").focus();
+	}
+}
+
+
+function addProdutoHtml(produto) {
+	$('#tableProdutos tr:last').after('<tr><td>' + produto.descricao + '</td><td>' + produto.quantidade + '</td></tr>');
+}
+
+
+function findProduto(_findPrincipal) {
+	findPrincipal = _findPrincipal;
+	produtosSR.on('click', function (e) {
+		var row = $(this);
+		if (selectedProduto) {
+			$('#' + selectedProduto).removeClass('highlight');
+		}
+		row.addClass('highlight');
+		selectedProduto = row.attr('id');
+	});
+	$('#produtoNome').val('');
+	search();
+	$("#produtoNome").bind('keydown', search);
+	$("#produtosMdl").modal();
+}
+
+function search() {
+	var text = $('#produtoNome').val();
+	var val = $.trim(text).replace(/ +/g, ' ').toLowerCase();
+
+	produtosSR.show().filter(function() {
+		var text = $(this).text().replace(/\s+/g, ' ').	toLowerCase();
+		return !~text.indexOf(val);
+	}).hide();
+}
+
+
+function getProduto(id, cb) {
+	produtos.forEach(function (produto) {
+		if (produto.id == id) {
+			cb(produto);
+		}
+	});
+}
+
+function selecionarProduto() {
+	$('#' + selectedProduto).removeClass('highlight');
+	
+	getProduto(selectedProduto, function (produto) {
+		if (findPrincipal) {
+			$("#produto").val(produto.descricao);
+			promocao.produto = produto;
+		}
+		else {
+			produtoObj = produto;
+			$("#produtoDetail").val(produto.descricao);
+		}
+		$("#produtosMdl").modal('hide');
+		$("#quantidade").focus();
+	});
+}
+
+</script>

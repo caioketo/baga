@@ -27,7 +27,7 @@ module.exports = {
 			}
 
 			PermissaoService.hasEditDeletePermissao({
-				userId: req.session.me,
+				req: req,
 				insertPath: '/conta/create',
 				deletePath: '/conta/delete',
 				editPath: '/conta/edit'

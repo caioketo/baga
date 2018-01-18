@@ -8,15 +8,16 @@
 <input id='cliente' type="text" value='<%= cliente.nome %>' onfocus="findCliente();" />
 <br>
 <br>
+<label>Loja</label>
 <label>Produto</label>
+<label>Quantidade</label>
+<label>Desconto</label>
 <br>
 <input id='lojaNome' type="text" value='' name='lojaNome' disabled="true" style="width: 100px;" />
-<input id='produto' type="text" value='' placeholder="Produto..." name='produto' onfocus="showProdutos();"/>
+<input id='produto' type="text" value='' placeholder="Produto..." name='produto' onfocus=""/>
 <input id='qtde' type="number" value='1' name='qtde'>
-<br>
-<label>Desconto</label>
 <input id='descontoProduto' type="number" value='0' onfocus="descontoProduto();">
-<input id='addProduto' type="submit" value="+" onclick="addProduto();"/>
+<input id='addProduto' type="button" value="+" onclick="addProduto();"/>
 
 <!-- MODAL -->
 <div class="modal fade" id="produtosMdl" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -51,7 +52,7 @@
 			<table id='tableProdutos' class="table table-striped">
 				<thead>
 					<tr>
-						<th>Descrição</th>
+						<th>Descripción</th>
 						<% estoques.forEach(function (e) { %>
 							<th>Qtde. <%= e.descricao %></th>
 						<% }); %>
@@ -179,4 +180,5 @@
 	var tabelas = <%- JSON.stringify(tabelas) %>;
 	var estoques = <%- JSON.stringify(estoques) %>;
 	var formasPagamento = <%- JSON.stringify(formasPagamento) %>;
+
 </script>

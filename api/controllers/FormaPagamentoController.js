@@ -23,7 +23,7 @@ module.exports = {
 				return res.send(JSON.stringify(err));
 			}
 			PermissaoService.hasEditDeletePermissao({
-				userId: req.session.me,
+				req: req,
 				insertPath: '/formapagamento/create',
 				deletePath: '/formapagamento/delete',
 				editPath: '/formapagamento/edit'

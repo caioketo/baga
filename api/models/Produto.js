@@ -31,6 +31,9 @@ module.exports = {
 		fornecedor: {
 			model: 'fornecedor'
 		},
+		fiscal: {
+			type: 'boolean'
+		},
 		quantidadeTotal: function() {
 			if (typeof this.estoques == 'undefined' && this.estoques.length <= 0 && typeof this.estoques[0].id == 'undefined') {
 				return 0;

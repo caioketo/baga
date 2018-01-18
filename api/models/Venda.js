@@ -40,7 +40,8 @@ module.exports = {
         model: 'abertura'
       },
       impresso: {
-        type: 'integer'
+        type: 'integer',
+        defaultsTo: 0
       }
   },
   beforeCreate: function(obj, next) {

@@ -2,7 +2,7 @@
 <br>
 <input id='codigo' type="number" value='<%= produto.codigo %>' name='codigo' />
 <br>
-<label>Descrição</label>
+<label>Descripción</label>
 <br>
 <input id='descricao' type="text" value='<%= produto.descricao %>' name='descricao' />
 <br>
@@ -58,6 +58,10 @@
 		<tbody>
 		</tbody>
 	</table>
+</div>
+<br>
+<div class="checkbox">
+	<label><input id="fiscal" type="checkbox"  checked='<%= produto.fiscal %>'/>Fiscal</label>
 </div>
 <br>
 <input type="submit" value="Salvar" onclick="editProduto();" />

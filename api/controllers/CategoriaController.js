@@ -25,7 +25,7 @@ module.exports = {
 	},
 	index: function (req, res) {
 		PermissaoService.hasEditDeletePermissao({
-			userId: req.session.me,
+			req: req,
 			insertPath: '/categoria/create',
 			deletePath: '/categoria/delete',
 			editPath: '/categoria/edit'

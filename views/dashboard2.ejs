@@ -21,6 +21,9 @@
 				<a id="tabVendas" class="nav-link" onclick="changeTab(1);">Vendas</a>
 			</li>
 			<li class="nav-item">
+				<a id="tabEstoques" class="nav-link" onclick="changeTab(3);">Estoques</a>
+			</li>
+			<li class="nav-item">
 				<a id="tabFinanceiro" class="nav-link" onclick="changeTab(2);">Financeiro</a>
 			</li>
 		</ul>
@@ -71,6 +74,12 @@
 			<% if (dashboard.user) { %>
 			<a class="nav-link" href="user" target="frameGeral">Usuários</a>
 			<% } %>
+		</nav>
+
+		<nav id="menuEstoques" class="nav flex-column menu-dashboard">
+			<a class="nav-link" href="movimentacao" target="frameGeral">Movimentações</a>
+			<a class="nav-link" href="movimentacao/indexEntrada" target="frameGeral">Entradas</a>
+			<a class="nav-link" href="movimentacao/indexSaida" target="frameGeral">Saídas</a>
 		</nav>
 
 		<nav id="menuFinanceiro" class="nav flex-column menu-dashboard">
@@ -139,6 +148,7 @@ function content_start_loading() {
 	var selectedMenu = $("#menuCadastros");
 	$("#menuFinanceiro").toggle();
 	$("#menuVendas").toggle();
+	$("#menuEstoques").toggle();
 	function changeTab(index) {
 		if (selectedTab) {
 			selectedTab.removeClass('active');
@@ -158,6 +168,10 @@ function content_start_loading() {
 			case 2: //cadastros;
 				selectedTab = $("#tabFinanceiro");
 				selectedMenu = $("#menuFinanceiro");
+				break;
+			case 3: //cadastros;
+				selectedTab = $("#tabEstoques");
+				selectedMenu = $("#menuEstoques");
 				break;
 		}
 		selectedTab.addClass('active');
