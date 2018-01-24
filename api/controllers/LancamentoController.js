@@ -50,7 +50,7 @@ function getContasObj(tipo, cb) {
 function getFormasPagamento(cb) {
 	FormaPagamento.find({aVista: true}).exec(function (err, formasPagamento) {
 		if (err) {
-			console.log(JSON.stringify(err));
+			console.log(JSON.stringify(err.message));
 			cb([]);
 			return;
 		}

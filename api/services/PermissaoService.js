@@ -19,6 +19,9 @@ module.exports = {
 			if (user.fiscal) {
 				return done(true);
 			}
+			else {
+				return done(false);
+			}
 		});
 	},
 	hasPermissao: function (options, done) {
@@ -279,6 +282,11 @@ module.exports = {
 		Permissao.create({nome: 'Creación de Ventas', path: '/venda/create'}).exec(function (err, permissao){});
 		Permissao.create({nome: 'Edición de Ventas', path: '/venda/edit'}).exec(function (err, permissao){});
 		Permissao.create({nome: 'Exclusión de Ventas', path: '/venda/delete'}).exec(function (err, permissao){});
+		Permissao.create({nome: 'Movimentaciones', path: '/movimentacao'}).exec(function (err, permissao){});
+		Permissao.create({nome: 'Entradas', path: '/movimentacao/indexEntrada'}).exec(function (err, permissao){});
+		Permissao.create({nome: 'Salidas', path: '/movimentacao/indexSaida'}).exec(function (err, permissao){});
+
+
 		return done();
 	}
 };

@@ -52,7 +52,7 @@ module.exports = {
 				console.log(JSON.stringify(err));
 				return res.send(JSON.stringify(err));
 			}
-			return res.view('movimentacao\\index.ejs', {insertURL: '/movimentacao/create', titulo: 'Movimentação', entradaSaida: 0, movimentacoes: movimentacoes, moment: moment});
+			return res.view('movimentacao/index.ejs', {insertURL: '/movimentacao/create', titulo: 'Movimentação', entradaSaida: 0, movimentacoes: movimentacoes, moment: moment});
 		});
 	},
 	indexEntrada: function (req, res) {
@@ -61,7 +61,7 @@ module.exports = {
 				console.log(JSON.stringify(err));
 				return res.send(JSON.stringify(err));
 			}
-			return res.view('movimentacao\\index.ejs', {insertURL: '/movimentacao/entrada', titulo: 'Entrada', entradaSaida: 1, movimentacoes: movimentacoes, moment: moment});
+			return res.view('movimentacao/index.ejs', {insertURL: '/movimentacao/entrada', titulo: 'Entrada', entradaSaida: 1, movimentacoes: movimentacoes, moment: moment});
 		});
 	},
 	indexSaida: function (req, res) {
@@ -70,7 +70,7 @@ module.exports = {
 				console.log(JSON.stringify(err));
 				return res.send(JSON.stringify(err));
 			}
-			return res.view('movimentacao\\index.ejs', {insertURL: '/movimentacao/saida', titulo: 'Saída', entradaSaida: 2, movimentacoes: movimentacoes, moment: moment});
+			return res.view('movimentacao/index.ejs', {insertURL: '/movimentacao/saida', titulo: 'Saída', entradaSaida: 2, movimentacoes: movimentacoes, moment: moment});
 		});
 	},
 	cancelar: function (req, res) {

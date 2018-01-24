@@ -64,10 +64,10 @@ module.exports = {
 		return res.send("OK");
 	},
 	index: function (req, res) {
-		PermissaoService.isFiscal({userId: req.session.me }, function (fiscal) {
+		PermissaoService.isFiscal({req: req }, function (fiscal) {
 			var query = Produto.find();
 			if (fiscal) {
-				query.where({fiscal: true});
+				query.where({fiscal: 1});
 			} 
 			query.populate(['categoria', 'estoques']).exec(function (err, produtos) {
 				if (err) {

@@ -32,7 +32,7 @@ module.exports = {
 			model: 'fornecedor'
 		},
 		fiscal: {
-			type: 'boolean'
+			type: 'integer'
 		},
 		quantidadeTotal: function() {
 			if (typeof this.estoques == 'undefined' && this.estoques.length <= 0 && typeof this.estoques[0].id == 'undefined') {
