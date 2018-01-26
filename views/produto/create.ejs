@@ -6,6 +6,10 @@
 <br>
 <input id='descricao' type="text" value='' name='descricao' />
 <br>
+<label>Descripción Site</label>
+<br>
+<input id='descricaoCompleta' type="text" value='' />
+<br>
 <label>Proveedor</label>
 <br>
 <input id='fornecedor' type="text" value='' name='fornecedor' onfocus="findFornecedor();" />
@@ -62,6 +66,58 @@
 <div class="checkbox">
 	<label><input id="fiscal" type="checkbox"  checked='true'/>Fiscal</label>
 </div>
+<br>
+<label>Peso</label>
+<br>
+<input id='peso' type="number" value='' />
+<br>
+<label>Largura</label>
+<br>
+<input id='largura' type="number" value='' />
+<br>
+<label>Altura</label>
+<br>
+<input id='altura' type="number" value='' />
+<br>
+<label>Profundidade</label>
+<br>
+<input id='profundidade' type="number" value='' />
+<br>
+<br>
+<label>Atributos</label>
+<br>
+<div>
+	<div id="newAtributo">
+		<label>Nombre</label>
+		<label style='margin-left: 120px;'>Valores (separados por ';')</label>
+		<br>
+		<input id='atributoNome' type='text' value='' />
+		<input id='atributoValores' type='text' value='' />
+		<input type="submit" value="Adicionar Atributo" onclick="addAtributo();" />	
+	</div>
+	<table id='tableAtributos' class='table table-striped'>
+		<thead>
+			<tr>
+				<th>Atributo</th>
+				<th>Valores</th>
+			</tr>
+		</thead>
+		<tbody>
+		</tbody>
+	</table>
+</div>
+<br>
+<br>
+<label>Fotos</label>
+<br>
+<div>
+	<div id="newFoto">
+		<input id="newFotoUpload" type="file" >
+	</div>
+	<div id="fotosDiv">
+	</div>
+</div>
+<br>
 <br>
 <input type="submit" value="Salvar" onclick="createProduto();" />
 

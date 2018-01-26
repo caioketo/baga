@@ -125,41 +125,76 @@ module.exports = {
 		});
 	},
 	edit: function(req, res) {
-		Produto.find({id: req.param('id')}).populate(['categoria', 'precos', 'estoques', 'fornecedor']).exec(function (err, produto) {
-			if (err) {
-				console.log(JSON.stringify(err));
-				return res.send(JSON.stringify(err));
-			}
-			produto = produto[0];
-			TabelaPreco.find().exec(function (err, tabelas) {
-				if (err) {
-					console.log(JSON.stringify(err));
-					return res.send(JSON.stringify(err));
-				}
+		let dbCalls = [];
+		let viewObj = {};
 
-				Estoque.find().exec(function (err, estoques) {
-					if (err) {
-						console.log(JSON.stringify(err));
-						return res.send(JSON.stringify(err));
-					}
-					return res.view({produto: produto, tabelasPreco: tabelas, estoques: estoques});
-				});
+		dbCalls.push(function (callback) {
+			Produto.findOne({id: req.param('id')}).populate(['categoria', 'precos', 'estoques', 'fornecedor', 
+				'galeria', 'atributos', 'valoresAtributos']).exec(function (err, produto) {
+				if (err) {
+					callback(err);
+				}
+				viewObj.produto = produto;
+				callback(null);
 			});
-		});		
-	},
-	create: function (req, res) {
-		TabelaPreco.find().exec(function (err, tabelasPreco) {
-			if (err) {
-				console.log(JSON.stringify(err));
-				return res.send(JSON.stringify(err));
-			}
+		});
+		dbCalls.push(function (callback) {
+			TabelaPreco.find().exec(function (err, tabelasPreco) {
+				if (err) {
+					callback(err);
+				}
+				viewObj.tabelasPreco = tabelasPreco;
+				callback(null);
+			});
+		});
+		dbCalls.push(function (callback) {
 			Estoque.find().exec(function (err, estoques) {
 				if (err) {
-					console.log(JSON.stringify(err));
-					return res.send(JSON.stringify(err));
+					callback(err);
 				}
-				return res.view({tabelasPreco: tabelasPreco, estoques: estoques});
+				viewObj.estoques = estoques;
+				callback(null);
 			});
+		});
+
+		async.parallel(dbCalls, function (err, results) {
+			if (err) {
+				console.log(JSON.stringify(err));
+				return res.send(JSON.stringify(err));
+			}
+			return res.view(viewObj);
+		});
+	},
+	create: function (req, res) {
+		let dbCalls = [];
+		let viewObj = {};
+
+		dbCalls.push(function (callback) {
+			TabelaPreco.find().exec(function (err, tabelasPreco) {
+				if (err) {
+					callback(err);
+				}
+				viewObj.tabelasPreco = tabelasPreco;
+				callback(null);
+			});
+		});
+		dbCalls.push(function (callback) {
+			Estoque.find().exec(function (err, estoques) {
+				if (err) {
+					callback(err);
+				}
+				viewObj.estoques = estoques;
+				callback(null);
+			});
+		});
+
+
+		async.parallel(dbCalls, function (err, results) {
+			if (err) {
+				console.log(JSON.stringify(err));
+				return res.send(JSON.stringify(err));
+			}
+			return res.view(viewObj);
 		});
 	},
 	editPost: function (req, res) {
@@ -174,13 +209,73 @@ module.exports = {
 	},
 	createPost: function (req, res) {
 		//validate(req.body, function (produto) {
+		let fotos = req.body.fotos || [];
+		let atributos = req.body.atributos || [];
+		let newProd = req.body.produto;
+		if (newProd.fiscal) {
+			newProd.fiscal = 0;
+		}
+		else {
+			newProd.fiscal = 1;
+		}
 		Produto.create(req.body.produto).exec(function (err, produtoDB) {
 			if (err) {
 				console.log(JSON.stringify(err));
 				return res.send(JSON.stringify(err));
 			}
+			let dbCalls = [];
+			for (let i = 0; i < fotos.length; i++) {
+				dbCalls.push(function (callback) {
+					Foto.create({
+						foto64: fotos[i].foto64,
+						produto: produtoDB.id}).exec(function (err, fotoDB) {
+							if (err) {
+								callback(err);
+								return;
+							}
+							console.log(JSON.stringify(fotoDB));
+							callback(null);
+						});
+				});
+			}
 
-			return res.send({statusCode: 200, produto: produtoDB});
+			for (let i = 0; i < atributos.length; i++) {
+				let atributosValores = atributos[i].valoresStr.split(';');
+				console.log(JSON.stringify(atributosValores));
+
+				dbCalls.push(function (callback) {
+					Atributo.create({
+						nome: atributos[i].nome,
+						produto: produtoDB.id}).exec(function (err, atributoDB) {
+							if (err) {
+								callback(err);
+								return;
+							}
+							for (let v = 0; v < atributosValores.length; v++) {
+								let newValor = {
+									nome: atributosValores[v],
+									atributo: atributoDB.id,
+									produto: atributoDB.produto
+								}
+								ValorAtributo.create(newValor).exec(function (err, valor) {
+									if (err) {
+										callback(err);
+										return;
+									}
+									console.log('New Valor: ' + JSON.stringify(valor));
+								});
+							}
+							callback(null);
+						});
+				});
+			}
+			async.parallel(dbCalls, function (err, results) {
+				if (err) {
+					console.log(JSON.stringify(err));
+					return res.send(JSON.stringify(err));
+				}
+				return res.send({statusCode: 200, produto: produtoDB});
+			});
 		});
 	}
 };

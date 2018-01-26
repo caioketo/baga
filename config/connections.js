@@ -34,6 +34,13 @@ module.exports.connections = {
   mongodb: {
     adapter: 'sails-mongo',
     url: 'mongodb://keto:vd001989@ds125255.mlab.com:25255/heroku_9d1d6dp2'
+  },
+  sqlserver: {
+    adapter: 'sails-mysql',
+    host: '127.0.0.1',
+    user: 'root',
+    password: 'mediagrow420',
+    database: 'mediagrow'
   }
   /***************************************************************************
   *                                                                          *

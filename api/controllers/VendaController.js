@@ -324,7 +324,7 @@ module.exports = {
 				PermissaoService.isFiscal({userId: req.session.me }, function (fiscal) {
 					var query = Produto.find();
 					if (fiscal) {
-						query.where({fiscal: true});
+						query.where({fiscal: 1});
 					} 
 					query.populate(['precos', 'estoques']).exec(function (err, produtos) {
 						if (err) {

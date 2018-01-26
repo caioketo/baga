@@ -34,6 +34,36 @@ module.exports = {
 		fiscal: {
 			type: 'integer'
 		},
+		galeria: {
+			collection: 'foto',
+			via: 'produto'
+		},
+		fotoPrincipal: {
+			model: 'foto'
+		},
+		atributos: {
+			collection: 'atributo',
+			via: 'produto'
+		},
+		valoresAtributos: {
+			collection: 'valoratributo',
+			via: 'produto'
+		},
+		descricaoCompleta: {
+			type: 'longtext'
+		},
+		peso: {
+			type: 'float'
+		},
+		altura: {
+			type: 'float'
+		},
+		largura: {
+			type: 'float'
+		},
+		profundidade: {
+			type: 'float'
+		},
 		quantidadeTotal: function() {
 			if (typeof this.estoques == 'undefined' && this.estoques.length <= 0 && typeof this.estoques[0].id == 'undefined') {
 				return 0;

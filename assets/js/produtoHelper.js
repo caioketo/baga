@@ -2,6 +2,31 @@ var precos = precos || [];
 var quantidades = quantidades || [];
 var tabelasDePreco = tabelasDePreco || []; 
 var estoques = estoques || [];
+var atributos = atributos || [];
+var valoresAtributos = valoresAtributos || [];
+var fotos = fotos || [];
+var uploadingFoto;
+var fotosIndex = fotos.length || 0;
+
+
+fotos.forEach(function (item, index) {
+	item.image = new Image();
+	item.image.onload = function() {
+		//draw to canvas
+		addFotoHtml(item, index);
+	};
+	item.image.src = item.foto64;
+});
+
+atributos.forEach(function (item, index) {
+	item.valoresStr = '';
+	for (var i = 0; i < valoresAtributos.length; i++) {
+		if (valoresAtributos[i].atributo == item.id) {
+			item.valoresStr = item.valoresStr + valoresAtributos[i].nome + ';';
+		}
+	}
+	addAtributoHtml(item);
+});
 
 precos.forEach(function (item, index) {
 	item.tabelaNome = getTabelaNome(item);
@@ -75,6 +100,20 @@ function addQuantidadeHtml(qtde) {
 	$("#estoques option[value='" + $("#estoques").val() + "']").remove();
 }
 
+function addAtributoHtml(atributo) {
+	$('#tableAtributos tr:last').after('<tr><td>' + atributo.nome + '</td><td>' + atributo.valoresStr + '</td>');
+}
+
+function addFotoHtml(foto, index) {
+	var newCanvas = $('<canvas id="canvas' + index + '" />')
+		.width(200)
+		.height(150);
+	newCanvas = newCanvas[0];
+	$('#fotosDiv').append(newCanvas);
+	var ctx = newCanvas.getContext("2d");
+	ctx.drawImage(foto.image, 0, 0, 200, 150);
+}
+
 function addPreco() {
 	var newPreco = {
 		valor: $('#venda').val(),
@@ -105,6 +144,15 @@ function addQtde() {
 	}
 }
 
+function addAtributo() {
+	var newAtributo = {
+		nome: $('#atributoNome').val(),
+		valoresStr: $('#atributoValores').val()
+	};
+
+	addAtributoHtml(newAtributo);
+	atributos.push(newAtributo);
+}
 
 function validateProduto(produto) {
 	return true;
@@ -121,6 +169,11 @@ function getProduto() {
 		estoques: quantidades,
 		fornecedor: selectedFornecedor,
 		fiscal: $("#fiscal").is(':checked'),
+		peso: $('#peso').val(),
+		altura: $('#altura').val(),
+		largura: $('#largura').val(),
+		profundidade: $('#profundidade').val(),
+		descricaoCompleta: $('#descricaoCompleta').val()
 	};
 }
 
@@ -140,7 +193,7 @@ function createProduto() {
 	var produto = getProduto();
 
 	if (validateProduto(produto)) {
-		io.socket.post('/produto/createPost', { produto: produto }, function (resData) {
+		io.socket.post('/produto/createPost', { produto: produto, fotos: fotos, atributos: atributos }, function (resData) {
 			if (resData.statusCode == 200) {
 				document.location = '/produto';
 			}
@@ -260,3 +313,31 @@ function filtrarFornecedores(e) {
 		}).hide();
 	}, 200);
 };
+
+function readImage() {
+	if (this.files && this.files[0]) {    
+		var FR= new FileReader();
+    
+		FR.addEventListener("load", function(e) {
+			loadImageToHtml({
+				foto64: e.target.result
+			});
+		});
+
+		FR.readAsDataURL( this.files[0] );
+	}
+};
+
+function loadImageToHtml(item) {
+	item.image = new Image();
+	item.image.onload = function() {
+		//draw to canvas
+		fotos.push({
+			foto64: item.foto64
+		});
+		addFotoHtml(item, 1);
+	};
+	item.image.src = item.foto64;
+}
+
+$("#newFotoUpload").on("change", readImage);

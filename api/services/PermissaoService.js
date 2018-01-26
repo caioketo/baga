@@ -285,8 +285,7 @@ module.exports = {
 		Permissao.create({nome: 'Movimentaciones', path: '/movimentacao'}).exec(function (err, permissao){});
 		Permissao.create({nome: 'Entradas', path: '/movimentacao/indexEntrada'}).exec(function (err, permissao){});
 		Permissao.create({nome: 'Salidas', path: '/movimentacao/indexSaida'}).exec(function (err, permissao){});
-
-
+		Permissao.create({nome: 'Abrir Caja', path: '/abertura/abrirCaixa'}).exec(function (err, permissao){});
 		return done();
 	}
 };

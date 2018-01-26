@@ -64,6 +64,58 @@
 	<label><input id="fiscal" type="checkbox"  checked='<%= produto.fiscal %>'/>Fiscal</label>
 </div>
 <br>
+<label>Peso</label>
+<br>
+<input id='peso' type="number" value='<%= produto.peso %>' />
+<br>
+<label>Largura</label>
+<br>
+<input id='largura' type="number" value='<%= produto.largura %>' />
+<br>
+<label>Altura</label>
+<br>
+<input id='altura' type="number" value='<%= produto.altura %>' />
+<br>
+<label>Profundidade</label>
+<br>
+<input id='profundidade' type="number" value='<%= produto.profundidade %>' />
+<br>
+<br>
+<label>Atributos</label>
+<br>
+<div>
+	<div id="newAtributo">
+		<label>Nombre</label>
+		<label style='margin-left: 120px;'>Valores (separados por ';')</label>
+		<br>
+		<input id='atributoNome' type='text' value='' />
+		<input id='atributoValores' type='text' value='' />
+		<input type="submit" value="Adicionar Atributo" onclick="addAtributo();" />	
+	</div>
+	<table id='tableAtributos' class='table table-striped'>
+		<thead>
+			<tr>
+				<th>Atributo</th>
+				<th>Valores</th>
+			</tr>
+		</thead>
+		<tbody>
+		</tbody>
+	</table>
+</div>
+<br>
+<br>
+<label>Fotos</label>
+<br>
+<div>
+	<div id="newFoto">
+		<input id="newFotoUpload" type="file" >
+	</div>
+	<div id="fotosDiv">
+	</div>
+</div>
+<br>
+<br>
 <input type="submit" value="Salvar" onclick="editProduto();" />
 <!-- MODAL -->
 <div class="modal fade" id="categoriaMdl" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -102,13 +154,13 @@
 
 
 <script>
-	var produtoID = '<%= produto.id %>';
+	var produtoID = <%= produto.id %>;
 	$(document).ready(function() {
 		selecionarCategoria();
 	});
 	var fornecedores = [];
 	<% if (produto.fornecedor) { %>
-		var selectedFornecedor = '<%- produto.fornecedor.id %>';
+		var selectedFornecedor = <%- produto.fornecedor.id %>;
 		var fornecedorObj = <%- JSON.stringify(produto.fornecedor) %>;
 	<% } else { %>
 		var selectedFornecedor = -1;
@@ -122,10 +174,13 @@
 	var estoques = <%- JSON.stringify(estoques) %>;
 	var precos = <%- JSON.stringify(produto.precos) %>;
 	var quantidades = <%- JSON.stringify(produto.estoques) %>;
+	var fotos = <%- JSON.stringify(produto.galeria) %>;
+	var atributos = <%- JSON.stringify(produto.atributos) %>;
+	var valoresAtributos = <%- JSON.stringify(produto.valoresAtributos) %>;
 
 	var categorias = [];
 	<% if (typeof produto.categoria !== 'undefined') { %>
-		var selectedCategoria =  '<%= produto.categoria.id %>';
+		var selectedCategoria =  <%= produto.categoria.id %>;
 		var categoriaObj = <%- JSON.stringify(produto.categoria) %>;
 	<%} else { %>
 		var selectedCategoria;
